@@ -1,4 +1,6 @@
-import { StyleSheet, Text, View } from 'react-native';
+import { View } from 'react-native';
+import { Text } from '../../components/typography';
+import { styles } from './index.styles';
 
 export default function HomeScreen() {
   return (
@@ -9,22 +11,3 @@ export default function HomeScreen() {
   );
 }
 
-const styles = StyleSheet.create({
-  container: {
-    flex: 1,
-    alignItems: 'center',
-    justifyContent: 'center',
-    paddingHorizontal: 20,
-    backgroundColor: '#FFFFFF',
-  },
-  title: {
-    fontSize: 28,
-    fontWeight: '700',
-    color: '#111111',
-    marginBottom: 8,
-  },
-  description: {
-    fontSize: 14,
-    color: '#555555',
-  },
-});
