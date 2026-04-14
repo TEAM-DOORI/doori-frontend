@@ -1,14 +1,30 @@
 # 이슈가 닫히거나 다시 열릴 때 Notion DB 행의 상태를 업데이트합니다.
 #
-# [closed 로직]
-#   state_reason == 'not_planned'  →  상태 → "취소됨"
-#   state_reason == 'completed'    →  현재 상태가 이미 "완료"면 skip,
-#                                     아니면 상태 → "완료" (PR 없이 수동 close한 경우)
-#   그 외 (null 등)                →  skip
+#  이슈 생성 (issues.opened)
+#      └→ [시작전]                  (issue-to-notion.yml)
 #
-# [reopened 로직]
-#   현재 상태가 "취소됨"  →  상태 → "시작전"
-#   그 외                →  skip (정상 진행 중인 이슈는 건드리지 않음)
+#  수동 노션 변경
+#      └→ [진행중]                  (수동)
+#
+#  PR 오픈 (pull_request.opened)
+#      └→ [리뷰중] + PR URL 갱신   (pr-update-notion.yml, 미구현)
+#
+#  PR 머지 (pull_request.closed + merged)
+#      └→ [완료] + PR URL 갱신     (pr-merged-notion.yml, 미구현)
+#
+#  이슈 close - not_planned (issues.closed)
+#      └→ [취소됨]                 (issue-closed-notion.yml ← 이 파일)
+#
+#  이슈 close - completed (issues.closed)
+#      현재 "완료"  →  skip
+#      아니면       →  [완료]       (issue-closed-notion.yml ← 이 파일)
+#
+#  이슈 close - 그 외 null
+#      └→ skip                     (issue-closed-notion.yml ← 이 파일)
+#
+#  이슈 reopen (issues.reopened)
+#      현재 "취소됨"  →  [시작전]  (issue-closed-notion.yml ← 이 파일)
+#      그 외          →  skip
 #
 # GitHub Secrets: NOTION_API_KEY, NOTION_DATABASE_ID
 
