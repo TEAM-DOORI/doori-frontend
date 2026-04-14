@@ -63,7 +63,7 @@ jobs:
 
           # completed인 경우: 현재 상태 확인 후 이미 완료면 skip
           if [ "${STATE_REASON}" = "completed" ]; then
-            CURRENT_STATUS=$(echo "$QUERY_RESPONSE" | jq -r '.results[0].properties.상태.status.name // empty')
+            CURRENT_STATUS=$(echo "$QUERY_RESPONSE" | jq -r '.results[0].properties["상태"].status.name // empty')
             echo "현재 노션 상태: ${CURRENT_STATUS}"
             if [ "${CURRENT_STATUS}" = "완료" ]; then
               echo "이미 완료 상태입니다. skip합니다."
