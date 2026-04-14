@@ -8,7 +8,7 @@
 # [검사 항목]
 #   1. ESLint  — expo lint (eslint-config-expo 기반)
 #   2. TypeScript — tsc --noEmit (타입 에러 검출)
-#   3. Test    — npm test (Jest 설치 후 활성화, 현재 주석 처리)
+#   3. Test    — npm test --ci (Jest + jest-expo, __tests__/smoke.test.ts 포함)
 #
 # [실패 시]
 #   GitHub PR 체크가 실패로 표시됩니다.
@@ -49,6 +49,5 @@ jobs:
       - name: TypeScript type check
         run: npx tsc --noEmit
 
-      # Jest 설치 완료 후 아래 주석 해제
-      # - name: Test
-      #   run: npm test -- --ci --passWithNoTests
+      - name: Test
+        run: npm test -- --ci --passWithNoTests
