@@ -1,25 +1,29 @@
-# 이슈가 닫힐 때 Notion DB 행의 상태를 업데이트합니다.
+# 이슈가 닫히거나 다시 열릴 때 Notion DB 행의 상태를 업데이트합니다.
 #
-# [로직]
+# [closed 로직]
 #   state_reason == 'not_planned'  →  상태 → "취소됨"
 #   state_reason == 'completed'    →  현재 상태가 이미 "완료"면 skip,
 #                                     아니면 상태 → "완료" (PR 없이 수동 close한 경우)
 #   그 외 (null 등)                →  skip
 #
+# [reopened 로직]
+#   현재 상태가 "취소됨"  →  상태 → "시작전"
+#   그 외                →  skip (정상 진행 중인 이슈는 건드리지 않음)
+#
 # GitHub Secrets: NOTION_API_KEY, NOTION_DATABASE_ID
 
-name: Update Notion on issue closed
+name: Update Notion on issue closed or reopened
 
 on:
   issues:
-    types: [closed]
+    types: [closed, reopened]
 
 permissions:
   contents: read
 
 jobs:
   update-notion:
-    name: Update Notion status on issue close
+    name: Update Notion status on issue close or reopen
     runs-on: ubuntu-latest
     steps:
       - name: Update Notion page status
@@ -27,15 +31,22 @@ jobs:
           NOTION_TOKEN: ${{ secrets.NOTION_API_KEY }}
           NOTION_DATABASE_ID: ${{ secrets.NOTION_DATABASE_ID }}
           ISSUE_NUMBER: ${{ github.event.issue.number }}
+          ISSUE_ACTION: ${{ github.event.action }}
           STATE_REASON: ${{ github.event.issue.state_reason }}
         run: |
           set -euo pipefail
-          echo "state_reason: ${STATE_REASON}"
+          echo "action: ${ISSUE_ACTION}, state_reason: ${STATE_REASON}"
 
-          # not_planned / completed 이외는 skip
-          if [ "${STATE_REASON}" != "not_planned" ] && [ "${STATE_REASON}" != "completed" ]; then
-            echo "state_reason이 not_planned / completed 가 아니므로 skip합니다."
-            exit 0
+          # closed가 아닌 reopened인 경우 바로 reopen 처리로 이동
+          if [ "${ISSUE_ACTION}" = "reopened" ]; then
+            HANDLE_REOPEN=true
+          else
+            HANDLE_REOPEN=false
+            # closed: not_planned / completed 이외는 skip
+            if [ "${STATE_REASON}" != "not_planned" ] && [ "${STATE_REASON}" != "completed" ]; then
+              echo "state_reason이 not_planned / completed 가 아니므로 skip합니다."
+              exit 0
+            fi
           fi
 
           # 이슈 번호로 노션 행 검색
@@ -61,17 +72,27 @@ jobs:
           fi
           echo "노션 페이지 ID: ${PAGE_ID}"
 
-          # completed인 경우: 현재 상태 확인 후 이미 완료면 skip
-          if [ "${STATE_REASON}" = "completed" ]; then
-            CURRENT_STATUS=$(echo "$QUERY_RESPONSE" | jq -r '.results[0].properties["상태"].status.name // empty')
-            echo "현재 노션 상태: ${CURRENT_STATUS}"
+          CURRENT_STATUS=$(echo "$QUERY_RESPONSE" | jq -r '.results[0].properties["상태"].status.name // empty')
+          echo "현재 노션 상태: ${CURRENT_STATUS}"
+
+          # reopened: 취소됨 상태일 때만 시작전으로
+          if [ "$HANDLE_REOPEN" = "true" ]; then
+            if [ "${CURRENT_STATUS}" != "취소됨" ]; then
+              echo "현재 상태가 '취소됨'이 아니므로 skip합니다."
+              exit 0
+            fi
+            NEW_STATUS="시작전"
+
+          # completed: 이미 완료면 skip, 아니면 완료로
+          elif [ "${STATE_REASON}" = "completed" ]; then
             if [ "${CURRENT_STATUS}" = "완료" ]; then
               echo "이미 완료 상태입니다. skip합니다."
               exit 0
             fi
             NEW_STATUS="완료"
+
+          # not_planned: 취소됨으로
           else
-            # not_planned
             NEW_STATUS="취소됨"
           fi
 
