@@ -1,0 +1,98 @@
+# 이슈가 닫힐 때 Notion DB 행의 상태를 업데이트합니다.
+#
+# [로직]
+#   state_reason == 'not_planned'  →  상태 → "취소됨"
+#   state_reason == 'completed'    →  현재 상태가 이미 "완료"면 skip,
+#                                     아니면 상태 → "완료" (PR 없이 수동 close한 경우)
+#   그 외 (null 등)                →  skip
+#
+# GitHub Secrets: NOTION_API_KEY, NOTION_DATABASE_ID
+
+name: Update Notion on issue closed
+
+on:
+  issues:
+    types: [closed]
+
+permissions:
+  contents: read
+
+jobs:
+  update-notion:
+    name: Update Notion status on issue close
+    runs-on: ubuntu-latest
+    steps:
+      - name: Update Notion page status
+        env:
+          NOTION_TOKEN: ${{ secrets.NOTION_API_KEY }}
+          NOTION_DATABASE_ID: ${{ secrets.NOTION_DATABASE_ID }}
+          ISSUE_NUMBER: ${{ github.event.issue.number }}
+          STATE_REASON: ${{ github.event.issue.state_reason }}
+        run: |
+          set -euo pipefail
+          echo "state_reason: ${STATE_REASON}"
+
+          # not_planned / completed 이외는 skip
+          if [ "${STATE_REASON}" != "not_planned" ] && [ "${STATE_REASON}" != "completed" ]; then
+            echo "state_reason이 not_planned / completed 가 아니므로 skip합니다."
+            exit 0
+          fi
+
+          # 이슈 번호로 노션 행 검색
+          QUERY_JSON=$(jq -n \
+            --argjson number "$ISSUE_NUMBER" \
+            '{
+              filter: {
+                property: "Github 이슈 번호",
+                number: { equals: $number }
+              }
+            }')
+          QUERY_RESPONSE=$(curl -sS \
+            -X POST "https://api.notion.com/v1/databases/${NOTION_DATABASE_ID}/query" \
+            -H "Authorization: Bearer ${NOTION_TOKEN}" \
+            -H "Notion-Version: 2022-06-28" \
+            -H "Content-Type: application/json" \
+            -d "$QUERY_JSON")
+          PAGE_ID=$(echo "$QUERY_RESPONSE" | jq -r '.results[0].id // empty')
+
+          if [ -z "$PAGE_ID" ]; then
+            echo "노션에서 이슈 #${ISSUE_NUMBER}에 해당하는 행을 찾을 수 없습니다. skip합니다."
+            exit 0
+          fi
+          echo "노션 페이지 ID: ${PAGE_ID}"
+
+          # completed인 경우: 현재 상태 확인 후 이미 완료면 skip
+          if [ "${STATE_REASON}" = "completed" ]; then
+            CURRENT_STATUS=$(echo "$QUERY_RESPONSE" | jq -r '.results[0].properties.상태.status.name // empty')
+            echo "현재 노션 상태: ${CURRENT_STATUS}"
+            if [ "${CURRENT_STATUS}" = "완료" ]; then
+              echo "이미 완료 상태입니다. skip합니다."
+              exit 0
+            fi
+            NEW_STATUS="완료"
+          else
+            # not_planned
+            NEW_STATUS="취소됨"
+          fi
+
+          echo "노션 상태를 '${NEW_STATUS}'로 업데이트합니다."
+          PATCH_JSON=$(jq -n \
+            --arg status "$NEW_STATUS" \
+            '{
+              properties: {
+                "상태": { status: { name: $status } }
+              }
+            }')
+          HTTP_CODE=$(curl -sS -o /tmp/notion_patch.json -w "%{http_code}" \
+            -X PATCH "https://api.notion.com/v1/pages/${PAGE_ID}" \
+            -H "Authorization: Bearer ${NOTION_TOKEN}" \
+            -H "Notion-Version: 2022-06-28" \
+            -H "Content-Type: application/json" \
+            -d "$PATCH_JSON")
+          if [ "$HTTP_CODE" -lt 200 ] || [ "$HTTP_CODE" -ge 300 ]; then
+            echo "Notion API failed with HTTP $HTTP_CODE"
+            cat /tmp/notion_patch.json
+            exit 1
+          fi
+          echo "노션 상태 업데이트 완료: ${NEW_STATUS}"
+          cat /tmp/notion_patch.json
