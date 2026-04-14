@@ -1,0 +1,179 @@
+# 이슈가 열릴 때 Notion DB에 행을 추가하고, 페이지 본문에 이슈 본문을 넣습니다.
+#
+# [DB 속성 — 노션과 이름·타입 일치]
+#   작업 이름            → Title
+#   Github 이슈 번호    → Number
+#   Github 이슈 URL    → URL
+#   작업 유형           → Select (bug/bugfix → BugFix, 그 외 Task)
+#   우선순위            → Select ("중간")
+#
+# 본문: Notion API children (paragraph). rich_text 2000자/블록, 요청당 최대 100블록.
+#
+# GitHub Secrets: NOTION_API_KEY, NOTION_DATABASE_ID
+
+name: Sync issue to Notion
+
+on:
+  issues:
+    types: [opened]
+
+permissions:
+  contents: read
+
+jobs:
+  sync-to-notion:
+    name: Add Notion row for new issue
+    runs-on: ubuntu-latest
+    steps:
+      - name: Create Notion database page
+        env:
+          NOTION_TOKEN: ${{ secrets.NOTION_API_KEY }}
+          NOTION_DATABASE_ID: ${{ secrets.NOTION_DATABASE_ID }}
+          ISSUE_TITLE: ${{ github.event.issue.title }}
+          ISSUE_BODY: ${{ github.event.issue.body }}
+          ISSUE_NUMBER: ${{ github.event.issue.number }}
+          ISSUE_URL: ${{ github.event.issue.html_url }}
+          LABELS_JSON: ${{ toJson(github.event.issue.labels) }}
+        run: |
+          set -euo pipefail
+          WORK_TYPE=$(echo "${LABELS_JSON}" | jq -r '
+            if any(.[]; (.name | ascii_downcase) == "bug" or (.name | ascii_downcase) == "bugfix")
+            then "BugFix"
+            else "Task"
+            end
+          ')
+          echo "Notion 작업 유형: ${WORK_TYPE}"
+
+          CHILDREN_JSON=$(python3 <<'PY'
+          import json, os, re
+
+          def rich_text(text):
+              """plain text → Notion rich_text 배열. 2000자 초과 시 자름."""
+              return [{"type": "text", "text": {"content": text[:2000]}}]
+
+          def make_block(block_type, **kwargs):
+              return {"object": "block", "type": block_type, block_type: kwargs}
+
+          def parse_inline(text):
+              """**bold**, `code` 같은 인라인 마크다운을 Notion annotations으로 변환."""
+              parts = []
+              pattern = re.compile(r'(\*\*(.+?)\*\*|`(.+?)`)')
+              last = 0
+              for m in pattern.finditer(text):
+                  if m.start() > last:
+                      parts.append({"type": "text", "text": {"content": text[last:m.start()]}})
+                  if m.group(2):  # **bold**
+                      parts.append({"type": "text", "text": {"content": m.group(2)},
+                                    "annotations": {"bold": True}})
+                  elif m.group(3):  # `code`
+                      parts.append({"type": "text", "text": {"content": m.group(3)},
+                                    "annotations": {"code": True}})
+                  last = m.end()
+              if last < len(text):
+                  parts.append({"type": "text", "text": {"content": text[last:]}})
+              return parts or rich_text(text)
+
+          def md_to_blocks(body):
+              blocks = []
+              MAX = 99
+
+              for raw_line in body.splitlines():
+                  if len(blocks) >= MAX:
+                      blocks.append(make_block("paragraph",
+                          rich_text=[{"type": "text", "text": {
+                              "content": "(이슈 본문이 길어 여기까지만 표시됩니다. 전체는 GitHub 이슈에서 확인하세요.)"
+                          }}]))
+                      break
+
+                  line = raw_line.rstrip()
+
+                  # 빈 줄 → 건너뜀
+                  if not line.strip():
+                      continue
+
+                  # ## 제목 (h2)
+                  if re.match(r'^## ', line):
+                      blocks.append(make_block("heading_2",
+                          rich_text=parse_inline(line[3:].strip())))
+
+                  # ### 제목 (h3)
+                  elif re.match(r'^### ', line):
+                      blocks.append(make_block("heading_3",
+                          rich_text=parse_inline(line[4:].strip())))
+
+                  # # 제목 (h1)
+                  elif re.match(r'^# ', line):
+                      blocks.append(make_block("heading_1",
+                          rich_text=parse_inline(line[2:].strip())))
+
+                  # > 인용
+                  elif re.match(r'^> ', line):
+                      blocks.append(make_block("quote",
+                          rich_text=parse_inline(line[2:].strip())))
+
+                  # - [x] 체크박스 (완료)
+                  elif re.match(r'^- \[x\] ', line, re.IGNORECASE):
+                      blocks.append(make_block("to_do",
+                          rich_text=parse_inline(line[6:].strip()),
+                          checked=True))
+
+                  # - [ ] 체크박스 (미완료)
+                  elif re.match(r'^- \[ \] ', line):
+                      blocks.append(make_block("to_do",
+                          rich_text=parse_inline(line[6:].strip()),
+                          checked=False))
+
+                  # 숫자. 순서 있는 목록
+                  elif re.match(r'^\d+\. ', line):
+                      content = re.sub(r'^\d+\. ', '', line)
+                      blocks.append(make_block("numbered_list_item",
+                          rich_text=parse_inline(content.strip())))
+
+                  # - 불릿 목록
+                  elif re.match(r'^- ', line):
+                      blocks.append(make_block("bulleted_list_item",
+                          rich_text=parse_inline(line[2:].strip())))
+
+                  # 일반 문단
+                  else:
+                      blocks.append(make_block("paragraph",
+                          rich_text=parse_inline(line)))
+
+              return blocks
+
+          body = (os.environ.get("ISSUE_BODY") or "").replace("\x00", "")
+          print(json.dumps(md_to_blocks(body)))
+          PY
+          )
+
+          JSON=$(jq -n \
+            --arg db_id "$NOTION_DATABASE_ID" \
+            --arg title "$ISSUE_TITLE" \
+            --argjson number "$ISSUE_NUMBER" \
+            --arg url "$ISSUE_URL" \
+            --arg work_type "$WORK_TYPE" \
+            --argjson children "$CHILDREN_JSON" \
+            '{
+              parent: { database_id: $db_id },
+              properties: {
+                "작업 이름": { title: [{ text: { content: $title } }] },
+                "Github 이슈 번호": { number: $number },
+                "Github 이슈 URL": { url: $url },
+                "작업 유형": { select: { name: $work_type } },
+                "우선순위": { select: { name: "중간" } }
+              },
+              children: $children
+            }')
+          HTTP_CODE=$(curl -sS -o /tmp/notion_response.json -w "%{http_code}" \
+            -X POST https://api.notion.com/v1/pages \
+            -H "Authorization: Bearer ${NOTION_TOKEN}" \
+            -H "Notion-Version: 2022-06-28" \
+            -H "Content-Type: application/json" \
+            -d "$JSON")
+          if [ "$HTTP_CODE" -lt 200 ] || [ "$HTTP_CODE" -ge 300 ]; then
+            echo "Notion API failed with HTTP $HTTP_CODE"
+            cat /tmp/notion_response.json
+            exit 1
+          fi
+          echo "Notion page created."
+          cat /tmp/notion_response.json
