@@ -1,0 +1,54 @@
+# ─────────────────────────────────────────────────────────────
+# PR 코드 품질 검사 워크플로
+#
+# [트리거]
+#   pull_request: main / develop 브랜치 대상 PR
+#   (Draft PR 포함 — opened, synchronize, reopened)
+#
+# [검사 항목]
+#   1. ESLint  — expo lint (eslint-config-expo 기반)
+#   2. TypeScript — tsc --noEmit (타입 에러 검출)
+#   3. Test    — npm test (Jest 설치 후 활성화, 현재 주석 처리)
+#
+# [실패 시]
+#   GitHub PR 체크가 실패로 표시됩니다.
+#   머지를 막으려면 레포 Settings → Branches → Branch protection rule에서
+#   "Require status checks to pass before merging" 에 이 워크플로를 추가하세요.
+# ─────────────────────────────────────────────────────────────
+
+name: CI
+
+on:
+  pull_request:
+    branches: [main, develop]
+    types: [opened, synchronize, reopened]
+
+permissions:
+  contents: read
+
+jobs:
+  lint-and-typecheck:
+    name: Lint & Type Check
+    runs-on: ubuntu-latest
+    steps:
+      - name: Checkout
+        uses: actions/checkout@v4
+
+      - name: Setup Node.js
+        uses: actions/setup-node@v4
+        with:
+          node-version: 20
+          cache: npm
+
+      - name: Install dependencies
+        run: npm ci
+
+      - name: ESLint
+        run: npm run lint
+
+      - name: TypeScript type check
+        run: npx tsc --noEmit
+
+      # Jest 설치 완료 후 아래 주석 해제
+      # - name: Test
+      #   run: npm test -- --ci --passWithNoTests
