@@ -6,7 +6,7 @@
 git clone <repo-url>
 cd doori-frontend
 npm install
-npm run web
+npx expo start
 ```
 
 ---
