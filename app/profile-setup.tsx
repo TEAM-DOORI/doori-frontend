@@ -39,7 +39,7 @@ export default function ProfileSetupScreen() {
   };
 
   const handleNext = () => {
-    router.replace("/(tabs)");
+    router.push("/profile-setup-lifestyle");
   };
 
   return (
