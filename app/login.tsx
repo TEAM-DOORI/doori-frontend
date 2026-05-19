@@ -12,7 +12,7 @@ export default function LoginScreen() {
   const insets = useSafeAreaInsets();
 
   const goToProfileSetup = () => {
-    router.push("/profile-setup");
+    router.push("/onboarding/profile-setup");
   };
 
   const goToMain = () => {

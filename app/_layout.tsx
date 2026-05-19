@@ -1,4 +1,6 @@
 import { DefaultTheme, ThemeProvider } from "@react-navigation/native";
+
+import { ProfileSetupProvider } from "../contexts/ProfileSetupContext";
 import { useFonts } from "expo-font";
 import { Stack } from "expo-router";
 import * as SplashScreen from "expo-splash-screen";
@@ -35,17 +37,16 @@ export default function RootLayout() {
   }
 
   return (
-    <ThemeProvider value={DefaultTheme}>
+    <ProfileSetupProvider>
+      <ThemeProvider value={DefaultTheme}>
       <Stack screenOptions={{ headerShown: false }}>
         <Stack.Screen name='index' />
         <Stack.Screen name='login' />
-        <Stack.Screen name='profile-setup' />
-        <Stack.Screen name='profile-setup-lifestyle' />
-        <Stack.Screen name='profile-setup-preferences' />
-        <Stack.Screen name='profile-setup-matching' />
+        <Stack.Screen name='onboarding' />
         <Stack.Screen name='(tabs)' />
       </Stack>
       <StatusBar style='auto' />
     </ThemeProvider>
+    </ProfileSetupProvider>
   );
 }

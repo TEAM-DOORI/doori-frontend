@@ -1,7 +1,7 @@
 import { StyleSheet } from "react-native";
 
-import { fs, hs, ms, vs } from "../constants";
-import { color, colorStyle } from "../constants/colors";
+import { fs, hs, ms, vs } from "../../constants";
+import { color, colorStyle } from "../../constants/colors";
 
 export const styles = StyleSheet.create({
   safeArea: {
@@ -32,40 +32,49 @@ export const styles = StyleSheet.create({
     color: colorStyle.S05,
     marginBottom: vs(48),
   },
-  section: {
-    marginBottom: vs(36),
+  field: {
+    marginBottom: vs(28),
   },
-  sectionLabel: {
+  fieldLabel: {
     fontSize: fs(18),
     lineHeight: vs(22),
     color: "#4B566A",
-    marginBottom: vs(15),
+    marginBottom: vs(12),
   },
-  optionRow: {
-    flexDirection: "row",
-    alignItems: "stretch",
-    gap: hs(8),
-    width: "100%",
+  input: {
+    backgroundColor: "#FFFFFF",
+    borderRadius: ms(12),
+    borderWidth: hs(1),
+    borderColor: colorStyle.S02,
+    paddingHorizontal: hs(16),
+    fontSize: fs(15),
+    lineHeight: vs(22),
+    color: colorStyle.Main_Text,
   },
-  criteriaRow: {
-    flexDirection: "row",
-    flexWrap: "wrap",
-    alignItems: "center",
-    gap: hs(10),
-    alignSelf: "flex-start",
+  inputShort: {
+    minHeight: vs(82),
+    paddingTop: vs(14),
+    paddingBottom: vs(14),
+    textAlignVertical: "top",
+  },
+  inputTall: {
+    minHeight: vs(120),
+    paddingTop: vs(14),
+    paddingBottom: vs(14),
+    textAlignVertical: "top",
   },
   footer: {
     paddingHorizontal: hs(20),
     paddingTop: vs(20),
   },
-  nextButton: {
+  startButton: {
     backgroundColor: color.buttonPrimary,
     borderRadius: ms(15),
     paddingVertical: vs(16),
     alignItems: "center",
     justifyContent: "center",
   },
-  nextButtonText: {
+  startButtonText: {
     fontSize: fs(18),
     lineHeight: vs(24),
     color: color.textPrimary,

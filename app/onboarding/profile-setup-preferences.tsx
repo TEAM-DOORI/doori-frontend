@@ -1,52 +1,40 @@
 import { useRouter } from "expo-router";
-import { useState } from "react";
 import { Pressable, ScrollView, View } from "react-native";
 import { useSafeAreaInsets } from "react-native-safe-area-context";
 
-import { BackgroundGradient } from "../components/layout/BackgroundGradient";
-import { BackButton } from "../components/navigation/BackButton";
-import { IconSelectChip } from "../components/profile-setup/IconSelectChip";
-import { LifestyleOptionCard } from "../components/profile-setup/LifestyleOptionCard";
-import { ProgressBar } from "../components/profile-setup/ProgressBar";
-import { Text } from "../components/typography";
-import { vs } from "../constants";
-import { styles } from "./profile-setup-matching.styles";
+import { BackgroundGradient } from "../../components/layout/BackgroundGradient";
+import { BackButton } from "../../components/navigation/BackButton";
+import { LifestyleOptionCard } from "../../components/profile-setup/LifestyleOptionCard";
+import { ProgressBar } from "../../components/profile-setup/ProgressBar";
+import { Text } from "../../components/typography";
+import { vs } from "../../constants";
+import { useProfileSetup } from "../../contexts/ProfileSetupContext";
+import { styles } from "./profile-setup-preferences.styles";
 
-type AtmosphereOption = "quiet" | "moderate" | "social";
-type PriorityCriterion =
-  | "sleep"
-  | "cleanliness"
-  | "smoking"
-  | "noise"
-  | "personality";
-
-const ATMOSPHERE_OPTIONS = [
-  { value: "quiet" as const, emoji: "👩🏻‍💻", label: "조용하게" },
-  { value: "moderate" as const, emoji: "🙆🏻‍", label: "적당히 교류" },
-  { value: "social" as const, emoji: "👯‍♀️", label: "자주 어울리기" },
+const CLEANLINESS_OPTIONS = [
+  { value: "very" as const, emoji: "🧼", label: "매우 중요" },
+  { value: "normal" as const, emoji: "🙂", label: "보통" },
+  { value: "low" as const, emoji: "😅", label: "크게 신경쓰지 안 써요" },
 ];
 
-const PRIORITY_OPTIONS: {
-  value: PriorityCriterion;
-  emoji: string;
-  label: string;
-}[] = [
-  { value: "sleep", emoji: "🌙", label: "수면패턴" },
-  { value: "cleanliness", emoji: "🧼", label: "청결도" },
-  { value: "smoking", emoji: "🚬", label: "흡연 여부" },
-  { value: "noise", emoji: "🔇", label: "소음 정도" },
-  { value: "personality", emoji: "🤝", label: "성격" },
+const NOISE_OPTIONS = [
+  { value: "sensitive" as const, emoji: "🔇", label: "민감해요" },
+  { value: "normal" as const, emoji: "🔉", label: "보통이에요" },
+  {
+    value: "insensitive" as const,
+    emoji: "🔊",
+    label: "둔감해요",
+  },
 ];
 
-export default function ProfileSetupMatchingScreen() {
+export default function ProfileSetupPreferencesScreen() {
   const router = useRouter();
   const insets = useSafeAreaInsets();
-
-  const [atmosphere, setAtmosphere] = useState<AtmosphereOption>("moderate");
-  const [priority, setPriority] = useState<PriorityCriterion>("sleep");
+  const { draft, updateDraft } = useProfileSetup();
+  const { cleanliness, noise } = draft.preferences;
 
   const handleNext = () => {
-    router.replace("/(tabs)");
+    router.push("/onboarding/profile-setup-matching");
   };
 
   return (
@@ -55,7 +43,7 @@ export default function ProfileSetupMatchingScreen() {
         <View style={styles.header}>
           <BackButton />
           <View style={styles.progressWrap}>
-            <ProgressBar progress={0.8} />
+            <ProgressBar progress={0.6} />
           </View>
         </View>
 
@@ -78,16 +66,18 @@ export default function ProfileSetupMatchingScreen() {
             <Text
               weight='semiBold'
               style={styles.sectionLabel}>
-              어떤 분위기의 생활을 원하시나요?
+              청결은 얼마나 중요하게 생각하시나요?
             </Text>
             <View style={styles.optionRow}>
-              {ATMOSPHERE_OPTIONS.map((option) => (
+              {CLEANLINESS_OPTIONS.map((option) => (
                 <LifestyleOptionCard
                   key={option.value}
                   emoji={option.emoji}
                   label={option.label}
-                  selected={atmosphere === option.value}
-                  onPress={() => setAtmosphere(option.value)}
+                  selected={cleanliness === option.value}
+                  onPress={() =>
+                    updateDraft({ preferences: { cleanliness: option.value } })
+                  }
                 />
               ))}
             </View>
@@ -97,16 +87,18 @@ export default function ProfileSetupMatchingScreen() {
             <Text
               weight='semiBold'
               style={styles.sectionLabel}>
-              룸메를 고를 때 가장 중요한 기준을 한 가지만 선택해주세요
+              소음에 얼마나 민감한가요?
             </Text>
-            <View style={styles.criteriaRow}>
-              {PRIORITY_OPTIONS.map((option) => (
-                <IconSelectChip
+            <View style={styles.optionRow}>
+              {NOISE_OPTIONS.map((option) => (
+                <LifestyleOptionCard
                   key={option.value}
                   emoji={option.emoji}
                   label={option.label}
-                  selected={priority === option.value}
-                  onPress={() => setPriority(option.value)}
+                  selected={noise === option.value}
+                  onPress={() =>
+                    updateDraft({ preferences: { noise: option.value } })
+                  }
                 />
               ))}
             </View>

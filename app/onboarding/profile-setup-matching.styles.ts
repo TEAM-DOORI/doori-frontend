@@ -1,12 +1,9 @@
 import { StyleSheet } from "react-native";
 
-import { fs, hs, ms, vs } from "../constants";
-import { color, colorStyle } from "../constants/colors";
+import { fs, hs, ms, vs } from "../../constants";
+import { color, colorStyle } from "../../constants/colors";
 
 export const styles = StyleSheet.create({
-  flex: {
-    flex: 1,
-  },
   safeArea: {
     flex: 1,
   },
@@ -22,26 +19,21 @@ export const styles = StyleSheet.create({
     flexGrow: 1,
     paddingHorizontal: hs(20),
     paddingBottom: vs(24),
-    overflow: "visible",
   },
   title: {
     fontSize: fs(24),
     lineHeight: vs(32),
-    color: "#1A3262",
+    color: colorStyle.Main_Text,
     marginBottom: vs(8),
   },
   description: {
     fontSize: fs(15),
     lineHeight: vs(22),
     color: colorStyle.S05,
-    marginBottom: vs(75),
+    marginBottom: vs(48),
   },
   section: {
-    marginBottom: vs(40),
-  },
-  sectionDropdown: {
-    overflow: "visible",
-    zIndex: 10,
+    marginBottom: vs(36),
   },
   sectionLabel: {
     fontSize: fs(18),
@@ -49,20 +41,18 @@ export const styles = StyleSheet.create({
     color: "#4B566A",
     marginBottom: vs(15),
   },
-  rowCompact: {
+  optionRow: {
     flexDirection: "row",
-    flexWrap: "wrap",
-    alignItems: "center",
-    gap: hs(10),
-    alignSelf: "flex-start",
+    alignItems: "stretch",
+    gap: hs(8),
+    width: "100%",
   },
-  rowDropdownContainer: {
+  criteriaRow: {
     flexDirection: "row",
     flexWrap: "wrap",
     alignItems: "center",
     gap: hs(10),
     alignSelf: "flex-start",
-    overflow: "visible",
   },
   footer: {
     paddingHorizontal: hs(20),

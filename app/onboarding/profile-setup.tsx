@@ -3,13 +3,13 @@ import { useMemo, useState } from "react";
 import { Pressable, ScrollView, View } from "react-native";
 import { useSafeAreaInsets } from "react-native-safe-area-context";
 
-import { BackgroundGradient } from "../components/layout/BackgroundGradient";
-import { BackButton } from "../components/navigation/BackButton";
-import { InlineChipDropdown } from "../components/profile-setup/InlineChipDropdown";
-import { ProfileSetupChip } from "../components/profile-setup/ProfileSetupChip";
-import { ProgressBar } from "../components/profile-setup/ProgressBar";
-import { Text } from "../components/typography";
-import { vs } from "../constants";
+import { BackgroundGradient } from "../../components/layout/BackgroundGradient";
+import { BackButton } from "../../components/navigation/BackButton";
+import { InlineChipDropdown } from "../../components/profile-setup/InlineChipDropdown";
+import { ProfileSetupChip } from "../../components/profile-setup/ProfileSetupChip";
+import { ProgressBar } from "../../components/profile-setup/ProgressBar";
+import { Text } from "../../components/typography";
+import { vs } from "../../constants";
 import {
   ENROLLMENT_OPTIONS,
   GRADE_OPTIONS,
@@ -17,7 +17,8 @@ import {
   getGraduationYearOptions,
   type EnrollmentOption,
   type GradeOption,
-} from "../constants/profile-setup-options";
+} from "../../constants/profile-setup-options";
+import { useProfileSetup } from "../../contexts/ProfileSetupContext";
 import { styles } from "./profile-setup.styles";
 
 type PickerField = "grade" | "enrollment" | "graduation";
@@ -26,12 +27,14 @@ export default function ProfileSetupScreen() {
   const router = useRouter();
   const insets = useSafeAreaInsets();
   const graduationYearOptions = useMemo(() => getGraduationYearOptions(), []);
-
-  const [gender, setGender] = useState<"male" | "female">("male");
-  const [residence, setResidence] = useState<"dorm" | "share">("dorm");
-  const [grade, setGrade] = useState<GradeOption>("3학년");
-  const [enrollment, setEnrollment] = useState<EnrollmentOption>("재학");
-  const [graduation, setGraduation] = useState<string | null>(null);
+  const { draft, updateDraft } = useProfileSetup();
+  const {
+    gender,
+    residence,
+    grade,
+    enrollment,
+    graduationYear: graduation,
+  } = draft.basic;
   const [openPicker, setOpenPicker] = useState<PickerField | null>(null);
 
   const togglePicker = (field: PickerField) => {
@@ -39,7 +42,7 @@ export default function ProfileSetupScreen() {
   };
 
   const handleNext = () => {
-    router.push("/profile-setup-lifestyle");
+    router.push("/onboarding/profile-setup-lifestyle");
   };
 
   return (
@@ -78,12 +81,12 @@ export default function ProfileSetupScreen() {
               <ProfileSetupChip
                 label='남성'
                 selected={gender === "male"}
-                onPress={() => setGender("male")}
+                onPress={() => updateDraft({ basic: { gender: "male" } })}
               />
               <ProfileSetupChip
                 label='여성'
                 selected={gender === "female"}
-                onPress={() => setGender("female")}
+                onPress={() => updateDraft({ basic: { gender: "female" } })}
               />
             </View>
           </View>
@@ -98,12 +101,12 @@ export default function ProfileSetupScreen() {
               <ProfileSetupChip
                 label='기숙사'
                 selected={residence === "dorm"}
-                onPress={() => setResidence("dorm")}
+                onPress={() => updateDraft({ basic: { residence: "dorm" } })}
               />
               <ProfileSetupChip
                 label='쉐어하우스'
                 selected={residence === "share"}
-                onPress={() => setResidence("share")}
+                onPress={() => updateDraft({ basic: { residence: "share" } })}
               />
             </View>
           </View>
@@ -124,7 +127,7 @@ export default function ProfileSetupScreen() {
                 zIndex={openPicker === "grade" ? 10 : 1}
                 onToggle={() => togglePicker("grade")}
                 onSelect={(value) => {
-                  setGrade(value as GradeOption);
+                  updateDraft({ basic: { grade: value as GradeOption } });
                   setOpenPicker(null);
                 }}
               />
@@ -137,7 +140,9 @@ export default function ProfileSetupScreen() {
                 zIndex={openPicker === "enrollment" ? 10 : 1}
                 onToggle={() => togglePicker("enrollment")}
                 onSelect={(value) => {
-                  setEnrollment(value as EnrollmentOption);
+                  updateDraft({
+                    basic: { enrollment: value as EnrollmentOption },
+                  });
                   setOpenPicker(null);
                 }}
               />
@@ -151,7 +156,7 @@ export default function ProfileSetupScreen() {
                 zIndex={openPicker === "graduation" ? 10 : 1}
                 onToggle={() => togglePicker("graduation")}
                 onSelect={(value) => {
-                  setGraduation(value);
+                  updateDraft({ basic: { graduationYear: value } });
                   setOpenPicker(null);
                 }}
               />

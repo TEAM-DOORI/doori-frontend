@@ -1,29 +1,25 @@
 import { useRouter } from "expo-router";
-import { useState } from "react";
 import { Pressable, ScrollView, View } from "react-native";
 import { useSafeAreaInsets } from "react-native-safe-area-context";
 
-import { BackgroundGradient } from "../components/layout/BackgroundGradient";
-import { BackButton } from "../components/navigation/BackButton";
-import { IconSelectChip } from "../components/profile-setup/IconSelectChip";
-import { LifestyleOptionCard } from "../components/profile-setup/LifestyleOptionCard";
-import { ProgressBar } from "../components/profile-setup/ProgressBar";
-import { Text } from "../components/typography";
-import { vs } from "../constants";
+import { BackgroundGradient } from "../../components/layout/BackgroundGradient";
+import { BackButton } from "../../components/navigation/BackButton";
+import { IconSelectChip } from "../../components/profile-setup/IconSelectChip";
+import { LifestyleOptionCard } from "../../components/profile-setup/LifestyleOptionCard";
+import { ProgressBar } from "../../components/profile-setup/ProgressBar";
+import { Text } from "../../components/typography";
+import { vs } from "../../constants";
+import { useProfileSetup } from "../../contexts/ProfileSetupContext";
 import { styles } from "./profile-setup-lifestyle.styles";
-
-type SmokingOption = "non-smoker" | "smoker";
-type SleepOption = "early" | "late" | "irregular";
 
 export default function ProfileSetupLifestyleScreen() {
   const router = useRouter();
   const insets = useSafeAreaInsets();
-
-  const [smoking, setSmoking] = useState<SmokingOption>("non-smoker");
-  const [sleep, setSleep] = useState<SleepOption>("late");
+  const { draft, updateDraft } = useProfileSetup();
+  const { smoking, sleep } = draft.lifestyle;
 
   const handleNext = () => {
-    router.push("/profile-setup-preferences");
+    router.push("/onboarding/profile-setup-preferences");
   };
 
   return (
@@ -55,20 +51,24 @@ export default function ProfileSetupLifestyleScreen() {
             <Text
               weight='semiBold'
               style={styles.sectionLabel}>
-              흡연 여부를 선택해주세요
+              흡연 여부
             </Text>
             <View style={styles.rowCompact}>
               <IconSelectChip
                 emoji='🚭'
                 label='비흡연'
                 selected={smoking === "non-smoker"}
-                onPress={() => setSmoking("non-smoker")}
+                onPress={() =>
+                  updateDraft({ lifestyle: { smoking: "non-smoker" } })
+                }
               />
               <IconSelectChip
                 emoji='🚬'
                 label='흡연'
                 selected={smoking === "smoker"}
-                onPress={() => setSmoking("smoker")}
+                onPress={() =>
+                  updateDraft({ lifestyle: { smoking: "smoker" } })
+                }
               />
             </View>
           </View>
@@ -84,19 +84,21 @@ export default function ProfileSetupLifestyleScreen() {
                 emoji='☀'
                 label='일찍 자요'
                 selected={sleep === "early"}
-                onPress={() => setSleep("early")}
+                onPress={() => updateDraft({ lifestyle: { sleep: "early" } })}
               />
               <LifestyleOptionCard
                 emoji='🌙'
                 label='늦게 자요'
                 selected={sleep === "late"}
-                onPress={() => setSleep("late")}
+                onPress={() => updateDraft({ lifestyle: { sleep: "late" } })}
               />
               <LifestyleOptionCard
                 emoji='⏰'
                 label='일정하지 않아요'
                 selected={sleep === "irregular"}
-                onPress={() => setSleep("irregular")}
+                onPress={() =>
+                  updateDraft({ lifestyle: { sleep: "irregular" } })
+                }
               />
             </View>
           </View>
