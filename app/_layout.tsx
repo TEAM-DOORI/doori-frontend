@@ -37,9 +37,10 @@ export default function RootLayout() {
   return (
     <ThemeProvider value={DefaultTheme}>
       <Stack screenOptions={{ headerShown: false }}>
-        <Stack.Screen name="index" />
-        <Stack.Screen name="login" />
-        <Stack.Screen name="(tabs)" />
+        <Stack.Screen name='index' />
+        <Stack.Screen name='login' />
+        <Stack.Screen name='profile-setup' />
+        <Stack.Screen name='(tabs)' />
       </Stack>
       <StatusBar style='auto' />
     </ThemeProvider>
