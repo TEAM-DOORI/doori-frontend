@@ -5,25 +5,36 @@ import { useSafeAreaInsets } from "react-native-safe-area-context";
 
 import { BackgroundGradient } from "../components/layout/BackgroundGradient";
 import { BackButton } from "../components/navigation/BackButton";
-import { IconSelectChip } from "../components/profile-setup/IconSelectChip";
 import { LifestyleOptionCard } from "../components/profile-setup/LifestyleOptionCard";
 import { ProgressBar } from "../components/profile-setup/ProgressBar";
 import { Text } from "../components/typography";
 import { vs } from "../constants";
-import { styles } from "./profile-setup-lifestyle.styles";
+import { styles } from "./profile-setup-preferences.styles";
 
-type SmokingOption = "non-smoker" | "smoker";
-type SleepOption = "early" | "late" | "irregular";
+type CleanlinessOption = "very" | "normal" | "low";
+type NoiseOption = "sensitive" | "normal" | "insensitive";
 
-export default function ProfileSetupLifestyleScreen() {
+const CLEANLINESS_OPTIONS = [
+  { value: "very" as const, emoji: "🧼", label: "매우 중요" },
+  { value: "normal" as const, emoji: "🙂", label: "보통" },
+  { value: "low" as const, emoji: "😅", label: "크게 신경 안 써요" },
+];
+
+const NOISE_OPTIONS = [
+  { value: "sensitive" as const, emoji: "🔇", label: "민감해요" },
+  { value: "normal" as const, emoji: "🔉", label: "보통이에요" },
+  { value: "insensitive" as const, emoji: "🔊", label: "둔감해요" },
+];
+
+export default function ProfileSetupPreferencesScreen() {
   const router = useRouter();
   const insets = useSafeAreaInsets();
 
-  const [smoking, setSmoking] = useState<SmokingOption>("non-smoker");
-  const [sleep, setSleep] = useState<SleepOption>("late");
+  const [cleanliness, setCleanliness] = useState<CleanlinessOption>("very");
+  const [noise, setNoise] = useState<NoiseOption>("sensitive");
 
   const handleNext = () => {
-    router.push("/profile-setup-preferences");
+    router.replace("/(tabs)");
   };
 
   return (
@@ -32,7 +43,7 @@ export default function ProfileSetupLifestyleScreen() {
         <View style={styles.header}>
           <BackButton />
           <View style={styles.progressWrap}>
-            <ProgressBar progress={0.4} />
+            <ProgressBar progress={0.6} />
           </View>
         </View>
 
@@ -55,21 +66,18 @@ export default function ProfileSetupLifestyleScreen() {
             <Text
               weight='semiBold'
               style={styles.sectionLabel}>
-              흡연 여부를 선택해주세요
+              청결은 얼마나 중요하게 생각하시나요?
             </Text>
-            <View style={styles.rowCompact}>
-              <IconSelectChip
-                emoji='🚭'
-                label='비흡연'
-                selected={smoking === "non-smoker"}
-                onPress={() => setSmoking("non-smoker")}
-              />
-              <IconSelectChip
-                emoji='🚬'
-                label='흡연'
-                selected={smoking === "smoker"}
-                onPress={() => setSmoking("smoker")}
-              />
+            <View style={styles.optionRow}>
+              {CLEANLINESS_OPTIONS.map((option) => (
+                <LifestyleOptionCard
+                  key={option.value}
+                  emoji={option.emoji}
+                  label={option.label}
+                  selected={cleanliness === option.value}
+                  onPress={() => setCleanliness(option.value)}
+                />
+              ))}
             </View>
           </View>
 
@@ -77,27 +85,18 @@ export default function ProfileSetupLifestyleScreen() {
             <Text
               weight='semiBold'
               style={styles.sectionLabel}>
-              보통 언제 잠에 드나요?
+              소음에 얼마나 민감한가요?
             </Text>
-            <View style={styles.sleepRow}>
-              <LifestyleOptionCard
-                emoji='☀'
-                label='일찍 자요'
-                selected={sleep === "early"}
-                onPress={() => setSleep("early")}
-              />
-              <LifestyleOptionCard
-                emoji='🌙'
-                label='늦게 자요'
-                selected={sleep === "late"}
-                onPress={() => setSleep("late")}
-              />
-              <LifestyleOptionCard
-                emoji='⏰'
-                label='일정하지 않아요'
-                selected={sleep === "irregular"}
-                onPress={() => setSleep("irregular")}
-              />
+            <View style={styles.optionRow}>
+              {NOISE_OPTIONS.map((option) => (
+                <LifestyleOptionCard
+                  key={option.value}
+                  emoji={option.emoji}
+                  label={option.label}
+                  selected={noise === option.value}
+                  onPress={() => setNoise(option.value)}
+                />
+              ))}
             </View>
           </View>
         </ScrollView>

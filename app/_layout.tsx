@@ -41,6 +41,7 @@ export default function RootLayout() {
         <Stack.Screen name='login' />
         <Stack.Screen name='profile-setup' />
         <Stack.Screen name='profile-setup-lifestyle' />
+        <Stack.Screen name='profile-setup-preferences' />
         <Stack.Screen name='(tabs)' />
       </Stack>
       <StatusBar style='auto' />
