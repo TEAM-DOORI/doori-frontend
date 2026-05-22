@@ -47,6 +47,7 @@ export function TabBar({ state, descriptors, navigation }: BottomTabBarProps) {
     const iconData = TAB_ICONS[tabKey];
 
     const onPress = () => {
+      setMenuOpen(false);
       const event = navigation.emit({
         type: "tabPress",
         target: route.key,
