@@ -1,7 +1,10 @@
 import type { BottomTabBarProps } from "@react-navigation/bottom-tabs";
-import { Image, Pressable, View } from "react-native";
+import { Image } from "expo-image";
+import { useState } from "react";
+import { Pressable, View } from "react-native";
 import { useSafeAreaInsets } from "react-native-safe-area-context";
 import { Text } from "../typography";
+import { PlusMenu } from "./PlusMenu";
 import { styles } from "./TabBar.styles";
 
 const TAB_ICONS = {
@@ -31,57 +34,93 @@ type TabKey = keyof typeof TAB_ICONS;
 
 export function TabBar({ state, descriptors, navigation }: BottomTabBarProps) {
   const insets = useSafeAreaInsets();
+  const [menuOpen, setMenuOpen] = useState(false);
+  const [tabBarHeight, setTabBarHeight] = useState(0);
+
+  const renderTab = (route: (typeof state.routes)[number], index: number) => {
+    const isFocused = state.index === index;
+    const tabKey = route.name as TabKey;
+    const iconData = TAB_ICONS[tabKey];
+
+    const onPress = () => {
+      const event = navigation.emit({
+        type: "tabPress",
+        target: route.key,
+        canPreventDefault: true,
+      });
+      if (!isFocused && !event.defaultPrevented) {
+        navigation.navigate(route.name, route.params);
+      }
+    };
+
+    return (
+      <Pressable
+        key={route.key}
+        accessibilityRole="button"
+        accessibilityState={isFocused ? { selected: true } : {}}
+        accessibilityLabel={
+          descriptors[route.key].options.tabBarAccessibilityLabel ??
+          iconData.label
+        }
+        testID={descriptors[route.key].options.tabBarButtonTestID}
+        onPress={onPress}
+        onLongPress={() =>
+          navigation.emit({ type: "tabLongPress", target: route.key })
+        }
+        style={styles.tabButton}
+      >
+        <Image
+          source={isFocused ? iconData.active : iconData.inactive}
+          style={styles.icon}
+          contentFit="contain"
+        />
+        <Text style={styles.label}>{iconData.label}</Text>
+      </Pressable>
+    );
+  };
+
+  const mid = Math.ceil(state.routes.length / 2);
 
   return (
     <View
-      style={[styles.wrapper, { paddingBottom: Math.max(insets.bottom, 10) }]}>
+      style={[styles.wrapper, { paddingBottom: Math.max(insets.bottom, 10) }]}
+      onLayout={(e) => setTabBarHeight(e.nativeEvent.layout.height)}
+    >
+      {/* PlusMenu: 탭바 컨텐츠보다 먼저 렌더 → 자동으로 뒤에 배치 */}
+      {menuOpen && (
+        <>
+          <Pressable style={styles.menuBackdrop} onPress={() => setMenuOpen(false)} />
+          <View
+            style={[styles.menuContainer, { bottom: tabBarHeight }]}
+            pointerEvents="box-none"
+          >
+            <PlusMenu onItemPress={() => setMenuOpen(false)} />
+          </View>
+        </>
+      )}
+
       <View style={styles.tabContainer}>
-        {state.routes.map((route, index) => {
-          const isFocused = state.index === index;
-          const tabKey = route.name as TabKey;
-          const iconData = TAB_ICONS[tabKey];
-
-          const onPress = () => {
-            const event = navigation.emit({
-              type: "tabPress",
-              target: route.key,
-              canPreventDefault: true,
-            });
-
-            if (!isFocused && !event.defaultPrevented) {
-              navigation.navigate(route.name, route.params);
-            }
-          };
-
-          const onLongPress = () => {
-            navigation.emit({
-              type: "tabLongPress",
-              target: route.key,
-            });
-          };
-
-          return (
-            <Pressable
-              key={route.key}
-              accessibilityRole='button'
-              accessibilityState={isFocused ? { selected: true } : {}}
-              accessibilityLabel={
-                descriptors[route.key].options.tabBarAccessibilityLabel ??
-                iconData.label
-              }
-              testID={descriptors[route.key].options.tabBarButtonTestID}
-              onPress={onPress}
-              onLongPress={onLongPress}
-              style={styles.tabButton}>
-              <Image
-                source={isFocused ? iconData.active : iconData.inactive}
-                style={styles.icon}
-              />
-              <Text style={styles.label}>{iconData.label}</Text>
-            </Pressable>
-          );
-        })}
+        <View style={styles.tabGroup}>
+          {state.routes.slice(0, mid).map((route, i) => renderTab(route, i))}
+        </View>
+        <View style={styles.plusSlot} />
+        <View style={styles.tabGroup}>
+          {state.routes.slice(mid).map((route, i) => renderTab(route, i + mid))}
+        </View>
       </View>
+
+      <Pressable
+        style={styles.plusButton}
+        accessibilityRole="button"
+        accessibilityLabel="추가"
+        onPress={() => setMenuOpen((v) => !v)}
+      >
+        <Image
+          source={require("../../app/(tabs)/assets/tabbar/plus-tab.png")}
+          style={styles.plusCircle}
+          contentFit="contain"
+        />
+      </Pressable>
     </View>
   );
 }
