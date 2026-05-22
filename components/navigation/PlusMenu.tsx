@@ -27,14 +27,17 @@ type ItemId = (typeof ITEMS)[number]["id"];
 
 type ItemLayout = { id: string; x: number; top?: number; bottom?: number };
 
+// 아치(244×122) 내부 좌표 (Figma node 1015:8267 기준)
+// x = figma_centerX - archLeft(75) - itemWidth/2
 const ITEM_LAYOUTS: ItemLayout[] = [
   { id: "roommate", x: hs(49.5) - ITEM_WIDTH / 2, bottom: vs(8) },
-  { id: "status", x: hs(121.5) - ITEM_WIDTH / 2, top: vs(8) },
-  { id: "log", x: hs(197.5) - ITEM_WIDTH / 2, bottom: vs(8) },
+  { id: "status",   x: hs(121.5) - ITEM_WIDTH / 2, top: vs(8) },
+  { id: "log",      x: hs(197.5) - ITEM_WIDTH / 2, bottom: vs(8) },
 ];
 
-// 스태거 순서: 가운데 → 양옆 동시
-const STAGGER_DELAY = [60, 0, 60] as const;
+// 아이템 등장 순서: 중앙(idx=1) → 좌(idx=0), 우(idx=2)
+const ITEM_ENTER_ORDER = [1, 0, 2] as const;
+const STAGGER_INTERVAL_MS = 60;
 
 type Props = {
   onItemPress?: (id: ItemId) => void;
@@ -54,19 +57,24 @@ export function PlusMenu({ onItemPress }: Props) {
       mass: 0.8,
     }).start();
 
-    // 아이템 스태거: 중앙(idx=1) → 좌우(idx=0,2)
-    const order = [1, 0, 2];
-    order.forEach((idx, step) => {
-      setTimeout(() => {
-        Animated.spring(itemAnims[idx], {
-          toValue: 1,
-          useNativeDriver: true,
-          damping: 18,
-          stiffness: 320,
-          mass: 0.7,
-        }).start();
-      }, step * 60);
+    const timeouts: ReturnType<typeof setTimeout>[] = [];
+    ITEM_ENTER_ORDER.forEach((idx, step) => {
+      timeouts.push(
+        setTimeout(() => {
+          Animated.spring(itemAnims[idx], {
+            toValue: 1,
+            useNativeDriver: true,
+            damping: 18,
+            stiffness: 320,
+            mass: 0.7,
+          }).start();
+        }, step * STAGGER_INTERVAL_MS),
+      );
     });
+
+    return () => {
+      timeouts.forEach(clearTimeout);
+    };
   }, [archAnim, itemAnims]);
 
   return (

@@ -14,7 +14,7 @@ export const COLORS = {
   cardGradientFrom: "#FFFFFF",
 };
 
-export const SCREEN_WIDTH = 393;
+const SCREEN_WIDTH = 393;
 export const CARD_WIDTH = hs(255);
 export const CARD_HEIGHT = ms(335, 0.5);
 export const CARD_GAP = hs(8);
@@ -26,12 +26,6 @@ export const styles = StyleSheet.create({
   },
   safeArea: {
     flex: 1,
-  },
-  scroll: {
-    flex: 1,
-  },
-  scrollContent: {
-    paddingBottom: vs(120),
   },
 
   header: {

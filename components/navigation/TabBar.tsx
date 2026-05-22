@@ -3,9 +3,13 @@ import { Image } from "expo-image";
 import { useState } from "react";
 import { Pressable, View } from "react-native";
 import { useSafeAreaInsets } from "react-native-safe-area-context";
+import { vs } from "../../constants";
 import { Text } from "../typography";
 import { PlusMenu } from "./PlusMenu";
 import { styles } from "./TabBar.styles";
+
+// onLayout 측정 전에 사용되는 합리적 기본 높이 (콘텐츠 + safe area 추정)
+const DEFAULT_TAB_BAR_HEIGHT = vs(80);
 
 const TAB_ICONS = {
   index: {
@@ -35,7 +39,7 @@ type TabKey = keyof typeof TAB_ICONS;
 export function TabBar({ state, descriptors, navigation }: BottomTabBarProps) {
   const insets = useSafeAreaInsets();
   const [menuOpen, setMenuOpen] = useState(false);
-  const [tabBarHeight, setTabBarHeight] = useState(0);
+  const [tabBarHeight, setTabBarHeight] = useState(DEFAULT_TAB_BAR_HEIGHT);
 
   const renderTab = (route: (typeof state.routes)[number], index: number) => {
     const isFocused = state.index === index;

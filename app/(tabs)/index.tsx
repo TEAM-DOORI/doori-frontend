@@ -7,6 +7,7 @@ import { Animated, Easing, FlatList, Pressable, View } from "react-native";
 import { useSafeAreaInsets } from "react-native-safe-area-context";
 
 import { Text } from "../../components/typography";
+import { ROOMMATES, USER_NAME, USER_TRAITS, type Roommate } from "../../mocks/home";
 import {
   CARD_GAP,
   CARD_RAISE,
@@ -15,61 +16,9 @@ import {
   styles,
 } from "./index.styles";
 
-type Roommate = {
-  id: string;
-  name: string;
-  matchRate: number;
-  traits: [string, string, string];
-  profile: any;
-};
-
-const USER_NAME = "선우";
-const USER_TRAITS: [string, string, string] = ["야행성", "비흡연", "깔끔한"];
-
-const ROOMMATES: Roommate[] = [
-  {
-    id: "1",
-    name: "김가람1",
-    matchRate: 98,
-    traits: ["야행성", "비흡연", "깔끔한"],
-    profile: require("../../assets/images/home/profile-1.png"),
-  },
-  {
-    id: "2",
-    name: "김가람2",
-    matchRate: 98,
-    traits: ["야행성", "비흡연", "깔끔한"],
-    profile: require("../../assets/images/home/profile-1.png"),
-  },
-  {
-    id: "3",
-    name: "김가람3",
-    matchRate: 98,
-    traits: ["야행성", "비흡연", "깔끔한"],
-    profile: require("../../assets/images/home/profile-1.png"),
-  },
-  {
-    id: "4",
-    name: "김가람4",
-    matchRate: 98,
-    traits: ["야행성", "비흡연", "깔끔한"],
-    profile: require("../../assets/images/home/profile-1.png"),
-  },
-  {
-    id: "5",
-    name: "김가람5",
-    matchRate: 98,
-    traits: ["야행성", "비흡연", "깔끔한"],
-    profile: require("../../assets/images/home/profile-1.png"),
-  },
-  {
-    id: "6",
-    name: "김가람6",
-    matchRate: 98,
-    traits: ["야행성", "비흡연", "깔끔한"],
-    profile: require("../../assets/images/home/profile-1.png"),
-  },
-];
+const SNAP = CARD_WIDTH + CARD_GAP;
+const AUTO_SLIDE_INTERVAL = 3000;
+const SLIDE_ANIM_DURATION = 700;
 
 function Header() {
   return (
@@ -128,19 +77,12 @@ function TraitChip({
 function TraitChipRow({
   traits,
   tone,
-  style,
 }: {
-  traits: [string, string, string];
+  traits: readonly [string, string, string];
   tone: "light" | "primary";
-  style?: any;
 }) {
   return (
-    <View
-      style={[
-        tone === "light" ? styles.topChipsRow : styles.cardChipsRow,
-        style,
-      ]}
-    >
+    <View style={tone === "light" ? styles.topChipsRow : styles.cardChipsRow}>
       {traits.map((t) => (
         <TraitChip key={t} label={t} tone={tone} />
       ))}
@@ -166,8 +108,10 @@ const RoommateCard = memo(function RoommateCard({
   onPress,
 }: {
   item: Roommate;
-  onPress: () => void;
+  onPress: (id: string) => void;
 }) {
+  const handlePress = useCallback(() => onPress(item.id), [onPress, item.id]);
+
   return (
     <LinearGradient
       colors={[COLORS.cardGradientFrom, "rgba(255,255,255,0)"]}
@@ -186,7 +130,7 @@ const RoommateCard = memo(function RoommateCard({
       <TraitChipRow traits={item.traits} tone="primary" />
       <Pressable
         style={({ pressed }) => [styles.cta, pressed && { opacity: 0.9 }]}
-        onPress={onPress}
+        onPress={handlePress}
         accessibilityRole="button"
         accessibilityLabel={`${item.name} 룸메 보러가기`}
       >
@@ -198,70 +142,135 @@ const RoommateCard = memo(function RoommateCard({
   );
 });
 
-const SNAP = CARD_WIDTH + CARD_GAP;
-const AUTO_SLIDE_INTERVAL = 3000;
-
 function RoommateCarousel() {
   const router = useRouter();
   const scrollX = useRef(new Animated.Value(0)).current;
-  const listRef = useRef<FlatList>(null);
+  const listRef = useRef<FlatList<Roommate>>(null);
   const currentIndex = useRef(0);
   const isDragging = useRef(false);
 
+  // 자동 슬라이드 + cleanup
   useEffect(() => {
+    let activeAnim: Animated.CompositeAnimation | null = null;
+    let activeValue: Animated.Value | null = null;
+    let activeListenerId: string | null = null;
+
+    const cleanupActive = () => {
+      activeAnim?.stop();
+      if (activeValue && activeListenerId !== null) {
+        activeValue.removeListener(activeListenerId);
+      }
+      activeAnim = null;
+      activeValue = null;
+      activeListenerId = null;
+    };
+
     const timer = setInterval(() => {
       if (isDragging.current) return;
       const next = Math.min(currentIndex.current + 1, ROOMMATES.length - 1);
       if (next === currentIndex.current) return;
 
+      cleanupActive();
+
       const startOffset = currentIndex.current * SNAP;
       currentIndex.current = next;
 
-      const anim = new Animated.Value(startOffset);
-      const id = anim.addListener(({ value }) => {
-        listRef.current?.scrollToOffset({ offset: value, animated: false });
+      const value = new Animated.Value(startOffset);
+      const listenerId = value.addListener(({ value: v }) => {
+        listRef.current?.scrollToOffset({ offset: v, animated: false });
       });
-      Animated.timing(anim, {
+      const anim = Animated.timing(value, {
         toValue: next * SNAP,
-        duration: 700,
+        duration: SLIDE_ANIM_DURATION,
         easing: Easing.inOut(Easing.cubic),
         useNativeDriver: false,
-      }).start(() => anim.removeListener(id));
+      });
+
+      activeAnim = anim;
+      activeValue = value;
+      activeListenerId = listenerId;
+
+      anim.start(() => {
+        value.removeListener(listenerId);
+        if (activeValue === value) {
+          activeAnim = null;
+          activeValue = null;
+          activeListenerId = null;
+        }
+      });
     }, AUTO_SLIDE_INTERVAL);
-    return () => clearInterval(timer);
+
+    return () => {
+      clearInterval(timer);
+      cleanupActive();
+    };
   }, []);
 
-  const handlePress = useCallback(
+  const handleCardPress = useCallback(
     (id: string) => {
+      // TODO: 룸메이트 상세 라우트 생성 후 typed routes로 교체
       router.push(`/roommate/${id}` as never);
     },
     [router],
   );
 
+  const handleScrollBeginDrag = useCallback(() => {
+    isDragging.current = true;
+  }, []);
+
+  const handleMomentumScrollEnd = useCallback((e: { nativeEvent: { contentOffset: { x: number } } }) => {
+    isDragging.current = false;
+    currentIndex.current = Math.round(e.nativeEvent.contentOffset.x / SNAP);
+  }, []);
+
+  const renderItem = useCallback(
+    ({ item, index }: { item: Roommate; index: number }) => {
+      const inputRange = [
+        (index - 1) * SNAP,
+        index * SNAP,
+        (index + 1) * SNAP,
+      ];
+      const translateY = scrollX.interpolate({
+        inputRange,
+        outputRange: [CARD_RAISE, 0, CARD_RAISE],
+        extrapolate: "clamp",
+      });
+      return (
+        <Animated.View
+          style={[styles.cardOuter, { transform: [{ translateY }] }]}
+        >
+          <RoommateCard item={item} onPress={handleCardPress} />
+        </Animated.View>
+      );
+    },
+    [scrollX, handleCardPress],
+  );
+
+  const getItemLayout = useCallback(
+    (_: unknown, index: number) => ({
+      length: SNAP,
+      offset: SNAP * index,
+      index,
+    }),
+    [],
+  );
+
   return (
     <View style={styles.carouselWrap}>
       <Animated.FlatList
-        ref={listRef as any}
+        // Animated.FlatList의 ref 타입이 정확히 FlatList<T>로 추론되지 않아 캐스팅
+        ref={listRef as unknown as React.Ref<Animated.FlatList<Roommate>>}
         data={ROOMMATES}
         horizontal
-        keyExtractor={(item) => item.id}
+        keyExtractor={(item: Roommate) => item.id}
         showsHorizontalScrollIndicator={false}
         snapToInterval={SNAP}
         decelerationRate="fast"
         contentContainerStyle={styles.carouselContent}
         initialScrollIndex={0}
-        getItemLayout={(_, index) => ({
-          length: SNAP,
-          offset: SNAP * index,
-          index,
-        })}
-        onScrollBeginDrag={() => {
-          isDragging.current = true;
-        }}
-        onMomentumScrollEnd={(e) => {
-          isDragging.current = false;
-          currentIndex.current = Math.round(e.nativeEvent.contentOffset.x / SNAP);
-        }}
+        getItemLayout={getItemLayout}
+        onScrollBeginDrag={handleScrollBeginDrag}
+        onMomentumScrollEnd={handleMomentumScrollEnd}
         onScroll={Animated.event(
           [{ nativeEvent: { contentOffset: { x: scrollX } } }],
           { useNativeDriver: true },
@@ -269,25 +278,7 @@ function RoommateCarousel() {
         scrollEventThrottle={16}
         windowSize={5}
         removeClippedSubviews={false}
-        renderItem={({ item, index }) => {
-          const inputRange = [
-            (index - 1) * SNAP,
-            index * SNAP,
-            (index + 1) * SNAP,
-          ];
-          const translateY = scrollX.interpolate({
-            inputRange,
-            outputRange: [CARD_RAISE, 0, CARD_RAISE],
-            extrapolate: "clamp",
-          });
-          return (
-            <Animated.View
-              style={[styles.cardOuter, { transform: [{ translateY }] }]}
-            >
-              <RoommateCard item={item} onPress={() => handlePress(item.id)} />
-            </Animated.View>
-          );
-        }}
+        renderItem={renderItem}
       />
     </View>
   );
