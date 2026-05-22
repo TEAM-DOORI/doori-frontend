@@ -1,5 +1,7 @@
-import { StyleSheet } from "react-native";
+import { Dimensions, StyleSheet } from "react-native";
 import { fs, hs, ms, vs } from "../../constants";
+
+const DEVICE_WIDTH = Dimensions.get("window").width;
 
 export const COLORS = {
   bgTop: "#F3F6FF",
@@ -14,7 +16,6 @@ export const COLORS = {
   cardGradientFrom: "#FFFFFF",
 };
 
-const SCREEN_WIDTH = 393;
 export const CARD_WIDTH = hs(255);
 export const CARD_HEIGHT = ms(335, 0.5);
 export const CARD_GAP = hs(8);
@@ -100,7 +101,8 @@ export const styles = StyleSheet.create({
     height: CARD_HEIGHT + CARD_RAISE,
   },
   carouselContent: {
-    paddingHorizontal: (SCREEN_WIDTH - 255) / 2,
+    // 실제 화면 폭 + 스케일된 카드 폭 기반으로 중앙 정렬 보정
+    paddingHorizontal: (DEVICE_WIDTH - CARD_WIDTH) / 2,
   },
   cardOuter: {
     width: CARD_WIDTH,
