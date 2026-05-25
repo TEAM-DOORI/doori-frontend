@@ -27,23 +27,23 @@ export const styles = StyleSheet.create({
     marginBottom: vs(8),
   },
   description: {
-    fontSize: fs(15),
+    fontSize: fs(16),
     lineHeight: vs(22),
     color: colorStyle.S05,
-    marginBottom: vs(48),
+    marginBottom: vs(75),
   },
   section: {
-    marginBottom: vs(36),
+    marginBottom: vs(40),
   },
   sectionLabel: {
     fontSize: fs(18),
-    lineHeight: vs(22),
+    lineHeight: vs(25),
     color: "#4B566A",
     marginBottom: vs(15),
   },
   rowCompact: {
     flexDirection: "row",
-    flexWrap: "wrap",
+    flexWrap: "nowrap",
     alignItems: "center",
     gap: hs(10),
     alignSelf: "flex-start",
@@ -51,7 +51,8 @@ export const styles = StyleSheet.create({
   sleepRow: {
     flexDirection: "row",
     alignItems: "stretch",
-    gap: hs(8),
+    gap: hs(10),
+    alignSelf: "stretch",
     width: "100%",
   },
   footer: {
@@ -61,13 +62,13 @@ export const styles = StyleSheet.create({
   nextButton: {
     backgroundColor: color.buttonPrimary,
     borderRadius: ms(15),
-    paddingVertical: vs(16),
+    paddingVertical: vs(14),
     alignItems: "center",
     justifyContent: "center",
   },
   nextButtonText: {
-    fontSize: fs(18),
-    lineHeight: vs(24),
+    fontSize: fs(20),
+    lineHeight: vs(28),
     color: color.textPrimary,
   },
 });

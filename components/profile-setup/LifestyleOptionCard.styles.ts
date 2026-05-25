@@ -6,45 +6,48 @@ import { colorStyle } from "../../constants/colors";
 export const styles = StyleSheet.create({
   card: {
     flex: 1,
-    minHeight: vs(116),
+    minWidth: hs(103),
+    height: vs(120),
     alignItems: "center",
     justifyContent: "center",
-    gap: vs(10),
+    gap: vs(8),
     borderRadius: ms(15),
     borderWidth: hs(1),
-    borderColor: colorStyle.S02,
-    backgroundColor: "#FFFFFF",
-    paddingTop: vs(20),
-    paddingBottom: vs(16),
-    paddingHorizontal: hs(8),
-    overflow: "visible",
+    paddingVertical: vs(10),
+    paddingHorizontal: hs(10),
+  },
+  splitLabelBlock: {
+    alignItems: "center",
+    alignSelf: "stretch",
+  },
+  cardUnselected: {
+    borderColor: colorStyle.S03,
+    backgroundColor: colorStyle.S01,
   },
   cardSelected: {
     borderColor: colorStyle.Sub1,
-  },
-  emojiWrap: {
-    minWidth: hs(32),
-    minHeight: vs(40),
-    paddingVertical: vs(6),
-    paddingHorizontal: hs(6),
-    alignItems: "center",
-    justifyContent: "center",
-    overflow: "visible",
-  },
-  emojiInactive: {
-    opacity: 0.5,
+    backgroundColor: "#FFFFFF",
   },
   emoji: {
-    fontSize: fs(26),
-    lineHeight: vs(32),
+    fontSize: fs(20),
+    lineHeight: vs(30),
     textAlign: "center",
     includeFontPadding: false,
   },
+  emojiDimmed: {
+    opacity: 0.5,
+  },
   label: {
-    fontSize: fs(14),
-    lineHeight: vs(20),
-    color: colorStyle.S04,
+    fontSize: fs(16),
+    lineHeight: vs(19),
+    color: colorStyle.S03,
     textAlign: "center",
+  },
+  labelSingle: {
+    alignSelf: "stretch",
+  },
+  labelLine: {
+    lineHeight: vs(19),
   },
   labelSelected: {
     color: colorStyle.Sub1,

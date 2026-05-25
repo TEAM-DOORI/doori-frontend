@@ -5,34 +5,34 @@ import { colorStyle } from "../../constants/colors";
 
 export const styles = StyleSheet.create({
   chip: {
-    alignSelf: "flex-start",
-    minHeight: vs(40),
+    width: hs(114),
+    minHeight: vs(42),
     flexDirection: "row",
     alignItems: "center",
     justifyContent: "center",
-    gap: hs(6),
-    borderRadius: ms(99),
+    gap: hs(10),
+    borderRadius: ms(30),
     borderWidth: hs(1),
-    backgroundColor: "#FFFFFF",
-    paddingVertical: vs(9),
-    paddingHorizontal: hs(20),
+    paddingVertical: vs(10),
+    paddingHorizontal: hs(26),
   },
   chipUnselected: {
-    borderColor: colorStyle.S04,
+    borderColor: colorStyle.S03,
+    backgroundColor: colorStyle.S01,
   },
   chipSelected: {
     borderColor: colorStyle.Sub1,
+    backgroundColor: "#FEFEFE",
   },
   emoji: {
-    fontSize: fs(20),
-    lineHeight: vs(26),
-    paddingVertical: vs(2),
+    fontSize: fs(16),
+    lineHeight: vs(22),
     includeFontPadding: false,
   },
   label: {
-    fontSize: fs(15),
+    fontSize: fs(16),
     lineHeight: vs(22),
-    color: colorStyle.S04,
+    color: colorStyle.S03,
   },
   labelSelected: {
     color: colorStyle.Sub1,

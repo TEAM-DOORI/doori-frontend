@@ -9,22 +9,31 @@ import { ProgressBar } from "../../components/profile-setup/ProgressBar";
 import { Text } from "../../components/typography";
 import { vs } from "../../constants";
 import { useProfileSetup } from "../../contexts/ProfileSetupContext";
+import type { CleanlinessOption, NoiseOption } from "../../types/profile-setup";
 import { styles } from "./_styles/profile-setup-preferences.styles";
 
-const CLEANLINESS_OPTIONS = [
-  { value: "very" as const, emoji: "🧼", label: "매우 중요" },
-  { value: "normal" as const, emoji: "🙂", label: "보통" },
-  { value: "low" as const, emoji: "😅", label: "크게 신경쓰지 안 써요" },
+type PreferenceCardOption<T extends string> = {
+  value: T;
+  emoji: string;
+  label: string;
+  labelLines?: readonly [string, string];
+};
+
+const CLEANLINESS_OPTIONS: PreferenceCardOption<CleanlinessOption>[] = [
+  { value: "very", emoji: "🧼", label: "매우 중요" },
+  { value: "normal", emoji: "🙂", label: "보통" },
+  {
+    value: "low",
+    emoji: "😅",
+    label: "크게 신경 안 써요",
+    labelLines: ["크게 신경", "안 써요"],
+  },
 ];
 
-const NOISE_OPTIONS = [
-  { value: "sensitive" as const, emoji: "🔇", label: "민감해요" },
-  { value: "normal" as const, emoji: "🔉", label: "보통이에요" },
-  {
-    value: "insensitive" as const,
-    emoji: "🔊",
-    label: "둔감해요",
-  },
+const NOISE_OPTIONS: PreferenceCardOption<NoiseOption>[] = [
+  { value: "sensitive", emoji: "🔇", label: "민감해요" },
+  { value: "normal", emoji: "🔉", label: "보통이에요" },
+  { value: "insensitive", emoji: "🔊", label: "둔감해요" },
 ];
 
 export default function ProfileSetupPreferencesScreen() {
@@ -62,45 +71,51 @@ export default function ProfileSetupPreferencesScreen() {
             입력하신 정보를 바탕으로 룸메 프로필이 추천됩니다
           </Text>
 
-          <View style={styles.section}>
-            <Text
-              weight='semiBold'
-              style={styles.sectionLabel}>
-              청결은 얼마나 중요하게 생각하시나요?
-            </Text>
-            <View style={styles.optionRow}>
-              {CLEANLINESS_OPTIONS.map((option) => (
-                <LifestyleOptionCard
-                  key={option.value}
-                  emoji={option.emoji}
-                  label={option.label}
-                  selected={cleanliness === option.value}
-                  onPress={() =>
-                    updateDraft({ preferences: { cleanliness: option.value } })
-                  }
-                />
-              ))}
+          <View style={styles.sections}>
+            <View style={styles.section}>
+              <Text
+                weight='semiBold'
+                style={styles.sectionLabel}>
+                청결은 얼마나 중요하게 생각하시나요?
+              </Text>
+              <View style={styles.optionRow}>
+                {CLEANLINESS_OPTIONS.map((option) => (
+                  <LifestyleOptionCard
+                    key={option.value}
+                    emoji={option.emoji}
+                    label={option.label}
+                    labelLines={option.labelLines}
+                    selected={cleanliness === option.value}
+                    onPress={() =>
+                      updateDraft({
+                        preferences: { cleanliness: option.value },
+                      })
+                    }
+                  />
+                ))}
+              </View>
             </View>
-          </View>
 
-          <View style={styles.section}>
-            <Text
-              weight='semiBold'
-              style={styles.sectionLabel}>
-              소음에 얼마나 민감한가요?
-            </Text>
-            <View style={styles.optionRow}>
-              {NOISE_OPTIONS.map((option) => (
-                <LifestyleOptionCard
-                  key={option.value}
-                  emoji={option.emoji}
-                  label={option.label}
-                  selected={noise === option.value}
-                  onPress={() =>
-                    updateDraft({ preferences: { noise: option.value } })
-                  }
-                />
-              ))}
+            <View style={styles.section}>
+              <Text
+                weight='semiBold'
+                style={styles.sectionLabel}>
+                소음에 얼마나 민감한가요?
+              </Text>
+              <View style={styles.optionRow}>
+                {NOISE_OPTIONS.map((option) => (
+                  <LifestyleOptionCard
+                    key={option.value}
+                    emoji={option.emoji}
+                    label={option.label}
+                    labelLines={option.labelLines}
+                    selected={noise === option.value}
+                    onPress={() =>
+                      updateDraft({ preferences: { noise: option.value } })
+                    }
+                  />
+                ))}
+              </View>
             </View>
           </View>
         </ScrollView>

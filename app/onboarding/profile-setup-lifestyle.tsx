@@ -51,7 +51,7 @@ export default function ProfileSetupLifestyleScreen() {
             <Text
               weight='semiBold'
               style={styles.sectionLabel}>
-              흡연 여부
+              흡연 여부를 선택해주세요
             </Text>
             <View style={styles.rowCompact}>
               <IconSelectChip
@@ -95,6 +95,8 @@ export default function ProfileSetupLifestyleScreen() {
               <LifestyleOptionCard
                 emoji='⏰'
                 label='일정하지 않아요'
+                labelLines={["일정하지", "않아요"]}
+                dimEmojiWhenUnselected
                 selected={sleep === "irregular"}
                 onPress={() =>
                   updateDraft({ lifestyle: { sleep: "irregular" } })
