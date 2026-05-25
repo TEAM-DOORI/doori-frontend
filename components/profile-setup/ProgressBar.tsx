@@ -21,13 +21,13 @@ const styles = StyleSheet.create({
   track: {
     width: "100%",
     height: vs(6),
-    borderRadius: ms(99),
+    borderRadius: ms(2),
     backgroundColor: color.progressTrack,
     overflow: "hidden",
   },
   fill: {
     height: "100%",
-    borderRadius: ms(99),
+    borderRadius: ms(2),
     backgroundColor: color.progressFill,
   },
 });

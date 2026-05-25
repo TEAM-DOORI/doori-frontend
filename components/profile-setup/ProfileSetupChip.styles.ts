@@ -8,7 +8,7 @@ export const styles = StyleSheet.create({
     minHeight: vs(48),
     borderRadius: ms(99),
     borderWidth: hs(1),
-    borderColor: colorStyle.S02,
+    borderColor: colorStyle.S03,
     backgroundColor: "#FFFFFF",
     alignItems: "center",
     justifyContent: "center",
@@ -17,9 +17,10 @@ export const styles = StyleSheet.create({
   },
   chipInline: {
     alignSelf: "flex-start",
-    minHeight: vs(40),
-    paddingVertical: vs(9),
-    paddingHorizontal: hs(28),
+    minHeight: vs(42),
+    borderRadius: ms(30),
+    paddingVertical: vs(10),
+    paddingHorizontal: hs(26),
   },
   chipFullWidth: {
     width: "100%",
@@ -33,19 +34,35 @@ export const styles = StyleSheet.create({
   },
   chipDropdown: {
     alignSelf: "flex-start",
-    minHeight: vs(40),
-    paddingVertical: vs(9),
-    paddingLeft: hs(14),
-    paddingRight: hs(10),
+    height: vs(42),
+    borderRadius: ms(40),
+    paddingVertical: 0,
+    paddingHorizontal: 0,
     flexDirection: "row",
     alignItems: "center",
-    gap: hs(6),
-    justifyContent: "center",
+    gap: hs(10),
   },
-  chipDropdownWide: {
-    minWidth: hs(108),
+  chipDropdownLabel: {
+    flexShrink: 0,
+    includeFontPadding: false,
+  },
+  chipDropdownChevron: {
+    flexShrink: 0,
+  },
+  chipDropdownGrade: {
+    width: hs(102),
+    paddingLeft: hs(22),
+    paddingRight: hs(22),
+  },
+  chipDropdownEnrollment: {
+    width: hs(80),
     paddingLeft: hs(16),
-    paddingRight: hs(14),
+    paddingRight: hs(16),
+  },
+  chipDropdownGraduation: {
+    width: hs(131),
+    paddingLeft: hs(21),
+    paddingRight: hs(20),
   },
   chipWithChevron: {
     flexDirection: "row",
@@ -58,6 +75,9 @@ export const styles = StyleSheet.create({
   chipBorderMuted: {
     borderColor: colorStyle.S05,
   },
+  chipPlaceholder: {
+    borderColor: colorStyle.S04,
+  },
   chipExpanded: {
     borderColor: colorStyle.Sub1,
   },
@@ -65,16 +85,21 @@ export const styles = StyleSheet.create({
     borderColor: colorStyle.Sub1,
   },
   chipText: {
-    fontSize: fs(15),
+    fontSize: fs(16),
     lineHeight: vs(22),
-    color: colorStyle.S04,
+    color: colorStyle.S03,
   },
   chipTextActive: {
     color: colorStyle.Sub1,
   },
   chipFieldText: {
-    fontSize: fs(15),
+    fontSize: fs(16),
     lineHeight: vs(22),
     color: colorStyle.S05,
+  },
+  chipPlaceholderText: {
+    fontSize: fs(16),
+    lineHeight: vs(22),
+    color: colorStyle.S04,
   },
 });

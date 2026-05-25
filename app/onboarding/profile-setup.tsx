@@ -41,7 +41,12 @@ export default function ProfileSetupScreen() {
     setOpenPicker((current) => (current === field ? null : field));
   };
 
+  const canProceed = graduation != null;
+
   const handleNext = () => {
+    if (!canProceed) {
+      return;
+    }
     router.push("/onboarding/profile-setup-lifestyle");
   };
 
@@ -122,6 +127,7 @@ export default function ProfileSetupScreen() {
                 label={grade}
                 value={grade}
                 options={GRADE_OPTIONS}
+                dropdownSize='grade'
                 mutedBorder
                 open={openPicker === "grade"}
                 zIndex={openPicker === "grade" ? 10 : 1}
@@ -135,6 +141,7 @@ export default function ProfileSetupScreen() {
                 label={enrollment}
                 value={enrollment}
                 options={ENROLLMENT_OPTIONS}
+                dropdownSize='enrollment'
                 mutedBorder
                 open={openPicker === "enrollment"}
                 zIndex={openPicker === "enrollment" ? 10 : 1}
@@ -151,7 +158,7 @@ export default function ProfileSetupScreen() {
                 value={graduation}
                 options={graduationYearOptions}
                 variant={graduation ? "field" : "placeholder"}
-                wide
+                dropdownSize='graduation'
                 open={openPicker === "graduation"}
                 zIndex={openPicker === "graduation" ? 10 : 1}
                 onToggle={() => togglePicker("graduation")}
@@ -172,14 +179,20 @@ export default function ProfileSetupScreen() {
           <Pressable
             style={({ pressed }) => [
               styles.nextButton,
-              pressed && { opacity: 0.92 },
+              !canProceed && styles.nextButtonDisabled,
+              canProceed && pressed && { opacity: 0.92 },
             ]}
             onPress={handleNext}
+            disabled={!canProceed}
             accessibilityRole='button'
-            accessibilityLabel='다음으로'>
+            accessibilityLabel='다음으로'
+            accessibilityState={{ disabled: !canProceed }}>
             <Text
               weight='bold'
-              style={styles.nextButtonText}>
+              style={[
+                styles.nextButtonText,
+                !canProceed && styles.nextButtonTextDisabled,
+              ]}>
               다음으로
             </Text>
           </Pressable>

@@ -1,5 +1,5 @@
 import { Feather } from "@expo/vector-icons";
-import { Pressable } from "react-native";
+import { Pressable, View } from "react-native";
 
 import { colorStyle } from "../../constants/colors";
 import { Text } from "../typography";
@@ -18,6 +18,7 @@ export type ProfileSetupChipProps = {
   fullWidth?: boolean;
   stretch?: boolean;
   dropdown?: boolean;
+  dropdownSize?: "grade" | "enrollment" | "graduation";
   wide?: boolean;
   mutedBorder?: boolean;
   expanded?: boolean;
@@ -33,6 +34,7 @@ export function ProfileSetupChip({
   fullWidth = false,
   stretch = false,
   dropdown = false,
+  dropdownSize,
   wide = false,
   mutedBorder = false,
   expanded = false,
@@ -57,7 +59,16 @@ export function ProfileSetupChip({
         fullWidth && styles.chipFullWidth,
         stretch && styles.chipStretch,
         dropdown && styles.chipDropdown,
-        dropdown && wide && styles.chipDropdownWide,
+        dropdown &&
+          dropdownSize === "grade" &&
+          styles.chipDropdownGrade,
+        dropdown &&
+          dropdownSize === "enrollment" &&
+          styles.chipDropdownEnrollment,
+        dropdown &&
+          (dropdownSize === "graduation" || wide) &&
+          styles.chipDropdownGraduation,
+        isPlaceholder && styles.chipPlaceholder,
         showChevron && !dropdown && styles.chipWithChevron,
         (fullWidth || stretch) && showChevron && styles.chipTriggerRow,
         !isField && !isPlaceholder && selected && styles.chipActive,
@@ -70,21 +81,26 @@ export function ProfileSetupChip({
         expanded: showChevron ? expanded : undefined,
       }}>
       <Text
-        weight={
-          isField || isPlaceholder ? "medium" : selected ? "semiBold" : "medium"
-        }
+        weight='semiBold'
         style={[
-          isField ? styles.chipFieldText : styles.chipText,
+          isField
+            ? styles.chipFieldText
+            : isPlaceholder
+              ? styles.chipPlaceholderText
+              : styles.chipText,
           !isField && !isPlaceholder && selected && styles.chipTextActive,
+          dropdown && styles.chipDropdownLabel,
         ]}>
         {label}
       </Text>
       {showChevron ? (
         dropdown ? (
-          <DropdownChevron
-            color={chevronColor}
-            up={chevronUp}
-          />
+          <View style={styles.chipDropdownChevron}>
+            <DropdownChevron
+              color={chevronColor}
+              up={chevronUp}
+            />
+          </View>
         ) : (
           <Feather
             name={chevronUp ? "chevron-up" : "chevron-down"}

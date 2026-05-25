@@ -10,7 +10,7 @@ export const styles = StyleSheet.create({
   },
   inlineDropdownList: {
     position: "absolute",
-    top: vs(40),
+    top: vs(46),
     left: 0,
     right: 0,
     backgroundColor: "#FFFFFF",
@@ -25,7 +25,7 @@ export const styles = StyleSheet.create({
     overflow: "hidden",
   },
   dropdownListWide: {
-    minWidth: hs(110),
+    minWidth: hs(131),
   },
   dropdownScroll: {
     maxHeight: vs(160),

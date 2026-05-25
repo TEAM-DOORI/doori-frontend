@@ -23,6 +23,7 @@ type InlineChipDropdownProps = {
   onSelect: (value: string) => void;
   variant?: ProfileSetupChipProps["variant"];
   wide?: boolean;
+  dropdownSize?: ProfileSetupChipProps["dropdownSize"];
   mutedBorder?: boolean;
   wrapperStyle?: StyleProp<ViewStyle>;
 };
@@ -37,6 +38,7 @@ export function InlineChipDropdown({
   onSelect,
   variant = "field",
   wide = false,
+  dropdownSize,
   mutedBorder = false,
   wrapperStyle,
 }: InlineChipDropdownProps) {
@@ -45,6 +47,7 @@ export function InlineChipDropdown({
       <ProfileSetupChip
         dropdown
         wide={wide}
+        dropdownSize={dropdownSize}
         mutedBorder={mutedBorder}
         label={label}
         variant={variant}
@@ -55,7 +58,10 @@ export function InlineChipDropdown({
       />
       {open ? (
         <View
-          style={[styles.inlineDropdownList, wide && styles.dropdownListWide]}>
+          style={[
+            styles.inlineDropdownList,
+            (wide || dropdownSize === "graduation") && styles.dropdownListWide,
+          ]}>
           <ScrollView
             nestedScrollEnabled
             style={styles.dropdownScroll}

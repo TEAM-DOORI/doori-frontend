@@ -58,7 +58,7 @@ export const color = {
   textMuted: colorStyle.S04,
   border: colorStyle.S03,
   borderActive: colorStyle.Sub1,
-  progressTrack: colorStyle.S03,
+  progressTrack: colorStyle.S01,
   progressFill: colorStyle.Sub1,
   buttonPrimary: colorStyle.Sub3,
   white: colorStyle.S01,
