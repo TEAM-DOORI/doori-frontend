@@ -1,10 +1,14 @@
 import { useRouter } from "expo-router";
+import { useRef } from "react";
 import {
   KeyboardAvoidingView,
   Platform,
   Pressable,
   ScrollView,
   View,
+  type TextInput as RNTextInput,
+  type StyleProp,
+  type TextStyle,
 } from "react-native";
 import { useSafeAreaInsets } from "react-native-safe-area-context";
 
@@ -17,6 +21,70 @@ import { colorStyle } from "../../constants/colors";
 import { useProfileSetup } from "../../contexts/ProfileSetupContext";
 import { styles } from "./_styles/profile-setup-intro.styles";
 
+const INTRO_MAX_LENGTH = 200;
+
+const INTRO_PLACEHOLDER = "미래의 룸메에게 보여질 자기소개를 작성해주세요.";
+
+const ROOMMATE_WISH_PLACEHOLDER_LINES = [
+  "희망하는 룸메에 대해 적어주신",
+  "내용을 바탕으로,",
+  "추후 룸메 추천에 반영해드릴게요.",
+] as const;
+
+type MultilineIntroFieldProps = {
+  value: string;
+  onChangeText: (text: string) => void;
+  placeholderLines?: readonly string[];
+  placeholder?: string;
+  inputStyle: StyleProp<TextStyle>;
+  maxLength: number;
+};
+
+function MultilineIntroField({
+  value,
+  onChangeText,
+  placeholderLines,
+  placeholder,
+  inputStyle,
+  maxLength,
+}: MultilineIntroFieldProps) {
+  const inputRef = useRef<RNTextInput>(null);
+  const showCustomPlaceholder = placeholderLines != null && value.length === 0;
+
+  return (
+    <Pressable
+      style={styles.inputBox}
+      onPress={() => inputRef.current?.focus()}>
+      <TextInput
+        ref={inputRef}
+        weight='medium'
+        style={inputStyle}
+        value={value}
+        onChangeText={onChangeText}
+        placeholder={showCustomPlaceholder ? "" : placeholder}
+        placeholderTextColor={colorStyle.S04}
+        multiline
+        maxLength={maxLength}
+        textAlignVertical='top'
+      />
+      {showCustomPlaceholder && placeholderLines ? (
+        <View
+          style={styles.placeholderOverlay}
+          pointerEvents='none'>
+          {placeholderLines.map((line) => (
+            <Text
+              key={line}
+              weight='medium'
+              style={styles.placeholderLine}>
+              {line}
+            </Text>
+          ))}
+        </View>
+      ) : null}
+    </Pressable>
+  );
+}
+
 export default function ProfileSetupIntroScreen() {
   const router = useRouter();
   const insets = useSafeAreaInsets();
@@ -25,6 +93,14 @@ export default function ProfileSetupIntroScreen() {
 
   const handleNext = () => {
     router.push("/onboarding/onboarding-complete");
+  };
+
+  const handleIntroChange = (text: string) => {
+    updateDraft({ intro: { introduction: text.slice(0, INTRO_MAX_LENGTH) } });
+  };
+
+  const handleWishChange = (text: string) => {
+    updateDraft({ intro: { roommateWish: text.slice(0, INTRO_MAX_LENGTH) } });
   };
 
   return (
@@ -56,44 +132,46 @@ export default function ProfileSetupIntroScreen() {
               입력하신 정보를 바탕으로 룸메 프로필이 추천됩니다
             </Text>
 
-            <View style={styles.field}>
-              <Text
-                weight='semiBold'
-                style={styles.fieldLabel}>
-                한 줄 소개
-              </Text>
-              <TextInput
-                weight='medium'
-                style={[styles.input, styles.inputShort]}
-                value={introduction}
-                onChangeText={(text) =>
-                  updateDraft({ intro: { introduction: text } })
-                }
-                placeholder='미래의 룸메에게 보여질 자기소개를 작성해주세요.'
-                placeholderTextColor={colorStyle.S04}
-                multiline
-                textAlignVertical='top'
-              />
-            </View>
+            <View style={styles.fields}>
+              <View style={styles.field}>
+                <Text
+                  weight='semiBold'
+                  style={styles.fieldLabel}>
+                  자기소개
+                </Text>
+                <MultilineIntroField
+                  value={introduction}
+                  onChangeText={handleIntroChange}
+                  placeholder={INTRO_PLACEHOLDER}
+                  inputStyle={[styles.input, styles.inputIntro]}
+                  maxLength={INTRO_MAX_LENGTH}
+                />
+                <Text
+                  weight='medium'
+                  style={styles.charCount}>
+                  {introduction.length}/{INTRO_MAX_LENGTH}
+                </Text>
+              </View>
 
-            <View style={styles.field}>
-              <Text
-                weight='semiBold'
-                style={styles.fieldLabel}>
-                룸메 희망 사항 한 줄
-              </Text>
-              <TextInput
-                weight='medium'
-                style={[styles.input, styles.inputTall]}
-                value={roommateWish}
-                onChangeText={(text) =>
-                  updateDraft({ intro: { roommateWish: text } })
-                }
-                placeholder='희망하는 룸메에 대해 적어주신 내용을 바탕으로, 추후 룸메 추천에 반영해드릴게요.'
-                placeholderTextColor={colorStyle.S04}
-                multiline
-                textAlignVertical='top'
-              />
+              <View style={styles.field}>
+                <Text
+                  weight='semiBold'
+                  style={styles.fieldLabel}>
+                  룸메 희망 사항 한 줄
+                </Text>
+                <MultilineIntroField
+                  value={roommateWish}
+                  onChangeText={handleWishChange}
+                  placeholderLines={ROOMMATE_WISH_PLACEHOLDER_LINES}
+                  inputStyle={[styles.input, styles.inputWish]}
+                  maxLength={INTRO_MAX_LENGTH}
+                />
+                <Text
+                  weight='medium'
+                  style={styles.charCount}>
+                  {roommateWish.length}/{INTRO_MAX_LENGTH}
+                </Text>
+              </View>
             </View>
           </ScrollView>
 
@@ -109,11 +187,11 @@ export default function ProfileSetupIntroScreen() {
               ]}
               onPress={handleNext}
               accessibilityRole='button'
-              accessibilityLabel='다음으로'>
+              accessibilityLabel='시작하기'>
               <Text
                 weight='bold'
                 style={styles.startButtonText}>
-                다음으로
+                시작하기
               </Text>
             </Pressable>
           </View>

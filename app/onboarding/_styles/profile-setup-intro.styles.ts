@@ -27,41 +27,60 @@ export const styles = StyleSheet.create({
     marginBottom: vs(8),
   },
   description: {
-    fontSize: fs(15),
+    fontSize: fs(16),
     lineHeight: vs(22),
     color: colorStyle.S05,
-    marginBottom: vs(48),
+    marginBottom: vs(75),
   },
-  field: {
-    marginBottom: vs(28),
+  fields: {
+    gap: vs(27),
   },
+  field: {},
   fieldLabel: {
     fontSize: fs(18),
-    lineHeight: vs(22),
+    lineHeight: vs(25),
     color: "#4B566A",
-    marginBottom: vs(12),
+    marginBottom: vs(15),
   },
   input: {
     backgroundColor: "#FFFFFF",
-    borderRadius: ms(12),
+    borderRadius: ms(10),
     borderWidth: hs(1),
-    borderColor: colorStyle.S02,
-    paddingHorizontal: hs(16),
+    borderColor: colorStyle.S03,
+    paddingHorizontal: hs(19),
+    paddingTop: vs(20),
+    paddingBottom: vs(20),
     fontSize: fs(15),
-    lineHeight: vs(22),
+    lineHeight: vs(21),
     color: colorStyle.Main_Text,
+    textAlignVertical: "top",
   },
-  inputShort: {
+  inputIntro: {
     minHeight: vs(82),
-    paddingTop: vs(14),
-    paddingBottom: vs(14),
-    textAlignVertical: "top",
   },
-  inputTall: {
-    minHeight: vs(120),
-    paddingTop: vs(14),
-    paddingBottom: vs(14),
-    textAlignVertical: "top",
+  inputWish: {
+    minHeight: vs(103),
+  },
+  inputBox: {
+    position: "relative",
+  },
+  placeholderOverlay: {
+    position: "absolute",
+    top: vs(20),
+    left: hs(19),
+  },
+  placeholderLine: {
+    fontSize: fs(15),
+    lineHeight: vs(21),
+    color: colorStyle.S04,
+    includeFontPadding: false,
+  },
+  charCount: {
+    alignSelf: "flex-end",
+    marginTop: vs(4),
+    fontSize: fs(15),
+    lineHeight: vs(21),
+    color: colorStyle.S04,
   },
   footer: {
     paddingHorizontal: hs(20),
@@ -70,13 +89,13 @@ export const styles = StyleSheet.create({
   startButton: {
     backgroundColor: color.buttonPrimary,
     borderRadius: ms(15),
-    paddingVertical: vs(16),
+    paddingVertical: vs(14),
     alignItems: "center",
     justifyContent: "center",
   },
   startButtonText: {
-    fontSize: fs(18),
-    lineHeight: vs(24),
+    fontSize: fs(20),
+    lineHeight: vs(28),
     color: color.textPrimary,
   },
 });
