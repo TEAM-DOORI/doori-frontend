@@ -83,6 +83,9 @@ export const createIntroStyles = ({ hs, vs, fs, ms }: ScaleFns) =>
       lineHeight: vs(21),
       color: colorStyle.S04,
     },
+    charCountValue: {
+      color: colorStyle.Sub1,
+    },
     footer: {
       paddingHorizontal: hs(20),
       paddingTop: vs(20),

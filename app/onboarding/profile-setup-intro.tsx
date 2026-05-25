@@ -33,6 +33,22 @@ const ROOMMATE_WISH_PLACEHOLDER_LINES = [
 
 type IntroStyles = ReturnType<typeof createIntroStyles>;
 
+type CharCountProps = {
+  count: number;
+  max: number;
+  styles: IntroStyles;
+};
+
+function CharCount({ count, max, styles }: CharCountProps) {
+  return (
+    <Text
+      weight='medium'
+      style={styles.charCount}>
+      <Text style={styles.charCountValue}>{count}</Text>/{max}
+    </Text>
+  );
+}
+
 type MultilineIntroFieldProps = {
   value: string;
   onChangeText: (text: string) => void;
@@ -152,11 +168,11 @@ export default function ProfileSetupIntroScreen() {
                   maxLength={INTRO_MAX_LENGTH}
                   fieldStyles={styles}
                 />
-                <Text
-                  weight='medium'
-                  style={styles.charCount}>
-                  {introduction.length}/{INTRO_MAX_LENGTH}
-                </Text>
+                <CharCount
+                  count={introduction.length}
+                  max={INTRO_MAX_LENGTH}
+                  styles={styles}
+                />
               </View>
 
               <View style={styles.field}>
@@ -173,11 +189,11 @@ export default function ProfileSetupIntroScreen() {
                   maxLength={INTRO_MAX_LENGTH}
                   fieldStyles={styles}
                 />
-                <Text
-                  weight='medium'
-                  style={styles.charCount}>
-                  {roommateWish.length}/{INTRO_MAX_LENGTH}
-                </Text>
+                <CharCount
+                  count={roommateWish.length}
+                  max={INTRO_MAX_LENGTH}
+                  styles={styles}
+                />
               </View>
             </View>
           </ScrollView>
