@@ -18,7 +18,7 @@ export function getOnboardingCompleteContent(
   return {
     variantId,
     title: copy.title,
-    description: copy.description,
+    descriptionLines: copy.descriptionLines,
     imageSource: copy.imageSource,
     imageUrl: copy.imageUrl,
   };

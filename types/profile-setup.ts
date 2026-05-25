@@ -52,7 +52,9 @@ export type ProfileSetupDraft = {
 export type OnboardingCompleteOverride = {
   variantId?: OnboardingResultVariantId;
   title?: string;
+  /** @deprecated descriptionLines 사용 권장 */
   description?: string;
+  descriptionLines?: readonly [string, string];
   /** 원격 이미지 URL (추후 연동) */
   imageUrl?: string | null;
 };
@@ -76,7 +78,7 @@ export type ProfileSetupDraftPatch = {
 export type OnboardingCompleteContent = {
   variantId: OnboardingResultVariantId;
   title: string;
-  description: string;
+  descriptionLines: readonly [string, string];
   imageSource: number;
   imageUrl: string | null;
 };

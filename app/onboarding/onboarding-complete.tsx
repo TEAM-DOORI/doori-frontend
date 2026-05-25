@@ -31,14 +31,20 @@ export default function OnboardingCompleteScreen() {
         <View style={styles.content}>
           <Text
             weight='bold'
-            style={styles.title}>
+            style={styles.title}
+            numberOfLines={1}>
             {content.title}
           </Text>
-          <Text
-            weight='regular'
-            style={styles.description}>
-            {content.description}
-          </Text>
+          <View style={styles.descriptionBlock}>
+            {content.descriptionLines.map((line) => (
+              <Text
+                key={line}
+                weight='regular'
+                style={styles.descriptionLine}>
+                {line}
+              </Text>
+            ))}
+          </View>
         </View>
 
         <View style={styles.illustrationWrap}>
@@ -51,6 +57,8 @@ export default function OnboardingCompleteScreen() {
             accessibilityLabel='온보딩 완료 일러스트'
           />
         </View>
+
+        <View style={styles.spacer} />
 
         <View
           style={[
