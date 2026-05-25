@@ -3,6 +3,7 @@ import { Pressable } from "react-native";
 
 import { colorStyle } from "../../constants/colors";
 import { Text } from "../typography";
+import { DropdownChevron } from "./DropdownChevron";
 import { styles } from "./ProfileSetupChip.styles";
 
 type ChipVariant = "selectable" | "field" | "placeholder";
@@ -79,11 +80,18 @@ export function ProfileSetupChip({
         {label}
       </Text>
       {showChevron ? (
-        <Feather
-          name={chevronUp ? "chevron-up" : "chevron-down"}
-          size={16}
-          color={chevronColor}
-        />
+        dropdown ? (
+          <DropdownChevron
+            color={chevronColor}
+            up={chevronUp}
+          />
+        ) : (
+          <Feather
+            name={chevronUp ? "chevron-up" : "chevron-down"}
+            size={16}
+            color={chevronColor}
+          />
+        )
       ) : null}
     </Pressable>
   );

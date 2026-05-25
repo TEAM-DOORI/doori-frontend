@@ -8,7 +8,7 @@ import { BackButton } from "../../components/navigation/BackButton";
 import { Text } from "../../components/typography";
 import { vs } from "../../constants";
 import { useOnboardingCompleteContent } from "../../contexts/ProfileSetupContext";
-import { styles } from "./onboarding-complete.styles";
+import { styles } from "./_styles/onboarding-complete.styles";
 
 export default function OnboardingCompleteScreen() {
   const router = useRouter();

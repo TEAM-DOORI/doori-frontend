@@ -11,7 +11,7 @@ import { Text } from "../../components/typography";
 import { vs } from "../../constants";
 import { useProfileSetup } from "../../contexts/ProfileSetupContext";
 import type { PriorityCriterion } from "../../types/profile-setup";
-import { styles } from "./profile-setup-matching.styles";
+import { styles } from "./_styles/profile-setup-matching.styles";
 
 const ATMOSPHERE_OPTIONS = [
   { value: "quiet" as const, emoji: "👩🏻‍💻", label: "조용하게" },

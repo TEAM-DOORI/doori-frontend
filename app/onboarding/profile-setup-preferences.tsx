@@ -9,7 +9,7 @@ import { ProgressBar } from "../../components/profile-setup/ProgressBar";
 import { Text } from "../../components/typography";
 import { vs } from "../../constants";
 import { useProfileSetup } from "../../contexts/ProfileSetupContext";
-import { styles } from "./profile-setup-preferences.styles";
+import { styles } from "./_styles/profile-setup-preferences.styles";
 
 const CLEANLINESS_OPTIONS = [
   { value: "very" as const, emoji: "🧼", label: "매우 중요" },

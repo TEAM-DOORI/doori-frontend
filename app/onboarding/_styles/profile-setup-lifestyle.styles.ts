@@ -1,7 +1,7 @@
 import { StyleSheet } from "react-native";
 
-import { fs, hs, ms, vs } from "../../constants";
-import { color, colorStyle } from "../../constants/colors";
+import { fs, hs, ms, vs } from "../../../constants";
+import { color, colorStyle } from "../../../constants/colors";
 
 export const styles = StyleSheet.create({
   safeArea: {
@@ -41,7 +41,14 @@ export const styles = StyleSheet.create({
     color: "#4B566A",
     marginBottom: vs(15),
   },
-  optionRow: {
+  rowCompact: {
+    flexDirection: "row",
+    flexWrap: "wrap",
+    alignItems: "center",
+    gap: hs(10),
+    alignSelf: "flex-start",
+  },
+  sleepRow: {
     flexDirection: "row",
     alignItems: "stretch",
     gap: hs(8),

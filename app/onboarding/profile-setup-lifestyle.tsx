@@ -10,7 +10,7 @@ import { ProgressBar } from "../../components/profile-setup/ProgressBar";
 import { Text } from "../../components/typography";
 import { vs } from "../../constants";
 import { useProfileSetup } from "../../contexts/ProfileSetupContext";
-import { styles } from "./profile-setup-lifestyle.styles";
+import { styles } from "./_styles/profile-setup-lifestyle.styles";
 
 export default function ProfileSetupLifestyleScreen() {
   const router = useRouter();

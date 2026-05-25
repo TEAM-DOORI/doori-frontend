@@ -15,7 +15,7 @@ import { Text, TextInput } from "../../components/typography";
 import { vs } from "../../constants";
 import { colorStyle } from "../../constants/colors";
 import { useProfileSetup } from "../../contexts/ProfileSetupContext";
-import { styles } from "./profile-setup-intro.styles";
+import { styles } from "./_styles/profile-setup-intro.styles";
 
 export default function ProfileSetupIntroScreen() {
   const router = useRouter();

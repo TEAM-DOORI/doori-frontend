@@ -36,9 +36,10 @@ export const styles = StyleSheet.create({
     minHeight: vs(40),
     paddingVertical: vs(9),
     paddingLeft: hs(14),
-    paddingRight: hs(12),
+    paddingRight: hs(10),
     flexDirection: "row",
-    gap: hs(4),
+    alignItems: "center",
+    gap: hs(6),
     justifyContent: "center",
   },
   chipDropdownWide: {

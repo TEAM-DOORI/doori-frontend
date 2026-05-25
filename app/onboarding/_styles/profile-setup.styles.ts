@@ -1,9 +1,12 @@
 import { StyleSheet } from "react-native";
 
-import { fs, hs, ms, vs } from "../../constants";
-import { color, colorStyle } from "../../constants/colors";
+import { fs, hs, ms, vs } from "../../../constants";
+import { color, colorStyle } from "../../../constants/colors";
 
 export const styles = StyleSheet.create({
+  flex: {
+    flex: 1,
+  },
   safeArea: {
     flex: 1,
   },
@@ -19,62 +22,60 @@ export const styles = StyleSheet.create({
     flexGrow: 1,
     paddingHorizontal: hs(20),
     paddingBottom: vs(24),
+    overflow: "visible",
   },
   title: {
     fontSize: fs(24),
     lineHeight: vs(32),
-    color: colorStyle.Main_Text,
+    color: "#1A3262",
     marginBottom: vs(8),
   },
   description: {
     fontSize: fs(15),
     lineHeight: vs(22),
     color: colorStyle.S05,
-    marginBottom: vs(48),
+    marginBottom: vs(75),
   },
-  field: {
-    marginBottom: vs(28),
+  section: {
+    marginBottom: vs(40),
   },
-  fieldLabel: {
+  sectionDropdown: {
+    overflow: "visible",
+    zIndex: 10,
+  },
+  sectionLabel: {
     fontSize: fs(18),
     lineHeight: vs(22),
     color: "#4B566A",
-    marginBottom: vs(12),
+    marginBottom: vs(15),
   },
-  input: {
-    backgroundColor: "#FFFFFF",
-    borderRadius: ms(12),
-    borderWidth: hs(1),
-    borderColor: colorStyle.S02,
-    paddingHorizontal: hs(16),
-    fontSize: fs(15),
-    lineHeight: vs(22),
-    color: colorStyle.Main_Text,
+  rowCompact: {
+    flexDirection: "row",
+    flexWrap: "wrap",
+    alignItems: "center",
+    gap: hs(10),
+    alignSelf: "flex-start",
   },
-  inputShort: {
-    minHeight: vs(82),
-    paddingTop: vs(14),
-    paddingBottom: vs(14),
-    textAlignVertical: "top",
-  },
-  inputTall: {
-    minHeight: vs(120),
-    paddingTop: vs(14),
-    paddingBottom: vs(14),
-    textAlignVertical: "top",
+  rowDropdownContainer: {
+    flexDirection: "row",
+    flexWrap: "wrap",
+    alignItems: "center",
+    gap: hs(10),
+    alignSelf: "flex-start",
+    overflow: "visible",
   },
   footer: {
     paddingHorizontal: hs(20),
     paddingTop: vs(20),
   },
-  startButton: {
+  nextButton: {
     backgroundColor: color.buttonPrimary,
     borderRadius: ms(15),
     paddingVertical: vs(16),
     alignItems: "center",
     justifyContent: "center",
   },
-  startButtonText: {
+  nextButtonText: {
     fontSize: fs(18),
     lineHeight: vs(24),
     color: color.textPrimary,
