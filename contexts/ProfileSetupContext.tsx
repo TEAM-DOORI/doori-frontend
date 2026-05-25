@@ -2,13 +2,20 @@ import {
   createContext,
   useCallback,
   useContext,
+  useEffect,
   useMemo,
   useState,
   type ReactNode,
 } from "react";
 
-import { getOnboardingCompleteContent } from "../lib/profile-setup/get-onboarding-complete-content";
 import { DEFAULT_PROFILE_SETUP_DRAFT } from "../lib/profile-setup/default-profile-setup-draft";
+import { getOnboardingCompleteContent } from "../lib/profile-setup/get-onboarding-complete-content";
+import { mergeProfileSetupDraft } from "../lib/profile-setup/merge-profile-setup-draft";
+import {
+  clearProfileSetupState,
+  loadProfileSetupState,
+  saveProfileSetupState,
+} from "../lib/profile-setup/profile-setup-storage";
 import type {
   OnboardingCompleteContent,
   OnboardingCompleteOverride,
@@ -31,33 +38,50 @@ type ProfileSetupContextValue = {
 
 const ProfileSetupContext = createContext<ProfileSetupContextValue | null>(null);
 
-function mergeDraft(
-  current: ProfileSetupDraft,
-  patch: ProfileSetupDraftPatch,
-): ProfileSetupDraft {
-  return {
-    ...current,
-    ...patch,
-    basic: { ...current.basic, ...patch.basic },
-    lifestyle: { ...current.lifestyle, ...patch.lifestyle },
-    preferences: { ...current.preferences, ...patch.preferences },
-    matching: { ...current.matching, ...patch.matching },
-    intro: { ...current.intro, ...patch.intro },
-  };
-}
-
 export function ProfileSetupProvider({ children }: { children: ReactNode }) {
   const [draft, setDraft] = useState<ProfileSetupDraft>(DEFAULT_PROFILE_SETUP_DRAFT);
   const [completeOverride, setCompleteOverride] =
     useState<OnboardingCompleteOverride | null>(null);
+  const [isHydrated, setIsHydrated] = useState(false);
+
+  useEffect(() => {
+    let cancelled = false;
+
+    void (async () => {
+      const stored = await loadProfileSetupState();
+      if (cancelled) {
+        return;
+      }
+
+      if (stored) {
+        setDraft(stored.draft);
+        setCompleteOverride(stored.completeOverride);
+      }
+
+      setIsHydrated(true);
+    })();
+
+    return () => {
+      cancelled = true;
+    };
+  }, []);
+
+  useEffect(() => {
+    if (!isHydrated) {
+      return;
+    }
+
+    void saveProfileSetupState(draft, completeOverride);
+  }, [draft, completeOverride, isHydrated]);
 
   const updateDraft = useCallback((patch: ProfileSetupDraftPatch) => {
-    setDraft((current) => mergeDraft(current, patch));
+    setDraft((current) => mergeProfileSetupDraft(current, patch));
   }, []);
 
   const resetDraft = useCallback(() => {
     setDraft(DEFAULT_PROFILE_SETUP_DRAFT);
     setCompleteOverride(null);
+    void clearProfileSetupState();
   }, []);
 
   const applyProfileSetupFromApi = useCallback((payload: ProfileSetupApiPayload) => {
@@ -68,7 +92,7 @@ export function ProfileSetupProvider({ children }: { children: ReactNode }) {
       }));
     }
     if (payload.draft) {
-      setDraft((current) => mergeDraft(current, payload.draft!));
+      setDraft((current) => mergeProfileSetupDraft(current, payload.draft!));
     }
     if (payload.complete !== undefined) {
       setCompleteOverride(payload.complete);
@@ -99,6 +123,10 @@ export function ProfileSetupProvider({ children }: { children: ReactNode }) {
       getCompleteContent,
     ],
   );
+
+  if (!isHydrated) {
+    return null;
+  }
 
   return (
     <ProfileSetupContext.Provider value={value}>
