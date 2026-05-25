@@ -10,13 +10,28 @@ import { ProgressBar } from "../../components/profile-setup/ProgressBar";
 import { Text } from "../../components/typography";
 import { vs } from "../../constants";
 import { useProfileSetup } from "../../contexts/ProfileSetupContext";
-import type { PriorityCriterion } from "../../types/profile-setup";
+import type {
+  AtmosphereOption,
+  PriorityCriterion,
+} from "../../types/profile-setup";
 import { styles } from "./_styles/profile-setup-matching.styles";
 
-const ATMOSPHERE_OPTIONS = [
-  { value: "quiet" as const, emoji: "👩🏻‍💻", label: "조용하게" },
-  { value: "moderate" as const, emoji: "🙆🏻‍", label: "적당히 교류" },
-  { value: "social" as const, emoji: "👯‍♀️", label: "어울리기" },
+type AtmosphereCardOption = {
+  value: AtmosphereOption;
+  emoji: string;
+  label: string;
+  labelLines?: readonly [string, string];
+};
+
+const ATMOSPHERE_OPTIONS: AtmosphereCardOption[] = [
+  { value: "quiet", emoji: "👩🏻‍💻", label: "조용하게" },
+  { value: "moderate", emoji: "🙆🏻‍", label: "적당히 교류" },
+  {
+    value: "social",
+    emoji: "👯‍♀️",
+    label: "자주 어울리기",
+    labelLines: ["자주", "어울리기"],
+  },
 ];
 
 const PRIORITY_OPTIONS: {
@@ -24,7 +39,7 @@ const PRIORITY_OPTIONS: {
   emoji: string;
   label: string;
 }[] = [
-  { value: "sleep", emoji: "🌙", label: "수면 패턴" },
+  { value: "sleep", emoji: "🌙", label: "수면패턴" },
   { value: "cleanliness", emoji: "🧼", label: "청결도" },
   { value: "smoking", emoji: "🚬", label: "흡연 여부" },
   { value: "noise", emoji: "🔇", label: "소음 정도" },
@@ -66,45 +81,67 @@ export default function ProfileSetupMatchingScreen() {
             입력하신 정보를 바탕으로 룸메 프로필이 추천됩니다
           </Text>
 
-          <View style={styles.section}>
-            <Text
-              weight='semiBold'
-              style={styles.sectionLabel}>
-              어떤 분위기의 생활을 원하시나요?
-            </Text>
-            <View style={styles.optionRow}>
-              {ATMOSPHERE_OPTIONS.map((option) => (
-                <LifestyleOptionCard
-                  key={option.value}
-                  emoji={option.emoji}
-                  label={option.label}
-                  selected={atmosphere === option.value}
-                  onPress={() =>
-                    updateDraft({ matching: { atmosphere: option.value } })
-                  }
-                />
-              ))}
+          <View style={styles.sections}>
+            <View style={styles.section}>
+              <Text
+                weight='semiBold'
+                style={styles.sectionLabel}>
+                어떤 분위기의 생활을 원하시나요?
+              </Text>
+              <View style={styles.optionRow}>
+                {ATMOSPHERE_OPTIONS.map((option) => (
+                  <LifestyleOptionCard
+                    key={option.value}
+                    emoji={option.emoji}
+                    label={option.label}
+                    labelLines={option.labelLines}
+                    selected={atmosphere === option.value}
+                    onPress={() =>
+                      updateDraft({ matching: { atmosphere: option.value } })
+                    }
+                  />
+                ))}
+              </View>
             </View>
-          </View>
 
-          <View style={styles.section}>
-            <Text
-              weight='semiBold'
-              style={styles.sectionLabel}>
-              룸메를 고를 때 가장 중요한 기준을 {"\n"}한 가지만 선택해주세요
-            </Text>
-            <View style={styles.criteriaRow}>
-              {PRIORITY_OPTIONS.map((option) => (
-                <IconSelectChip
-                  key={option.value}
-                  emoji={option.emoji}
-                  label={option.label}
-                  selected={priority === option.value}
-                  onPress={() =>
-                    updateDraft({ matching: { priority: option.value } })
-                  }
-                />
-              ))}
+            <View style={styles.section}>
+              <View style={styles.sectionLabelBlock}>
+                <Text
+                  weight='semiBold'
+                  style={[
+                    styles.sectionLabel,
+                    styles.sectionLabelMultiline,
+                  ]}>
+                  룸메를 고를 때 가장 중요한 기준을
+                </Text>
+                <Text
+                  weight='semiBold'
+                  style={[
+                    styles.sectionLabel,
+                    styles.sectionLabelMultiline,
+                  ]}>
+                  <Text
+                    weight='semiBold'
+                    style={styles.sectionLabelUnderline}>
+                    한 가지만
+                  </Text>
+                  {" 선택해주세요"}
+                </Text>
+              </View>
+              <View style={styles.criteriaRow}>
+                {PRIORITY_OPTIONS.map((option) => (
+                  <IconSelectChip
+                    key={option.value}
+                    variant='criteria'
+                    emoji={option.emoji}
+                    label={option.label}
+                    selected={priority === option.value}
+                    onPress={() =>
+                      updateDraft({ matching: { priority: option.value } })
+                    }
+                  />
+                ))}
+              </View>
             </View>
           </View>
         </ScrollView>
