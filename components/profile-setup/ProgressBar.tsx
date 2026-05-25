@@ -1,13 +1,14 @@
-import { StyleSheet, View } from "react-native";
+import { View } from "react-native";
 
-import { color } from "../../constants/colors";
-import { ms, vs } from "../../constants/scale";
+import { useScaledStyles } from "../../hooks/useScaledStyles";
+import { createProgressBarStyles } from "./ProgressBar.styles";
 
 type ProgressBarProps = {
   progress: number;
 };
 
 export function ProgressBar({ progress }: ProgressBarProps) {
+  const styles = useScaledStyles(createProgressBarStyles);
   const clamped = Math.min(1, Math.max(0, progress));
 
   return (
@@ -16,18 +17,3 @@ export function ProgressBar({ progress }: ProgressBarProps) {
     </View>
   );
 }
-
-const styles = StyleSheet.create({
-  track: {
-    width: "100%",
-    height: vs(6),
-    borderRadius: ms(2),
-    backgroundColor: color.progressTrack,
-    overflow: "hidden",
-  },
-  fill: {
-    height: "100%",
-    borderRadius: ms(2),
-    backgroundColor: color.progressFill,
-  },
-});

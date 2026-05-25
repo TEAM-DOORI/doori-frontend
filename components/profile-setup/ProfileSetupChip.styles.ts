@@ -1,9 +1,10 @@
 import { StyleSheet } from "react-native";
 
-import { fs, hs, ms, vs } from "../../constants";
+import type { ScaleFns } from "../../constants/create-scale-api";
 import { colorStyle } from "../../constants/colors";
 
-export const styles = StyleSheet.create({
+export const createProfileSetupChipStyles = ({ hs, vs, fs, ms }: ScaleFns) =>
+  StyleSheet.create({
   chip: {
     minHeight: vs(48),
     borderRadius: ms(99),
@@ -102,4 +103,4 @@ export const styles = StyleSheet.create({
     lineHeight: vs(22),
     color: colorStyle.S04,
   },
-});
+  });

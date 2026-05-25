@@ -1,9 +1,10 @@
 import { StyleSheet } from "react-native";
 
-import { fs, hs, ms, vs } from "../../constants";
+import type { ScaleFns } from "../../constants/create-scale-api";
 import { colorStyle } from "../../constants/colors";
 
-export const styles = StyleSheet.create({
+export const createInlineChipDropdownStyles = ({ hs, vs, fs, ms }: ScaleFns) =>
+  StyleSheet.create({
   dropdownWrapper: {
     position: "relative",
     alignSelf: "flex-start",
@@ -49,4 +50,4 @@ export const styles = StyleSheet.create({
   dropdownItemTextActive: {
     color: colorStyle.Sub1,
   },
-});
+  });

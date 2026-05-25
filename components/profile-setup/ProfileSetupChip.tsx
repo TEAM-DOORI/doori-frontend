@@ -2,9 +2,10 @@ import { Feather } from "@expo/vector-icons";
 import { Pressable, View } from "react-native";
 
 import { colorStyle } from "../../constants/colors";
+import { useScaledStyles } from "../../hooks/useScaledStyles";
 import { Text } from "../typography";
 import { DropdownChevron } from "./DropdownChevron";
-import { styles } from "./ProfileSetupChip.styles";
+import { createProfileSetupChipStyles } from "./ProfileSetupChip.styles";
 
 type ChipVariant = "selectable" | "field" | "placeholder";
 
@@ -39,6 +40,7 @@ export function ProfileSetupChip({
   mutedBorder = false,
   expanded = false,
 }: ProfileSetupChipProps) {
+  const styles = useScaledStyles(createProfileSetupChipStyles);
   const isField = variant === "field";
   const isPlaceholder = variant === "placeholder";
 

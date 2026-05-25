@@ -1,12 +1,13 @@
 import { StyleSheet } from "react-native";
 
-import { fs, hs, ms, vs } from "../../constants";
+import type { ScaleFns } from "../../constants/create-scale-api";
 import { colorStyle } from "../../constants/colors";
 
 const CRITERIA_BORDER = "#D6D6D6";
 const CRITERIA_TEXT = "#A0A0A0";
 
-export const styles = StyleSheet.create({
+export const createIconSelectChipStyles = ({ hs, vs, fs, ms }: ScaleFns) =>
+  StyleSheet.create({
   chip: {
     minHeight: vs(42),
     flexDirection: "row",
@@ -56,4 +57,4 @@ export const styles = StyleSheet.create({
   labelSelected: {
     color: colorStyle.Sub1,
   },
-});
+  });

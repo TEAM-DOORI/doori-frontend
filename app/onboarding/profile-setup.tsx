@@ -19,13 +19,15 @@ import {
   type GradeOption,
 } from "../../constants/profile-setup-options";
 import { useProfileSetup } from "../../contexts/ProfileSetupContext";
-import { styles } from "./_styles/profile-setup.styles";
+import { useScaledStyles } from "../../hooks/useScaledStyles";
+import { createProfileSetupScreenStyles } from "./_styles/profile-setup.styles";
 
 type PickerField = "grade" | "enrollment" | "graduation";
 
 export default function ProfileSetupScreen() {
   const router = useRouter();
   const insets = useSafeAreaInsets();
+  const styles = useScaledStyles(createProfileSetupScreenStyles);
   const graduationYearOptions = useMemo(() => getGraduationYearOptions(), []);
   const { draft, updateDraft } = useProfileSetup();
   const {

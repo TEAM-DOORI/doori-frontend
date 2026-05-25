@@ -10,7 +10,8 @@ import { Text } from "../../components/typography";
 import { vs } from "../../constants";
 import { useProfileSetup } from "../../contexts/ProfileSetupContext";
 import type { CleanlinessOption, NoiseOption } from "../../types/profile-setup";
-import { styles } from "./_styles/profile-setup-preferences.styles";
+import { useScaledStyles } from "../../hooks/useScaledStyles";
+import { createPreferencesScreenStyles } from "./_styles/profile-setup-preferences.styles";
 
 type PreferenceCardOption<T extends string> = {
   value: T;
@@ -39,6 +40,7 @@ const NOISE_OPTIONS: PreferenceCardOption<NoiseOption>[] = [
 export default function ProfileSetupPreferencesScreen() {
   const router = useRouter();
   const insets = useSafeAreaInsets();
+  const styles = useScaledStyles(createPreferencesScreenStyles);
   const { draft, updateDraft } = useProfileSetup();
   const { cleanliness, noise } = draft.preferences;
 

@@ -1,9 +1,10 @@
 import { StyleSheet } from "react-native";
 
-import { fs, hs, ms, vs } from "../../constants";
+import type { ScaleFns } from "../../constants/create-scale-api";
 import { colorStyle } from "../../constants/colors";
 
-export const styles = StyleSheet.create({
+export const createLifestyleOptionCardStyles = ({ hs, vs, fs, ms }: ScaleFns) =>
+  StyleSheet.create({
   card: {
     flex: 1,
     minWidth: hs(103),
@@ -52,4 +53,4 @@ export const styles = StyleSheet.create({
   labelSelected: {
     color: colorStyle.Sub1,
   },
-});
+  });

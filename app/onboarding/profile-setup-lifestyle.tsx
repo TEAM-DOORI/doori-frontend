@@ -10,11 +10,13 @@ import { ProgressBar } from "../../components/profile-setup/ProgressBar";
 import { Text } from "../../components/typography";
 import { vs } from "../../constants";
 import { useProfileSetup } from "../../contexts/ProfileSetupContext";
-import { styles } from "./_styles/profile-setup-lifestyle.styles";
+import { useScaledStyles } from "../../hooks/useScaledStyles";
+import { createLifestyleScreenStyles } from "./_styles/profile-setup-lifestyle.styles";
 
 export default function ProfileSetupLifestyleScreen() {
   const router = useRouter();
   const insets = useSafeAreaInsets();
+  const styles = useScaledStyles(createLifestyleScreenStyles);
   const { draft, updateDraft } = useProfileSetup();
   const { smoking, sleep } = draft.lifestyle;
 

@@ -14,7 +14,8 @@ import type {
   AtmosphereOption,
   PriorityCriterion,
 } from "../../types/profile-setup";
-import { styles } from "./_styles/profile-setup-matching.styles";
+import { useScaledStyles } from "../../hooks/useScaledStyles";
+import { createMatchingScreenStyles } from "./_styles/profile-setup-matching.styles";
 
 type AtmosphereCardOption = {
   value: AtmosphereOption;
@@ -49,6 +50,7 @@ const PRIORITY_OPTIONS: {
 export default function ProfileSetupMatchingScreen() {
   const router = useRouter();
   const insets = useSafeAreaInsets();
+  const styles = useScaledStyles(createMatchingScreenStyles);
   const { draft, updateDraft } = useProfileSetup();
   const { atmosphere, priority } = draft.matching;
 

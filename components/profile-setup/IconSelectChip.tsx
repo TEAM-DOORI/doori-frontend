@@ -1,7 +1,8 @@
 import { Pressable, Text as RNText } from "react-native";
 
+import { useScaledStyles } from "../../hooks/useScaledStyles";
 import { Text } from "../typography";
-import { styles } from "./IconSelectChip.styles";
+import { createIconSelectChipStyles } from "./IconSelectChip.styles";
 
 type IconSelectChipVariant = "select" | "criteria";
 
@@ -21,6 +22,7 @@ export function IconSelectChip({
   onPress,
   variant = "select",
 }: IconSelectChipProps) {
+  const styles = useScaledStyles(createIconSelectChipStyles);
   const isCriteria = variant === "criteria";
 
   return (
@@ -39,7 +41,12 @@ export function IconSelectChip({
       ]}
       accessibilityRole='button'
       accessibilityState={{ selected }}>
-      <RNText style={styles.emoji}>{emoji}</RNText>
+      <RNText
+        allowFontScaling={false}
+        maxFontSizeMultiplier={1}
+        style={styles.emoji}>
+        {emoji}
+      </RNText>
       <Text
         weight='semiBold'
         style={[

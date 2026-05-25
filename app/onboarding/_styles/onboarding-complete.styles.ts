@@ -1,9 +1,10 @@
 import { StyleSheet } from "react-native";
 
-import { fs, hs, ms, vs } from "../../../constants";
+import type { ScaleFns } from "../../../constants/create-scale-api";
 import { color, colorStyle } from "../../../constants/colors";
 
-export const styles = StyleSheet.create({
+export const createOnboardingCompleteStyles = ({ hs, vs, fs, ms }: ScaleFns) =>
+  StyleSheet.create({
   safeArea: {
     flex: 1,
   },
@@ -52,4 +53,4 @@ export const styles = StyleSheet.create({
     lineHeight: vs(24),
     color: color.textPrimary,
   },
-});
+  });

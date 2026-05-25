@@ -1,7 +1,8 @@
 import { Pressable, Text as RNText, View } from "react-native";
 
+import { useScaledStyles } from "../../hooks/useScaledStyles";
 import { Text } from "../typography";
-import { styles } from "./LifestyleOptionCard.styles";
+import { createLifestyleOptionCardStyles } from "./LifestyleOptionCard.styles";
 
 type LifestyleOptionCardProps = {
   label: string;
@@ -22,6 +23,7 @@ export function LifestyleOptionCard({
   onPress,
   dimEmojiWhenUnselected = false,
 }: LifestyleOptionCardProps) {
+  const styles = useScaledStyles(createLifestyleOptionCardStyles);
   const showDimmedEmoji = !selected && dimEmojiWhenUnselected;
   const isSplitLabel = labelLines != null;
 
@@ -35,6 +37,8 @@ export function LifestyleOptionCard({
       accessibilityRole='button'
       accessibilityState={{ selected }}>
       <RNText
+        allowFontScaling={false}
+        maxFontSizeMultiplier={1}
         style={[styles.emoji, showDimmedEmoji && styles.emojiDimmed]}>
         {emoji}
       </RNText>

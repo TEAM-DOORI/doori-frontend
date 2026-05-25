@@ -6,8 +6,9 @@ import {
   type ViewStyle,
 } from "react-native";
 
+import { useScaledStyles } from "../../hooks/useScaledStyles";
 import { Text } from "../typography";
-import { styles } from "./InlineChipDropdown.styles";
+import { createInlineChipDropdownStyles } from "./InlineChipDropdown.styles";
 import {
   ProfileSetupChip,
   type ProfileSetupChipProps,
@@ -42,6 +43,8 @@ export function InlineChipDropdown({
   mutedBorder = false,
   wrapperStyle,
 }: InlineChipDropdownProps) {
+  const styles = useScaledStyles(createInlineChipDropdownStyles);
+
   return (
     <View style={[styles.dropdownWrapper, { zIndex }, wrapperStyle]}>
       <ProfileSetupChip

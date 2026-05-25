@@ -8,11 +8,13 @@ import { BackButton } from "../../components/navigation/BackButton";
 import { Text } from "../../components/typography";
 import { vs } from "../../constants";
 import { useOnboardingCompleteContent } from "../../contexts/ProfileSetupContext";
-import { styles } from "./_styles/onboarding-complete.styles";
+import { useScaledStyles } from "../../hooks/useScaledStyles";
+import { createOnboardingCompleteStyles } from "./_styles/onboarding-complete.styles";
 
 export default function OnboardingCompleteScreen() {
   const router = useRouter();
   const insets = useSafeAreaInsets();
+  const styles = useScaledStyles(createOnboardingCompleteStyles);
   const content = useOnboardingCompleteContent();
 
   const handleStart = () => {
