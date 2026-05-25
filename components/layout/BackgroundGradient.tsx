@@ -1,10 +1,11 @@
 import { LinearGradient } from "expo-linear-gradient";
+import type { ReactNode } from "react";
 import { StyleSheet, type StyleProp, type ViewStyle } from "react-native";
 
 import { gradient } from "../../constants/colors";
 
 type BackgroundGradientProps = {
-  children: React.ReactNode;
+  children: ReactNode;
   style?: StyleProp<ViewStyle>;
 };
 

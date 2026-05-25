@@ -33,8 +33,6 @@ export const Text = forwardRef<RNText, TextProps>(function Text(
   return (
     <RNText
       ref={ref}
-      allowFontScaling={false}
-      maxFontSizeMultiplier={1}
       style={[fontStyle, style]}
       {...rest}
     />

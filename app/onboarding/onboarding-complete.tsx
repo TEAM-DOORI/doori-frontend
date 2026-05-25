@@ -18,7 +18,7 @@ export default function OnboardingCompleteScreen() {
   const content = useOnboardingCompleteContent();
 
   const handleStart = () => {
-    router.replace("/(tabs)");
+    router.dismissTo("/(tabs)");
   };
 
   return (

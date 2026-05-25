@@ -29,9 +29,9 @@ function Header() {
         contentFit="contain"
         accessibilityLabel="DOORI 로고"
       />
-      <Pressable accessibilityRole="button" accessibilityLabel="알림">
+      <View accessibilityElementsHidden importantForAccessibility="no">
         <Feather name="bell" size={styles.bell.width} color="#1A3262" />
-      </Pressable>
+      </View>
     </View>
   );
 }
@@ -218,10 +218,13 @@ function RoommateCarousel() {
     isDragging.current = true;
   }, []);
 
-  const handleMomentumScrollEnd = useCallback((e: { nativeEvent: { contentOffset: { x: number } } }) => {
-    isDragging.current = false;
-    currentIndex.current = Math.round(e.nativeEvent.contentOffset.x / SNAP);
-  }, []);
+  const finalizeCarouselScroll = useCallback(
+    (e: { nativeEvent: { contentOffset: { x: number } } }) => {
+      isDragging.current = false;
+      currentIndex.current = Math.round(e.nativeEvent.contentOffset.x / SNAP);
+    },
+    [],
+  );
 
   const renderItem = useCallback(
     ({ item, index }: { item: Roommate; index: number }) => {
@@ -270,7 +273,8 @@ function RoommateCarousel() {
         initialScrollIndex={0}
         getItemLayout={getItemLayout}
         onScrollBeginDrag={handleScrollBeginDrag}
-        onMomentumScrollEnd={handleMomentumScrollEnd}
+        onScrollEndDrag={finalizeCarouselScroll}
+        onMomentumScrollEnd={finalizeCarouselScroll}
         onScroll={Animated.event(
           [{ nativeEvent: { contentOffset: { x: scrollX } } }],
           { useNativeDriver: true },

@@ -33,8 +33,6 @@ export const TextInput = forwardRef<RNTextInput, TextInputProps>(function TextIn
   return (
     <RNTextInput
       ref={ref}
-      allowFontScaling={false}
-      maxFontSizeMultiplier={1}
       style={[fontStyle, style]}
       placeholderTextColor={placeholderTextColor}
       {...rest}
