@@ -44,6 +44,7 @@ export default function RootLayout() {
         <Stack.Screen name='login' />
         <Stack.Screen name='onboarding' />
         <Stack.Screen name='matching' />
+        <Stack.Screen name='roommate' />
         <Stack.Screen name='(tabs)' />
       </Stack>
       <StatusBar style='auto' />
