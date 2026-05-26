@@ -23,10 +23,10 @@ import { MATCHING_QUICK_CHIPS } from "../../constants/matching-filter-options";
 import { useMatchingFilters } from "../../contexts/MatchingFilterContext";
 import { applyMatchingFilters } from "../../lib/matching/apply-matching-filters";
 import type { MatchingQuickChip } from "../../types/matching-filter";
+import type { RecommendedRoommate } from "../../types/recommended-roommate";
 import {
   RECOMMENDED_ROOMMATES,
   getMatchingSectionSubtitle,
-  type RecommendedRoommate,
 } from "../../mocks/matching-recommendations";
 import { createRecommendationsStyles } from "./_styles/recommendations.styles";
 

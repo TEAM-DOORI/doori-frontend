@@ -105,7 +105,7 @@ export function TabBar({ state, descriptors, navigation }: BottomTabBarProps) {
               onItemPress={(id) => {
                 setMenuOpen(false);
                 if (id === "roommate") {
-                  router.push("/matching" as never);
+                  router.replace("/matching" as never);
                 }
               }}
             />

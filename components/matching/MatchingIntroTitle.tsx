@@ -13,7 +13,7 @@ export function MatchingIntroTitle() {
   const styles = useScaledStyles<MatchingIntroTitleStyles>(
     createMatchingIntroTitleStyles
   );
-  const traitLabel = USER_TRAITS[2];
+  const traitLabel = USER_TRAITS[2] ?? "잘 맞는";
 
   return (
     <View style={styles.block}>

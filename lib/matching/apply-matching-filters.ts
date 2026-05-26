@@ -1,5 +1,5 @@
 import type { MatchingQuickChip } from "../../types/matching-filter";
-import type { RecommendedRoommate } from "../../mocks/matching-recommendations";
+import type { RecommendedRoommate } from "../../types/recommended-roommate";
 import type { MatchingFilters } from "../../types/matching-filter";
 
 function traitIncludes(traits: readonly string[], needle: string) {
@@ -31,7 +31,7 @@ export function getActiveFilterLabels(filters: MatchingFilters): string[] {
     .join("");
   if (mbti) labels.push(mbti);
 
-  return labels;
+  return Array.from(new Set(labels));
 }
 
 export function removeFilterByLabel(
@@ -96,8 +96,7 @@ export function applyMatchingFilters(
     }
     if (
       filters.quickChips.includes("아침형") &&
-      !traitIncludes(item.traits, "아침") &&
-      !traitIncludes(item.traits, "야행")
+      !traitIncludes(item.traits, "아침")
     ) {
       return false;
     }

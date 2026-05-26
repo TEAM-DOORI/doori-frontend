@@ -193,7 +193,7 @@ export function RoommateCarousel({
       decelerationRate="fast"
       style={{ height: listHeight }}
       contentContainerStyle={contentContainerStyle}
-      initialScrollIndex={0}
+      {...(data.length > 0 ? { initialScrollIndex: 0 as const } : {})}
       getItemLayout={getItemLayout}
       onScrollBeginDrag={handleScrollBeginDrag}
       onScrollEndDrag={finalizeCarouselScroll}

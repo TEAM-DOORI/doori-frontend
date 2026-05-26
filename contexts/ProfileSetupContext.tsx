@@ -48,17 +48,23 @@ export function ProfileSetupProvider({ children }: { children: ReactNode }) {
     let cancelled = false;
 
     void (async () => {
-      const stored = await loadProfileSetupState();
-      if (cancelled) {
-        return;
-      }
+      try {
+        const stored = await loadProfileSetupState();
+        if (cancelled) {
+          return;
+        }
 
-      if (stored) {
-        setDraft(stored.draft);
-        setCompleteOverride(stored.completeOverride);
+        if (stored) {
+          setDraft(stored.draft);
+          setCompleteOverride(stored.completeOverride);
+        }
+      } catch (error) {
+        console.error("프로필 설정 상태 복원 실패", error);
+      } finally {
+        if (!cancelled) {
+          setIsHydrated(true);
+        }
       }
-
-      setIsHydrated(true);
     })();
 
     return () => {

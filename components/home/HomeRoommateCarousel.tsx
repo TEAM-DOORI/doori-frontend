@@ -2,7 +2,7 @@ import { Image } from "expo-image";
 import { LinearGradient } from "expo-linear-gradient";
 import { useRouter } from "expo-router";
 import { memo, useCallback } from "react";
-import { Dimensions, Pressable, View } from "react-native";
+import { Pressable, View, useWindowDimensions } from "react-native";
 
 import {
   CARD_GAP,
@@ -16,7 +16,6 @@ import { ROOMMATES, type Roommate } from "../../mocks/home";
 import { Text } from "../typography";
 import { RoommateCarousel } from "../roommate/RoommateCarousel";
 
-const DEVICE_WIDTH = Dimensions.get("window").width;
 const SNAP = CARD_WIDTH + CARD_GAP;
 
 function TraitChip({
@@ -96,10 +95,12 @@ const RoommateCard = memo(function RoommateCard({
 
 export function HomeRoommateCarousel() {
   const router = useRouter();
+  const { width } = useWindowDimensions();
+  const carouselPadding = (width - CARD_WIDTH) / 2;
 
   const handleCardPress = useCallback(
     (id: string) => {
-      router.push(`/roommate/${id}` as never);
+      router.push({ pathname: "/roommate/[id]", params: { id } });
     },
     [router],
   );
@@ -121,7 +122,7 @@ export function HomeRoommateCarousel() {
         cardRaise={CARD_RAISE}
         listHeight={CARD_HEIGHT + CARD_RAISE}
         contentContainerStyle={{
-          paddingHorizontal: (DEVICE_WIDTH - CARD_WIDTH) / 2,
+          paddingHorizontal: carouselPadding,
         }}
         renderCard={renderCard}
       />

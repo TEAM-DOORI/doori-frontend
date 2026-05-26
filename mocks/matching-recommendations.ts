@@ -1,9 +1,6 @@
 import type { Roommate } from "./home";
 import { ROOMMATES, USER_NAME, USER_TRAITS } from "./home";
-
-export type RecommendedRoommate = Roommate & {
-  matchSummary: string;
-};
+import type { RecommendedRoommate } from "../types/recommended-roommate";
 
 const DEFAULT_MATCH_SUMMARY = "수면패턴 · 흡연여부 일치";
 
@@ -40,7 +37,7 @@ export function roommateMatchesFilter(
     return traits.some((t) => t.includes("깔끔한"));
   }
   if (filter === "아침형") {
-    return traits.some((t) => t.includes("아침") || t.includes("야행"));
+    return traits.some((t) => t.includes("아침"));
   }
   return true;
 }

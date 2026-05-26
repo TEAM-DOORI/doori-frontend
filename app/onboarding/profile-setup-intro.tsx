@@ -52,6 +52,7 @@ function CharCount({ count, max, styles }: CharCountProps) {
 type MultilineIntroFieldProps = {
   value: string;
   onChangeText: (text: string) => void;
+  accessibilityLabel: string;
   placeholderLines?: readonly string[];
   placeholder?: string;
   inputStyle: StyleProp<TextStyle>;
@@ -62,6 +63,7 @@ type MultilineIntroFieldProps = {
 function MultilineIntroField({
   value,
   onChangeText,
+  accessibilityLabel,
   placeholderLines,
   placeholder,
   inputStyle,
@@ -86,6 +88,7 @@ function MultilineIntroField({
         multiline
         maxLength={maxLength}
         textAlignVertical='top'
+        accessibilityLabel={accessibilityLabel}
       />
       {showCustomPlaceholder && placeholderLines ? (
         <View
@@ -163,6 +166,7 @@ export default function ProfileSetupIntroScreen() {
                 <MultilineIntroField
                   value={introduction}
                   onChangeText={handleIntroChange}
+                  accessibilityLabel='자기소개 입력'
                   placeholder={INTRO_PLACEHOLDER}
                   inputStyle={[styles.input, styles.inputIntro]}
                   maxLength={INTRO_MAX_LENGTH}
@@ -184,6 +188,7 @@ export default function ProfileSetupIntroScreen() {
                 <MultilineIntroField
                   value={roommateWish}
                   onChangeText={handleWishChange}
+                  accessibilityLabel='룸메 희망사항 입력'
                   placeholderLines={ROOMMATE_WISH_PLACEHOLDER_LINES}
                   inputStyle={[styles.input, styles.inputWish]}
                   maxLength={INTRO_MAX_LENGTH}

@@ -25,4 +25,11 @@ export const createActiveFilterPillStyles = ({ hs, vs, fs, ms }: ScaleFns) =>
       color: "#121212",
       marginRight: hs(12),
     },
+    removeButton: {
+      minWidth: hs(44),
+      minHeight: vs(44),
+      alignItems: "center",
+      justifyContent: "center",
+      borderRadius: ms(22),
+    },
   });

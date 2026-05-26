@@ -20,6 +20,7 @@ export function ActiveFilterPill({ label, onRemove }: ActiveFilterPillProps) {
       </Text>
       <Pressable
         onPress={onRemove}
+        style={styles.removeButton}
         hitSlop={8}
         accessibilityRole="button"
         accessibilityLabel={`${label} 필터 제거`}>

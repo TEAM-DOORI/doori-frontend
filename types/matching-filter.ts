@@ -16,6 +16,12 @@ export type MatchingSociability = "비즈니스" | "적당하게" | "찐친형";
 
 export type MbtiAxis = "ei" | "sn" | "tf" | "jp";
 export type MbtiLetter = "E" | "I" | "S" | "N" | "T" | "F" | "J" | "P";
+export type MbtiAxisMap = {
+  ei: "E" | "I";
+  sn: "S" | "N";
+  tf: "T" | "F";
+  jp: "J" | "P";
+};
 
 /** 청결도·소음 슬라이더 5단계 (0~4, 라벨은 0·2·4만 표시) */
 export type MatchingScaleStep = 0 | 1 | 2 | 3 | 4;
@@ -31,7 +37,7 @@ export type MatchingFilters = {
   cleanliness: MatchingScaleStep;
   noise: MatchingScaleStep;
   sociability: MatchingSociability | null;
-  mbti: Partial<Record<MbtiAxis, MbtiLetter>>;
+  mbti: Partial<MbtiAxisMap>;
 };
 
 export const DEFAULT_MATCHING_FILTERS: MatchingFilters = {

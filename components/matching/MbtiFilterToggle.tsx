@@ -2,13 +2,13 @@ import { Pressable, View } from "react-native";
 
 import { MBTI_OPTIONS } from "../../constants/matching-filter-options";
 import { useScaledStyles } from "../../hooks/useScaledStyles";
-import type { MbtiAxis, MbtiLetter } from "../../types/matching-filter";
+import type { MbtiAxisMap } from "../../types/matching-filter";
 import { Text } from "../typography";
 import { createMbtiFilterToggleStyles } from "./_styles/MbtiFilterToggle.styles";
 
 type MbtiFilterToggleProps = {
-  value: Partial<Record<MbtiAxis, MbtiLetter>>;
-  onChange: (value: Partial<Record<MbtiAxis, MbtiLetter>>) => void;
+  value: Partial<MbtiAxisMap>;
+  onChange: (value: Partial<MbtiAxisMap>) => void;
 };
 
 export function MbtiFilterToggle({ value, onChange }: MbtiFilterToggleProps) {

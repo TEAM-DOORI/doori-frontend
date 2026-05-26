@@ -74,6 +74,17 @@ export function FilterScaleSlider({
     [onChange]
   );
 
+  const handleAccessibilityStep = useCallback(
+    (direction: "increment" | "decrement") => {
+      const next =
+        direction === "increment"
+          ? Math.min(MAX_STEP, value + 1)
+          : Math.max(0, value - 1);
+      onChange(next as MatchingScaleStep);
+    },
+    [onChange, value]
+  );
+
   const panResponder = useMemo(
     () =>
       PanResponder.create({
@@ -112,6 +123,19 @@ export function FilterScaleSlider({
             max: MAX_STEP,
             now: value,
             text: accessibilityLabelForStep(value, labels),
+          }}
+          accessibilityActions={[
+            { name: "increment", label: "값 증가" },
+            { name: "decrement", label: "값 감소" },
+          ]}
+          onAccessibilityAction={(event) => {
+            if (event.nativeEvent.actionName === "increment") {
+              handleAccessibilityStep("increment");
+              return;
+            }
+            if (event.nativeEvent.actionName === "decrement") {
+              handleAccessibilityStep("decrement");
+            }
           }}
           {...panResponder.panHandlers}>
           <View style={styles.track} />

@@ -36,9 +36,9 @@ export default function OnboardingCompleteScreen() {
             {content.title}
           </Text>
           <View style={styles.descriptionBlock}>
-            {content.descriptionLines.map((line) => (
+            {content.descriptionLines.map((line, index) => (
               <Text
-                key={line}
+                key={`description-${index}`}
                 weight='regular'
                 style={styles.descriptionLine}>
                 {line}

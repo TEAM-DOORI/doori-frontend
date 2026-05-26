@@ -2,7 +2,7 @@ import { Image } from "expo-image";
 import { Pressable, View } from "react-native";
 
 import { useScaledStyles } from "../../hooks/useScaledStyles";
-import type { RecommendedRoommate } from "../../mocks/matching-recommendations";
+import type { RecommendedRoommate } from "../../types/recommended-roommate";
 import { Text } from "../typography";
 import { createRoommateListItemStyles } from "./_styles/RoommateListItem.styles";
 
@@ -55,9 +55,9 @@ export function RoommateListItem({ item, onPress }: RoommateListItemProps) {
           </View>
         </View>
         <View style={styles.chipsRow}>
-          {item.traits.map((trait) => (
+          {item.traits.map((trait, index) => (
             <View
-              key={trait}
+              key={`${item.id}-${index}`}
               style={styles.chip}>
               <Text
                 weight='medium'

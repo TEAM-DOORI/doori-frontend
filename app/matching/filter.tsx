@@ -24,9 +24,9 @@ import {
 } from "../../lib/matching/apply-matching-filters";
 import {
   RECOMMENDED_ROOMMATES,
-  type RecommendedRoommate,
 } from "../../mocks/matching-recommendations";
 import type { MatchingFilters, MatchingQuickChip } from "../../types/matching-filter";
+import type { RecommendedRoommate } from "../../types/recommended-roommate";
 import { createMatchingFilterScreenStyles } from "./_styles/filter.styles";
 
 export default function MatchingFilterScreen() {

@@ -76,6 +76,17 @@ export const createMatchingFilterSheetStyles = ({ hs, vs, fs }: ScaleFns) =>
       width: "100%",
       gap: hs(8),
     },
+    /** 1행 4칸·2행 22/21학번 — 동일 너비(행당 flex 합 4) */
+    gradeChipSlot: {
+      flex: 1,
+      minWidth: 0,
+    },
+    /** 2행 21학번 이전 — 나머지 2칸 분량, 칩은 내용 너비 */
+    gradeChipSlotWide: {
+      flex: 2,
+      minWidth: 0,
+      alignItems: "flex-start",
+    },
     sliderSection: {
       gap: vs(40),
     },

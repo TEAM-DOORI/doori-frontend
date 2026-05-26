@@ -1,7 +1,8 @@
 import { Image } from "expo-image";
 import { LinearGradient } from "expo-linear-gradient";
 import { useLocalSearchParams } from "expo-router";
-import { Pressable, ScrollView, View } from "react-native";
+import { useCallback, useState } from "react";
+import { Alert, Pressable, ScrollView, View } from "react-native";
 import { useSafeAreaInsets } from "react-native-safe-area-context";
 
 import { BackButton } from "../../components/navigation/BackButton";
@@ -12,11 +13,32 @@ import { getRoommateDetail } from "../../mocks/roommate-detail";
 import { createRoommateDetailStyles } from "./_styles/roommate-detail.styles";
 
 export default function RoommateDetailScreen() {
-  const { id } = useLocalSearchParams<{ id: string }>();
+  const { id } = useLocalSearchParams();
   const insets = useSafeAreaInsets();
   const styles = useScaledStyles(createRoommateDetailStyles);
+  const [isFavorite, setIsFavorite] = useState(false);
+  const [requestSending, setRequestSending] = useState(false);
+  const [requestSent, setRequestSent] = useState(false);
 
-  const roommate = id ? getRoommateDetail(id) : undefined;
+  const roommateId = Array.isArray(id) ? id[0] : id;
+  const roommate = roommateId ? getRoommateDetail(roommateId) : undefined;
+
+  const handleToggleInterest = useCallback(() => {
+    if (!roommate) return;
+    setIsFavorite((prev) => !prev);
+    Alert.alert("관심 룸메이트", `${roommate.name}님을 관심 목록에 반영했어요.`);
+  }, [roommate]);
+
+  const handleSendRoommateRequest = useCallback(() => {
+    if (!roommate || requestSending || requestSent) return;
+    setRequestSending(true);
+    try {
+      setRequestSent(true);
+      Alert.alert("요청 완료", `${roommate.name}님에게 룸메 요청을 보냈어요.`);
+    } finally {
+      setRequestSending(false);
+    }
+  }, [roommate, requestSending, requestSent]);
 
   if (!roommate) {
     return (
@@ -155,8 +177,10 @@ export default function RoommateDetailScreen() {
           <Pressable
             style={({ pressed }) => [
               styles.favoriteButton,
+              isFavorite && { opacity: 0.75 },
               pressed && { opacity: 0.85 },
             ]}
+            onPress={handleToggleInterest}
             accessibilityRole="button"
             accessibilityLabel="관심 룸메이트">
             <Image
@@ -168,12 +192,15 @@ export default function RoommateDetailScreen() {
           <Pressable
             style={({ pressed }) => [
               styles.ctaButton,
+              (requestSending || requestSent) && { opacity: 0.65 },
               pressed && { opacity: 0.9 },
             ]}
+            onPress={handleSendRoommateRequest}
+            disabled={requestSending || requestSent}
             accessibilityRole="button"
             accessibilityLabel="룸메 요청 보내기">
             <Text weight="semiBold" style={styles.ctaText}>
-              룸메 요청 보내기
+              {requestSent ? "요청 완료" : "룸메 요청 보내기"}
             </Text>
           </Pressable>
         </View>

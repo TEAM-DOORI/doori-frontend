@@ -65,19 +65,29 @@ export function MatchingFilterSheet({
             <View style={styles.gradeChipRows}>
               {MATCHING_GRADE_ROWS.map((row, rowIndex) => (
                 <View key={rowIndex} style={styles.gradeChipRow}>
-                  {row.map((grade) => (
-                    <FilterOptionChip
-                      key={grade}
-                      label={grade}
-                      fill
-                      selected={draft.grade === grade}
-                      onPress={() =>
-                        patch({
-                          grade: draft.grade === grade ? null : grade,
-                        })
-                      }
-                    />
-                  ))}
+                  {row.map((grade) => {
+                    const isBefore21 = grade === "21학번 이전";
+                    return (
+                      <View
+                        key={grade}
+                        style={
+                          isBefore21
+                            ? styles.gradeChipSlotWide
+                            : styles.gradeChipSlot
+                        }>
+                        <FilterOptionChip
+                          label={grade}
+                          fill={!isBefore21}
+                          selected={draft.grade === grade}
+                          onPress={() =>
+                            patch({
+                              grade: draft.grade === grade ? null : grade,
+                            })
+                          }
+                        />
+                      </View>
+                    );
+                  })}
                 </View>
               ))}
             </View>
