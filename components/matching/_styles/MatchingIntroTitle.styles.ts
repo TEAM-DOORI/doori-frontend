@@ -45,7 +45,7 @@ export const createMatchingIntroTitleStyles = ({
       fontSize: fs(INTRO_FONT),
       lineHeight: vs(INTRO_LINE_HEIGHT),
       letterSpacing: figmaLetterSpacing(INTRO_FONT, -3),
-      color: colorStyle.Main_Text,
+      color: colorStyle.Sub1,
     },
     line2: {
       textAlign: "center",
