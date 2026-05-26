@@ -1,11 +1,13 @@
 import { Feather } from "@expo/vector-icons";
-import { useRouter } from "expo-router";
+import { type Href, useRouter } from "expo-router";
 import { Pressable, StyleSheet } from "react-native";
 
 import { hs, vs } from "../../constants/scale";
 
 type BackButtonProps = {
   onPress?: () => void;
+  /** canGoBack이 false일 때 이동할 경로 (예: replace로 진입한 화면) */
+  fallbackHref?: Href;
   iconColor?: string;
   iconSize?: number;
   /** Figma 매칭 뒤로가기(30×30) — 추가 패딩 제거 */
@@ -14,6 +16,7 @@ type BackButtonProps = {
 
 export function BackButton({
   onPress,
+  fallbackHref,
   iconColor = "#3B3869",
   iconSize = 28,
   compact = false,
@@ -25,7 +28,13 @@ export function BackButton({
       onPress();
       return;
     }
-    router.back();
+    if (router.canGoBack()) {
+      router.back();
+      return;
+    }
+    if (fallbackHref) {
+      router.replace(fallbackHref);
+    }
   };
 
   return (

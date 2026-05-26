@@ -44,6 +44,14 @@ export default function MatchingRecommendationsScreen() {
     [router]
   );
 
+  const handleLeaveScreen = useCallback(() => {
+    if (router.canGoBack()) {
+      router.back();
+      return;
+    }
+    router.replace("/(tabs)" as never);
+  }, [router]);
+
   const filteredList = useMemo(
     () => applyMatchingFilters(RECOMMENDED_ROOMMATES, filters),
     [filters]
@@ -89,6 +97,7 @@ export default function MatchingRecommendationsScreen() {
                   iconColor='#3B3869'
                   iconSize={28}
                   compact
+                  fallbackHref='/(tabs)'
                 />
               </View>
               <View style={styles.introWrap}>
@@ -128,7 +137,7 @@ export default function MatchingRecommendationsScreen() {
             </View>
             <Pressable
               style={styles.headerBackHit}
-              onPress={() => router.back()}
+              onPress={handleLeaveScreen}
               accessibilityRole='button'
               accessibilityLabel='뒤로 가기'>
               <Feather
