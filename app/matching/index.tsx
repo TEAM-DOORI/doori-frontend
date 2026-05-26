@@ -2,7 +2,7 @@ import { Feather } from "@expo/vector-icons";
 import { Image } from "expo-image";
 import { LinearGradient } from "expo-linear-gradient";
 import { useRouter } from "expo-router";
-import { useCallback, useMemo, useState } from "react";
+import { useCallback, useMemo } from "react";
 import {
   FlatList,
   Pressable,
@@ -19,12 +19,13 @@ import { RoommateListItem } from "../../components/matching/RoommateListItem";
 import { BackButton } from "../../components/navigation/BackButton";
 import { Text } from "../../components/typography";
 import { useScaledStyles } from "../../hooks/useScaledStyles";
+import { MATCHING_QUICK_CHIPS } from "../../constants/matching-filter-options";
+import { useMatchingFilters } from "../../contexts/MatchingFilterContext";
+import { applyMatchingFilters } from "../../lib/matching/apply-matching-filters";
+import type { MatchingQuickChip } from "../../types/matching-filter";
 import {
-  FILTER_CHIP_OPTIONS,
   RECOMMENDED_ROOMMATES,
   getMatchingSectionSubtitle,
-  roommateMatchesFilter,
-  type FilterChipOption,
   type RecommendedRoommate,
 } from "../../mocks/matching-recommendations";
 import { createRecommendationsStyles } from "./_styles/recommendations.styles";
@@ -33,7 +34,7 @@ export default function MatchingRecommendationsScreen() {
   const router = useRouter();
   const insets = useSafeAreaInsets();
   const styles = useScaledStyles(createRecommendationsStyles);
-  const [activeFilters, setActiveFilters] = useState<FilterChipOption[]>([]);
+  const { filters, updateFilters } = useMatchingFilters();
   const sectionSubtitle = useMemo(() => getMatchingSectionSubtitle(), []);
 
   const handleRoommatePress = useCallback(
@@ -43,24 +44,19 @@ export default function MatchingRecommendationsScreen() {
     [router]
   );
 
-  const toggleFilter = (option: FilterChipOption) => {
-    setActiveFilters((prev) =>
-      prev.includes(option)
-        ? prev.filter((item) => item !== option)
-        : [...prev, option]
-    );
-  };
+  const filteredList = useMemo(
+    () => applyMatchingFilters(RECOMMENDED_ROOMMATES, filters),
+    [filters]
+  );
 
-  const filteredList = useMemo(() => {
-    if (activeFilters.length === 0) {
-      return RECOMMENDED_ROOMMATES;
-    }
-    return RECOMMENDED_ROOMMATES.filter((item) =>
-      activeFilters.every((filter) =>
-        roommateMatchesFilter(item.traits, filter)
-      )
-    );
-  }, [activeFilters]);
+  const toggleQuickChip = (chip: MatchingQuickChip) => {
+    const has = filters.quickChips.includes(chip);
+    updateFilters({
+      quickChips: has
+        ? filters.quickChips.filter((c) => c !== chip)
+        : [...filters.quickChips, chip],
+    });
+  };
 
   const renderListItem: ListRenderItem<RecommendedRoommate> = useCallback(
     ({ item }) => (
@@ -146,6 +142,7 @@ export default function MatchingRecommendationsScreen() {
           <View style={styles.filterRow}>
             <Pressable
               style={[styles.filterChip, styles.filterChipWide]}
+              onPress={() => router.push("/matching/filter")}
               accessibilityRole='button'
               accessibilityLabel='필터'>
               <Image
@@ -159,23 +156,23 @@ export default function MatchingRecommendationsScreen() {
                 필터
               </Text>
             </Pressable>
-            {FILTER_CHIP_OPTIONS.map((option) => {
-              const active = activeFilters.includes(option);
+            {MATCHING_QUICK_CHIPS.map((chip) => {
+              const active = filters.quickChips.includes(chip);
               return (
                 <Pressable
-                  key={option}
+                  key={chip}
                   style={[styles.filterChip, active && styles.filterChipActive]}
-                  onPress={() => toggleFilter(option)}
+                  onPress={() => toggleQuickChip(chip)}
                   accessibilityRole='button'
                   accessibilityState={{ selected: active }}
-                  accessibilityLabel={option}>
+                  accessibilityLabel={chip}>
                   <Text
                     weight='medium'
                     style={[
                       styles.filterChipText,
                       active && styles.filterChipTextActive,
                     ]}>
-                    {option}
+                    {chip}
                   </Text>
                 </Pressable>
               );
