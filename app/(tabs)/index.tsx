@@ -218,10 +218,10 @@ function RoommateCarousel() {
     isDragging.current = true;
   }, []);
 
-  const finalizeCarouselScroll = useCallback(
+  const handleMomentumScrollEnd = useCallback(
     (e: { nativeEvent: { contentOffset: { x: number } } }) => {
-      isDragging.current = false;
       currentIndex.current = Math.round(e.nativeEvent.contentOffset.x / SNAP);
+      isDragging.current = false;
     },
     [],
   );
@@ -273,8 +273,7 @@ function RoommateCarousel() {
         initialScrollIndex={0}
         getItemLayout={getItemLayout}
         onScrollBeginDrag={handleScrollBeginDrag}
-        onScrollEndDrag={finalizeCarouselScroll}
-        onMomentumScrollEnd={finalizeCarouselScroll}
+        onMomentumScrollEnd={handleMomentumScrollEnd}
         onScroll={Animated.event(
           [{ nativeEvent: { contentOffset: { x: scrollX } } }],
           { useNativeDriver: true },

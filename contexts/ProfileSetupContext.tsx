@@ -4,6 +4,7 @@ import {
   useContext,
   useEffect,
   useMemo,
+  useRef,
   useState,
   type ReactNode,
 } from "react";
@@ -43,6 +44,7 @@ export function ProfileSetupProvider({ children }: { children: ReactNode }) {
   const [completeOverride, setCompleteOverride] =
     useState<OnboardingCompleteOverride | null>(null);
   const [isHydrated, setIsHydrated] = useState(false);
+  const skipSaveRef = useRef(false);
 
   useEffect(() => {
     let cancelled = false;
@@ -67,7 +69,7 @@ export function ProfileSetupProvider({ children }: { children: ReactNode }) {
   }, []);
 
   useEffect(() => {
-    if (!isHydrated) {
+    if (!isHydrated || skipSaveRef.current) {
       return;
     }
 
@@ -79,9 +81,16 @@ export function ProfileSetupProvider({ children }: { children: ReactNode }) {
   }, []);
 
   const resetDraft = useCallback(() => {
-    setDraft(DEFAULT_PROFILE_SETUP_DRAFT);
-    setCompleteOverride(null);
-    void clearProfileSetupState();
+    void (async () => {
+      skipSaveRef.current = true;
+      try {
+        await clearProfileSetupState();
+        setDraft(DEFAULT_PROFILE_SETUP_DRAFT);
+        setCompleteOverride(null);
+      } finally {
+        skipSaveRef.current = false;
+      }
+    })();
   }, []);
 
   const applyProfileSetupFromApi = useCallback((payload: ProfileSetupApiPayload) => {
