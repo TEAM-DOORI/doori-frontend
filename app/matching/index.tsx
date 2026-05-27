@@ -19,10 +19,13 @@ import { RoommateListItem } from "../../components/matching/RoommateListItem";
 import { BackButton } from "../../components/navigation/BackButton";
 import { Text } from "../../components/typography";
 import { useScaledStyles } from "../../hooks/useScaledStyles";
-import { MATCHING_QUICK_CHIPS } from "../../constants/matching-filter-options";
+import { MATCHING_SHORTCUT_CHIPS } from "../../constants/matching-filter-options";
 import { useMatchingFilters } from "../../contexts/MatchingFilterContext";
 import { applyMatchingFilters } from "../../lib/matching/apply-matching-filters";
-import type { MatchingQuickChip } from "../../types/matching-filter";
+import {
+  isShortcutChipActive,
+  toggleShortcutChip,
+} from "../../lib/matching/matching-shortcut-chip";
 import type { RecommendedRoommate } from "../../types/recommended-roommate";
 import {
   RECOMMENDED_ROOMMATES,
@@ -44,27 +47,14 @@ export default function MatchingRecommendationsScreen() {
     [router]
   );
 
-  const handleLeaveScreen = useCallback(() => {
-    if (router.canGoBack()) {
-      router.back();
-      return;
-    }
-    router.replace("/(tabs)" as never);
+  const handleGoToSearchScreen = useCallback(() => {
+    router.push("/matching/filter");
   }, [router]);
 
   const filteredList = useMemo(
     () => applyMatchingFilters(RECOMMENDED_ROOMMATES, filters),
     [filters]
   );
-
-  const toggleQuickChip = (chip: MatchingQuickChip) => {
-    const has = filters.quickChips.includes(chip);
-    updateFilters({
-      quickChips: has
-        ? filters.quickChips.filter((c) => c !== chip)
-        : [...filters.quickChips, chip],
-    });
-  };
 
   const renderListItem: ListRenderItem<RecommendedRoommate> = useCallback(
     ({ item }) => (
@@ -137,9 +127,9 @@ export default function MatchingRecommendationsScreen() {
             </View>
             <Pressable
               style={styles.headerBackHit}
-              onPress={handleLeaveScreen}
+              onPress={handleGoToSearchScreen}
               accessibilityRole='button'
-              accessibilityLabel='뒤로 가기'>
+              accessibilityLabel='검색 화면으로 이동'>
               <Feather
                 name='chevron-right'
                 size={28}
@@ -165,13 +155,13 @@ export default function MatchingRecommendationsScreen() {
                 필터
               </Text>
             </Pressable>
-            {MATCHING_QUICK_CHIPS.map((chip) => {
-              const active = filters.quickChips.includes(chip);
+            {MATCHING_SHORTCUT_CHIPS.map((chip) => {
+              const active = isShortcutChipActive(filters, chip);
               return (
                 <Pressable
                   key={chip}
                   style={[styles.filterChip, active && styles.filterChipActive]}
-                  onPress={() => toggleQuickChip(chip)}
+                  onPress={() => updateFilters(toggleShortcutChip(filters, chip))}
                   accessibilityRole='button'
                   accessibilityState={{ selected: active }}
                   accessibilityLabel={chip}>

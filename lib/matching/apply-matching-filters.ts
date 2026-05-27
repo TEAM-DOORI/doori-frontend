@@ -1,4 +1,3 @@
-import type { MatchingQuickChip } from "../../types/matching-filter";
 import type { RecommendedRoommate } from "../../types/recommended-roommate";
 import type { MatchingFilters } from "../../types/matching-filter";
 
@@ -7,7 +6,7 @@ function traitIncludes(traits: readonly string[], needle: string) {
 }
 
 export function getActiveFilterLabels(filters: MatchingFilters): string[] {
-  const labels: string[] = [...filters.quickChips];
+  const labels: string[] = [];
 
   if (filters.grade) labels.push(filters.grade);
   if (filters.sleepPattern) labels.push(filters.sleepPattern);
@@ -20,6 +19,7 @@ export function getActiveFilterLabels(filters: MatchingFilters): string[] {
     };
     labels.push(map[filters.sociability]);
   }
+  if (filters.cleanliness >= 3) labels.push("깔끔한");
 
   const mbti = [
     filters.mbti.ei,
@@ -40,17 +40,14 @@ export function removeFilterByLabel(
 ): MatchingFilters {
   const next: MatchingFilters = {
     ...filters,
-    quickChips: [...filters.quickChips],
     mbti: { ...filters.mbti },
   };
 
-  if (next.quickChips.includes(label as MatchingQuickChip)) {
-    next.quickChips = next.quickChips.filter((c) => c !== label);
-  }
   if (next.grade === label) next.grade = null;
   if (next.sleepPattern === label) next.sleepPattern = null;
   if (next.smoking === label) next.smoking = null;
   if (next.sociability === label) next.sociability = null;
+  if (label === "깔끔한") next.cleanliness = 2;
 
   const mbtiJoined = [
     next.mbti.ei,
@@ -62,18 +59,6 @@ export function removeFilterByLabel(
     .join("");
   if (mbtiJoined === label) next.mbti = {};
 
-  if (label === "비흡연") {
-    next.smoking = null;
-    next.quickChips = next.quickChips.filter((c) => c !== "비흡연");
-  }
-  if (label === "아침형") {
-    next.sleepPattern = null;
-    next.quickChips = next.quickChips.filter((c) => c !== "아침형");
-  }
-  if (label === "깔끔한") {
-    next.quickChips = next.quickChips.filter((c) => c !== "깔끔한");
-  }
-
   return next;
 }
 
@@ -82,25 +67,6 @@ export function applyMatchingFilters(
   filters: MatchingFilters
 ): RecommendedRoommate[] {
   return roommates.filter((item) => {
-    if (
-      filters.quickChips.includes("비흡연") &&
-      !traitIncludes(item.traits, "비흡연")
-    ) {
-      return false;
-    }
-    if (
-      filters.quickChips.includes("깔끔한") &&
-      !traitIncludes(item.traits, "깔끔한")
-    ) {
-      return false;
-    }
-    if (
-      filters.quickChips.includes("아침형") &&
-      !traitIncludes(item.traits, "아침")
-    ) {
-      return false;
-    }
-
     if (filters.smoking === "비흡연" && !traitIncludes(item.traits, "비흡연")) {
       return false;
     }
@@ -116,6 +82,10 @@ export function applyMatchingFilters(
       };
       const needle = map[filters.sleepPattern];
       if (needle && !traitIncludes(item.traits, needle)) return false;
+    }
+
+    if (filters.cleanliness >= 3 && !traitIncludes(item.traits, "깔끔한")) {
+      return false;
     }
 
     return true;

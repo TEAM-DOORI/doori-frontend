@@ -1,20 +1,16 @@
+import { Feather } from "@expo/vector-icons";
 import { Image } from "expo-image";
 import { useRouter } from "expo-router";
 import { useCallback, useMemo, useState } from "react";
-import {
-  FlatList,
-  Pressable,
-  View,
-  type ListRenderItem,
-} from "react-native";
+import { FlatList, Pressable, View, type ListRenderItem } from "react-native";
 import { useSafeAreaInsets } from "react-native-safe-area-context";
 
 import { ActiveFilterPill } from "../../components/matching/ActiveFilterPill";
 import { MatchingFilterSheet } from "../../components/matching/MatchingFilterSheet";
 import { RoommateListItem } from "../../components/matching/RoommateListItem";
 import { BackButton } from "../../components/navigation/BackButton";
-import { Text } from "../../components/typography";
-import { MATCHING_QUICK_CHIPS } from "../../constants/matching-filter-options";
+import { Text, TextInput } from "../../components/typography";
+import { MATCHING_SHORTCUT_CHIPS } from "../../constants/matching-filter-options";
 import { useMatchingFilters } from "../../contexts/MatchingFilterContext";
 import { useScaledStyles } from "../../hooks/useScaledStyles";
 import {
@@ -23,9 +19,11 @@ import {
   removeFilterByLabel,
 } from "../../lib/matching/apply-matching-filters";
 import {
-  RECOMMENDED_ROOMMATES,
-} from "../../mocks/matching-recommendations";
-import type { MatchingFilters, MatchingQuickChip } from "../../types/matching-filter";
+  isShortcutChipActive,
+  toggleShortcutChip,
+} from "../../lib/matching/matching-shortcut-chip";
+import { RECOMMENDED_ROOMMATES } from "../../mocks/matching-recommendations";
+import type { MatchingFilters } from "../../types/matching-filter";
 import type { RecommendedRoommate } from "../../types/recommended-roommate";
 import { createMatchingFilterScreenStyles } from "./_styles/filter.styles";
 
@@ -35,14 +33,17 @@ export default function MatchingFilterScreen() {
   const styles = useScaledStyles(createMatchingFilterScreenStyles);
   const { filters, setFilters } = useMatchingFilters();
   const [draft, setDraft] = useState<MatchingFilters>(filters);
-  const [sheetOpen, setSheetOpen] = useState(true);
-
+  const [sheetOpen, setSheetOpen] = useState(false);
+  const [searchQuery, setSearchQuery] = useState("");
   const activeLabels = useMemo(() => getActiveFilterLabels(draft), [draft]);
 
-  const filteredList = useMemo(
-    () => applyMatchingFilters(RECOMMENDED_ROOMMATES, draft),
-    [draft]
-  );
+  const filteredList = useMemo(() => {
+    const base = applyMatchingFilters(RECOMMENDED_ROOMMATES, draft);
+    const trimmed = searchQuery.trim();
+
+    if (!trimmed) return base;
+    return base.filter((item) => item.name.includes(trimmed));
+  }, [draft, searchQuery]);
 
   const applyDraft = useCallback(
     (next: MatchingFilters) => {
@@ -51,14 +52,6 @@ export default function MatchingFilterScreen() {
     },
     [setFilters]
   );
-
-  const toggleQuickChip = (chip: MatchingQuickChip) => {
-    const has = draft.quickChips.includes(chip);
-    const quickChips = has
-      ? draft.quickChips.filter((c) => c !== chip)
-      : [...draft.quickChips, chip];
-    applyDraft({ ...draft, quickChips });
-  };
 
   const handleRoommatePress = useCallback(
     (id: string) => {
@@ -69,7 +62,10 @@ export default function MatchingFilterScreen() {
 
   const renderListItem: ListRenderItem<RecommendedRoommate> = useCallback(
     ({ item }) => (
-      <RoommateListItem item={item} onPress={handleRoommatePress} />
+      <RoommateListItem
+        item={item}
+        onPress={handleRoommatePress}
+      />
     ),
     [handleRoommatePress]
   );
@@ -80,10 +76,7 @@ export default function MatchingFilterScreen() {
     <View style={styles.root}>
       <FlatList
         style={styles.list}
-        contentContainerStyle={[
-          styles.listContent,
-          { paddingTop: insets.top },
-        ]}
+        contentContainerStyle={[styles.listContent, { paddingTop: insets.top }]}
         data={filteredList}
         keyExtractor={(item) => item.id}
         renderItem={renderListItem}
@@ -91,39 +84,62 @@ export default function MatchingFilterScreen() {
         ListHeaderComponent={
           <View style={styles.headerBlock}>
             <View style={styles.topRow}>
-              <BackButton iconColor="#1A3262" iconSize={30} compact />
-              {activeLabels.length > 0 ? (
-                <View style={styles.activePillsRow}>
-                  {activeLabels.map((label) => (
-                    <ActiveFilterPill
-                      key={label}
-                      label={label}
-                      onRemove={() =>
-                        applyDraft(removeFilterByLabel(draft, label))
-                      }
+              <View style={styles.backButtonWrap}>
+                <BackButton
+                  iconColor='#1A3262'
+                  iconSize={30}
+                  compact
+                />
+              </View>
+              <View style={styles.searchInputWrap}>
+                <Feather
+                  name='search'
+                  size={16}
+                  color='#6B7280'
+                />
+                <TextInput
+                  value={searchQuery}
+                  onChangeText={setSearchQuery}
+                  placeholder='이름으로 검색' //임시 placeholder
+                  style={styles.searchInput}
+                  returnKeyType='search'
+                />
+                {searchQuery.length > 0 ? (
+                  <Pressable
+                    onPress={() => setSearchQuery("")}
+                    hitSlop={8}
+                    style={styles.searchClearButton}
+                    accessibilityRole='button'
+                    accessibilityLabel='검색어 지우기'>
+                    <Feather
+                      name='x'
+                      size={16}
+                      color='#888D91'
                     />
-                  ))}
-                </View>
-              ) : null}
+                  </Pressable>
+                ) : null}
+              </View>
             </View>
 
             <View style={styles.filterRow}>
               <Pressable
                 style={[styles.filterChip, styles.filterChipWide]}
                 onPress={() => setSheetOpen(true)}
-                accessibilityRole="button"
-                accessibilityLabel="필터">
+                accessibilityRole='button'
+                accessibilityLabel='필터'>
                 <Image
                   source={require("../../assets/images/matching/filter-icon.svg")}
                   style={styles.filterIcon}
-                  contentFit="contain"
+                  contentFit='contain'
                 />
-                <Text weight="medium" style={styles.filterChipText}>
+                <Text
+                  weight='medium'
+                  style={styles.filterChipText}>
                   필터
                 </Text>
               </Pressable>
-              {MATCHING_QUICK_CHIPS.map((chip) => {
-                const active = draft.quickChips.includes(chip);
+              {MATCHING_SHORTCUT_CHIPS.map((chip) => {
+                const active = isShortcutChipActive(draft, chip);
                 return (
                   <Pressable
                     key={chip}
@@ -131,12 +147,12 @@ export default function MatchingFilterScreen() {
                       styles.filterChip,
                       active && styles.filterChipActive,
                     ]}
-                    onPress={() => toggleQuickChip(chip)}
-                    accessibilityRole="button"
+                    onPress={() => applyDraft(toggleShortcutChip(draft, chip))}
+                    accessibilityRole='button'
                     accessibilityState={{ selected: active }}
                     accessibilityLabel={chip}>
                     <Text
-                      weight="medium"
+                      weight='medium'
                       style={[
                         styles.filterChipText,
                         active && styles.filterChipTextActive,
@@ -147,6 +163,19 @@ export default function MatchingFilterScreen() {
                 );
               })}
             </View>
+            {activeLabels.length > 0 ? (
+              <View style={styles.activePillsRow}>
+                {activeLabels.map((label) => (
+                  <ActiveFilterPill
+                    key={label}
+                    label={label}
+                    onRemove={() =>
+                      applyDraft(removeFilterByLabel(draft, label))
+                    }
+                  />
+                ))}
+              </View>
+            ) : null}
 
             <View style={styles.listDivider} />
           </View>
@@ -158,8 +187,8 @@ export default function MatchingFilterScreen() {
           <Pressable
             style={styles.overlay}
             onPress={closeSheet}
-            accessibilityRole="button"
-            accessibilityLabel="필터 닫기"
+            accessibilityRole='button'
+            accessibilityLabel='필터 닫기'
           />
           <MatchingFilterSheet
             draft={draft}

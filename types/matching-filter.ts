@@ -1,6 +1,3 @@
-/** Figma `1015:7741` 룸메 찾기 필터 */
-export type MatchingQuickChip = "아침형" | "비흡연" | "깔끔한";
-
 export type MatchingGrade =
   | "26학번"
   | "25학번"
@@ -30,7 +27,6 @@ export const MATCHING_SCALE_STEP_COUNT = 5;
 export const MATCHING_SCALE_LABELED_STEPS = [0, 2, 4] as const;
 
 export type MatchingFilters = {
-  quickChips: MatchingQuickChip[];
   grade: MatchingGrade | null;
   sleepPattern: MatchingSleepPattern | null;
   smoking: MatchingSmoking | null;
@@ -41,7 +37,6 @@ export type MatchingFilters = {
 };
 
 export const DEFAULT_MATCHING_FILTERS: MatchingFilters = {
-  quickChips: [],
   grade: null,
   sleepPattern: null,
   smoking: null,

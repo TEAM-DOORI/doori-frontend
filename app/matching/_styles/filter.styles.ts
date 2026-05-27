@@ -2,10 +2,17 @@ import { StyleSheet } from "react-native";
 
 import { colorStyle } from "../../../constants/colors";
 import type { ScaleFns } from "../../../constants/create-scale-api";
-import { figmaLetterSpacing } from "../../../constants/matching-figma";
-import { matchingColors } from "../../../constants/matching-figma";
+import {
+  figmaLetterSpacing,
+  matchingColors,
+} from "../../../constants/matching-figma";
 
-export const createMatchingFilterScreenStyles = ({ hs, vs, fs, ms }: ScaleFns) =>
+export const createMatchingFilterScreenStyles = ({
+  hs,
+  vs,
+  fs,
+  ms,
+}: ScaleFns) =>
   StyleSheet.create({
     root: {
       flex: 1,
@@ -31,15 +38,45 @@ export const createMatchingFilterScreenStyles = ({ hs, vs, fs, ms }: ScaleFns) =
     topRow: {
       flexDirection: "row",
       alignItems: "center",
-      gap: hs(16),
-      flexWrap: "wrap",
+      gap: hs(10),
+    },
+    backButtonWrap: {
+      width: hs(36),
+      height: vs(46),
+      alignItems: "center",
+      justifyContent: "center",
     },
     activePillsRow: {
-      flex: 1,
       flexDirection: "row",
       flexWrap: "wrap",
       gap: hs(8),
+    },
+    searchInputWrap: {
+      flex: 1,
+      flexDirection: "row",
+      alignItems: "center",
+      gap: hs(8),
+      backgroundColor: colorStyle.Main2,
+      borderWidth: hs(1),
+      borderColor: colorStyle.Main2,
+      borderRadius: ms(20),
+      paddingHorizontal: hs(18),
+      height: vs(46),
       minWidth: 0,
+    },
+    searchInput: {
+      flex: 1,
+      fontSize: fs(14),
+      lineHeight: vs(14 * 1.4),
+      letterSpacing: figmaLetterSpacing(14, -2),
+      color: matchingColors.bodyInk,
+      paddingVertical: 0,
+    },
+    searchClearButton: {
+      width: hs(20),
+      height: hs(20),
+      alignItems: "center",
+      justifyContent: "center",
     },
     filterRow: {
       flexDirection: "row",

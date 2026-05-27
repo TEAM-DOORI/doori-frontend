@@ -106,6 +106,7 @@ export const createRecommendationsStyles = ({ hs, vs, fs, ms }: ScaleFns) =>
       gap: hs(7),
       paddingHorizontal: hs(20),
       paddingBottom: vs(10),
+      minWidth: 0,
     },
     filterChip: {
       flexDirection: "row",

@@ -1,17 +1,13 @@
 import type {
   MatchingGrade,
-  MatchingQuickChip,
   MatchingSleepPattern,
   MatchingSmoking,
   MatchingSociability,
   MbtiLetter,
 } from "../types/matching-filter";
 
-export const MATCHING_QUICK_CHIPS: readonly MatchingQuickChip[] = [
-  "아침형",
-  "비흡연",
-  "깔끔한",
-] as const;
+export const MATCHING_SHORTCUT_CHIPS = ["아침형", "비흡연", "깔끔한"] as const;
+export type MatchingShortcutChip = (typeof MATCHING_SHORTCUT_CHIPS)[number];
 
 export const MATCHING_GRADE_OPTIONS: readonly MatchingGrade[] = [
   "26학번",
