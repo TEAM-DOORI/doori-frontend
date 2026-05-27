@@ -1,17 +1,14 @@
 import { StyleSheet } from "react-native";
 
 import { color, colorStyle } from "../../../constants/colors";
+import { onboardingScreenBackground } from "./shared";
 import type { ScaleFns } from "../../../constants/create-scale-api";
 
 export const createOnboardingCompleteStyles = ({ hs, vs, fs, ms }: ScaleFns) =>
   StyleSheet.create({
-    safeArea: {
+    screen: {
       flex: 1,
-    },
-    header: {
-      paddingHorizontal: hs(20),
-      paddingTop: vs(17),
-      paddingBottom: vs(67),
+      backgroundColor: onboardingScreenBackground,
     },
     content: {
       paddingHorizontal: hs(20),

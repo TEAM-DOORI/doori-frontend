@@ -2,10 +2,7 @@ import { useRouter } from "expo-router";
 import { Pressable, ScrollView, View } from "react-native";
 import { useSafeAreaInsets } from "react-native-safe-area-context";
 
-import { BackgroundGradient } from "../../components/layout/BackgroundGradient";
-import { BackButton } from "../../components/navigation/BackButton";
 import { LifestyleOptionCard } from "../../components/profile-setup/LifestyleOptionCard";
-import { ProgressBar } from "../../components/profile-setup/ProgressBar";
 import { Text } from "../../components/typography";
 import { vs } from "../../constants";
 import { useProfileSetup } from "../../contexts/ProfileSetupContext";
@@ -49,15 +46,7 @@ export default function ProfileSetupPreferencesScreen() {
   };
 
   return (
-    <BackgroundGradient>
-      <View style={[styles.safeArea, { paddingTop: insets.top }]}>
-        <View style={styles.header}>
-          <BackButton />
-          <View style={styles.progressWrap}>
-            <ProgressBar progress={0.6} />
-          </View>
-        </View>
-
+    <View style={styles.screen}>
         <ScrollView
           contentContainerStyle={styles.scrollContent}
           showsVerticalScrollIndicator={false}
@@ -142,7 +131,6 @@ export default function ProfileSetupPreferencesScreen() {
             </Text>
           </Pressable>
         </View>
-      </View>
-    </BackgroundGradient>
+    </View>
   );
 }

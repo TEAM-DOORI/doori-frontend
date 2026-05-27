@@ -3,8 +3,6 @@ import { useRouter } from "expo-router";
 import { Pressable, View } from "react-native";
 import { useSafeAreaInsets } from "react-native-safe-area-context";
 
-import { BackgroundGradient } from "../../components/layout/BackgroundGradient";
-import { BackButton } from "../../components/navigation/BackButton";
 import { Text } from "../../components/typography";
 import { vs } from "../../constants";
 import { useOnboardingCompleteContent } from "../../contexts/ProfileSetupContext";
@@ -22,12 +20,7 @@ export default function OnboardingCompleteScreen() {
   };
 
   return (
-    <BackgroundGradient>
-      <View style={[styles.safeArea, { paddingTop: insets.top }]}>
-        <View style={styles.header}>
-          <BackButton />
-        </View>
-
+      <View style={styles.screen}>
         <View style={styles.content}>
           <Text
             weight='bold'
@@ -81,6 +74,5 @@ export default function OnboardingCompleteScreen() {
           </Pressable>
         </View>
       </View>
-    </BackgroundGradient>
   );
 }

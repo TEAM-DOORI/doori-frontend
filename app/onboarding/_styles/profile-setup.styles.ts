@@ -2,22 +2,16 @@ import { StyleSheet } from "react-native";
 
 import type { ScaleFns } from "../../../constants/create-scale-api";
 import { color, colorStyle } from "../../../constants/colors";
+import { onboardingScreenBackground } from "./shared";
 
 export const createProfileSetupScreenStyles = ({ hs, vs, fs, ms }: ScaleFns) =>
   StyleSheet.create({
   flex: {
     flex: 1,
   },
-  safeArea: {
+  screen: {
     flex: 1,
-  },
-  header: {
-    paddingHorizontal: hs(20),
-    paddingBottom: vs(44),
-    paddingTop: vs(17),
-  },
-  progressWrap: {
-    marginTop: vs(8),
+    backgroundColor: onboardingScreenBackground,
   },
   scrollContent: {
     flexGrow: 1,

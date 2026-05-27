@@ -12,9 +12,6 @@ import {
 } from "react-native";
 import { useSafeAreaInsets } from "react-native-safe-area-context";
 
-import { BackgroundGradient } from "../../components/layout/BackgroundGradient";
-import { BackButton } from "../../components/navigation/BackButton";
-import { ProgressBar } from "../../components/profile-setup/ProgressBar";
 import { Text, TextInput } from "../../components/typography";
 import { vs } from "../../constants";
 import { colorStyle } from "../../constants/colors";
@@ -125,19 +122,10 @@ export default function ProfileSetupIntroScreen() {
   };
 
   return (
-    <BackgroundGradient>
       <KeyboardAvoidingView
-        style={styles.safeArea}
+        style={styles.screen}
         behavior={Platform.OS === "ios" ? "padding" : undefined}
-        keyboardVerticalOffset={insets.top}>
-        <View style={[styles.safeArea, { paddingTop: insets.top }]}>
-          <View style={styles.header}>
-            <BackButton />
-            <View style={styles.progressWrap}>
-              <ProgressBar progress={1} />
-            </View>
-          </View>
-
+        keyboardVerticalOffset={0}>
           <ScrollView
             contentContainerStyle={styles.scrollContent}
             showsVerticalScrollIndicator={false}
@@ -218,8 +206,6 @@ export default function ProfileSetupIntroScreen() {
               </Text>
             </Pressable>
           </View>
-        </View>
       </KeyboardAvoidingView>
-    </BackgroundGradient>
   );
 }

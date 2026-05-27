@@ -3,11 +3,8 @@ import { useMemo, useState } from "react";
 import { Pressable, ScrollView, View } from "react-native";
 import { useSafeAreaInsets } from "react-native-safe-area-context";
 
-import { BackgroundGradient } from "../../components/layout/BackgroundGradient";
-import { BackButton } from "../../components/navigation/BackButton";
 import { InlineChipDropdown } from "../../components/profile-setup/InlineChipDropdown";
 import { ProfileSetupChip } from "../../components/profile-setup/ProfileSetupChip";
-import { ProgressBar } from "../../components/profile-setup/ProgressBar";
 import { Text } from "../../components/typography";
 import { vs } from "../../constants";
 import {
@@ -53,15 +50,7 @@ export default function ProfileSetupScreen() {
   };
 
   return (
-    <BackgroundGradient>
-      <View style={[styles.safeArea, { paddingTop: insets.top }]}>
-        <View style={styles.header}>
-          <BackButton />
-          <View style={styles.progressWrap}>
-            <ProgressBar progress={0.2} />
-          </View>
-        </View>
-
+    <View style={styles.screen}>
         <ScrollView
           contentContainerStyle={styles.scrollContent}
           showsVerticalScrollIndicator={false}
@@ -199,7 +188,6 @@ export default function ProfileSetupScreen() {
             </Text>
           </Pressable>
         </View>
-      </View>
-    </BackgroundGradient>
+    </View>
   );
 }
