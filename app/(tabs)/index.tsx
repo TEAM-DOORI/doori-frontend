@@ -29,9 +29,9 @@ function Header() {
         contentFit="contain"
         accessibilityLabel="DOORI 로고"
       />
-      <View accessibilityElementsHidden importantForAccessibility="no">
+      <Pressable accessibilityRole="button" accessibilityLabel="알림">
         <Feather name="bell" size={styles.bell.width} color="#1A3262" />
-      </View>
+      </Pressable>
     </View>
   );
 }
@@ -218,13 +218,10 @@ function RoommateCarousel() {
     isDragging.current = true;
   }, []);
 
-  const handleMomentumScrollEnd = useCallback(
-    (e: { nativeEvent: { contentOffset: { x: number } } }) => {
-      currentIndex.current = Math.round(e.nativeEvent.contentOffset.x / SNAP);
-      isDragging.current = false;
-    },
-    [],
-  );
+  const handleMomentumScrollEnd = useCallback((e: { nativeEvent: { contentOffset: { x: number } } }) => {
+    isDragging.current = false;
+    currentIndex.current = Math.round(e.nativeEvent.contentOffset.x / SNAP);
+  }, []);
 
   const renderItem = useCallback(
     ({ item, index }: { item: Roommate; index: number }) => {
