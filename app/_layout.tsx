@@ -16,6 +16,7 @@ export const unstable_settings = {
 
 export default function RootLayout() {
   const [loaded, error] = useFonts({
+    "THE-POSTER-FONT-DEMO": require("../assets/fonts/THE-POSTER-FONT-DEMO.ttf"),
     "Pretendard-Thin": require("../assets/fonts/Pretendard-Thin.ttf"),
     "Pretendard-ExtraLight": require("../assets/fonts/Pretendard-ExtraLight.ttf"),
     "Pretendard-Light": require("../assets/fonts/Pretendard-Light.ttf"),
