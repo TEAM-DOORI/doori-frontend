@@ -31,7 +31,7 @@ export default function TabLayout() {
       <Tabs.Screen
         name="settings"
         options={{
-          title: '설정',
+          title: 'MY',
         }}
       />
     </Tabs>
