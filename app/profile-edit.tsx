@@ -1,8 +1,9 @@
 import { Feather } from "@expo/vector-icons";
+import AsyncStorage from "@react-native-async-storage/async-storage";
 import { Image } from "expo-image";
 import { LinearGradient } from "expo-linear-gradient";
 import { useRouter } from "expo-router";
-import { useMemo, useState } from "react";
+import { useEffect, useMemo, useState } from "react";
 import { Pressable, ScrollView, View } from "react-native";
 import { useSafeAreaInsets } from "react-native-safe-area-context";
 
@@ -13,6 +14,7 @@ import { PROFILE_EDIT_DEFAULT, PROFILE_EDIT_LIMITS } from "../mocks/profile-edit
 import { COLORS, styles } from "./profile-edit.styles";
 
 type LifestyleType = "morning" | "evening";
+const PROFILE_EDIT_STORAGE_KEY = "profile-edit:draft";
 
 export default function ProfileEditScreen() {
   const router = useRouter();
@@ -26,16 +28,54 @@ export default function ProfileEditScreen() {
   const [introduction, setIntroduction] = useState<string>(
     PROFILE_EDIT_DEFAULT.introduction,
   );
-  const [myTags] = useState([...PROFILE_EDIT_DEFAULT.myTags]);
+  const [myTags, setMyTags] = useState<string[]>([...PROFILE_EDIT_DEFAULT.myTags]);
   const [wantedTagInput, setWantedTagInput] = useState("");
   const [roommateTags, setRoommateTags] = useState<string[]>(
     PROFILE_EDIT_DEFAULT.roommateTags,
   );
+  const [isSaving, setIsSaving] = useState(false);
   const { showAlert } = useGlobalAlert();
 
   const introCount = introduction.length;
   const isRoommateTagLimitReached =
     roommateTags.length >= PROFILE_EDIT_LIMITS.roommateTagMax;
+
+  useEffect(() => {
+    let mounted = true;
+
+    const loadProfileDraft = async () => {
+      try {
+        const raw = await AsyncStorage.getItem(PROFILE_EDIT_STORAGE_KEY);
+        if (!raw || !mounted) return;
+        const parsed = JSON.parse(raw) as {
+          lifestyle?: LifestyleType;
+          name?: string;
+          introduction?: string;
+          myTags?: string[];
+          roommateTags?: string[];
+        };
+
+        if (parsed.lifestyle === "morning" || parsed.lifestyle === "evening") {
+          setLifestyle(parsed.lifestyle);
+        }
+        if (typeof parsed.name === "string") setName(parsed.name);
+        if (typeof parsed.introduction === "string") {
+          setIntroduction(parsed.introduction.slice(0, PROFILE_EDIT_LIMITS.introductionMax));
+        }
+        if (Array.isArray(parsed.myTags)) setMyTags(parsed.myTags);
+        if (Array.isArray(parsed.roommateTags)) {
+          setRoommateTags(parsed.roommateTags.slice(0, PROFILE_EDIT_LIMITS.roommateTagMax));
+        }
+      } catch {
+        // 초안 복원 실패 시 기본값으로 진행
+      }
+    };
+
+    loadProfileDraft();
+    return () => {
+      mounted = false;
+    };
+  }, []);
 
   const handleAddRoommateTag = () => {
     const tag = wantedTagInput.trim();
@@ -51,6 +91,51 @@ export default function ProfileEditScreen() {
     }
     setRoommateTags((prev) => [...prev, tag]);
     setWantedTagInput("");
+  };
+
+  const handleRemoveMyTag = (tagToRemove: string) => {
+    setMyTags((prev) => prev.filter((tag) => tag !== tagToRemove));
+  };
+
+  const handleRemoveRoommateTag = (tagToRemove: string) => {
+    setRoommateTags((prev) => prev.filter((tag) => tag !== tagToRemove));
+  };
+
+  const handleSave = async () => {
+    const trimmedName = name.trim();
+    if (!trimmedName) {
+      showAlert({
+        title: "입력 확인",
+        message: "이름을 입력해주세요.",
+      });
+      return;
+    }
+
+    const payload = {
+      lifestyle,
+      name: trimmedName,
+      school,
+      introduction: introduction.trim(),
+      myTags,
+      roommateTags,
+      updatedAt: new Date().toISOString(),
+    };
+
+    setIsSaving(true);
+    try {
+      await AsyncStorage.setItem(PROFILE_EDIT_STORAGE_KEY, JSON.stringify(payload));
+      showAlert({
+        title: "저장 완료",
+        message: "프로필 정보가 저장되었습니다.",
+      });
+    } catch {
+      showAlert({
+        title: "저장 실패",
+        message: "저장 중 문제가 발생했어요. 잠시 후 다시 시도해주세요.",
+      });
+    } finally {
+      setIsSaving(false);
+    }
   };
 
   const lifestyleOptions = useMemo(
@@ -189,7 +274,13 @@ export default function ProfileEditScreen() {
                 <Text weight="medium" style={styles.chipText}>
                   {tag}
                 </Text>
-                <Feather name="x" size={14} color={COLORS.primary} />
+                <Pressable
+                  onPress={() => handleRemoveMyTag(tag)}
+                  accessibilityRole="button"
+                  accessibilityLabel={`${tag} 태그 삭제`}
+                >
+                  <Feather name="x" size={14} color={COLORS.primary} />
+                </Pressable>
               </View>
             ))}
           </View>
@@ -229,12 +320,18 @@ export default function ProfileEditScreen() {
           </Pressable>
           {roommateTags.length > 0 && (
             <View style={styles.chipList}>
-              {roommateTags.map((tag) => (
-                <View key={tag} style={styles.chip}>
+              {roommateTags.map((tag, index) => (
+                <View key={`${tag}-${index}`} style={styles.chip}>
                   <Text weight="medium" style={styles.chipText}>
                     {tag}
                   </Text>
-                  <Feather name="x" size={14} color={COLORS.primary} />
+                  <Pressable
+                    onPress={() => handleRemoveRoommateTag(tag)}
+                    accessibilityRole="button"
+                    accessibilityLabel={`${tag} 태그 삭제`}
+                  >
+                    <Feather name="x" size={14} color={COLORS.primary} />
+                  </Pressable>
                 </View>
               ))}
             </View>
@@ -243,9 +340,15 @@ export default function ProfileEditScreen() {
       </ScrollView>
 
       <View style={[styles.footer, { paddingBottom: Math.max(insets.bottom, vs(20)) }]}>
-        <Pressable style={styles.saveButton} accessibilityRole="button" accessibilityLabel="저장하기">
+        <Pressable
+          style={({ pressed }) => [styles.saveButton, (pressed || isSaving) && { opacity: 0.85 }]}
+          onPress={handleSave}
+          disabled={isSaving}
+          accessibilityRole="button"
+          accessibilityLabel="저장하기"
+        >
           <Text weight="semiBold" style={styles.saveButtonText}>
-            저장하기
+            {isSaving ? "저장 중..." : "저장하기"}
           </Text>
         </Pressable>
       </View>
