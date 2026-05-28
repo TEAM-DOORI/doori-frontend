@@ -4,7 +4,7 @@ import { fs, hs, ms, vs } from "../../constants";
 import { colorStyle } from "../../constants/colors";
 import { Text } from "../typography";
 
-type CustomAlertProps = {
+export type CustomAlertProps = {
   visible: boolean;
   title?: string;
   message: string;

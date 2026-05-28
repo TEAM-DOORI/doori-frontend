@@ -2,11 +2,11 @@ import { Feather } from "@expo/vector-icons";
 import { Image } from "expo-image";
 import { LinearGradient } from "expo-linear-gradient";
 import { useRouter } from "expo-router";
-import { useCallback, useState } from "react";
+import { useCallback } from "react";
 import { Pressable, ScrollView, View } from "react-native";
 import { useSafeAreaInsets } from "react-native-safe-area-context";
 
-import { CustomAlert } from "../../components/common/CustomAlert";
+import { useGlobalAlert } from "../../components/common/GlobalAlertProvider";
 import { Text } from "../../components/typography";
 import { vs } from "../../constants";
 import {
@@ -81,15 +81,14 @@ function MenuSection({
 export default function MyPageScreen() {
   const router = useRouter();
   const insets = useSafeAreaInsets();
-  const [alertVisible, setAlertVisible] = useState(false);
-  const [alertTitle, setAlertTitle] = useState("알림");
-  const [alertMessage, setAlertMessage] = useState("");
+  const { showAlert } = useGlobalAlert();
 
   const showComingSoon = useCallback((label: string) => {
-    setAlertTitle(label);
-    setAlertMessage("준비 중인 기능입니다.");
-    setAlertVisible(true);
-  }, []);
+    showAlert({
+      title: label,
+      message: "준비 중인 기능입니다.",
+    });
+  }, [showAlert]);
 
   const handleMenuPress = useCallback(
     (item: MyPageMenuItem) => showComingSoon(item.label),
@@ -204,12 +203,6 @@ export default function MyPageScreen() {
           </View>
         </View>
       </ScrollView>
-      <CustomAlert
-        visible={alertVisible}
-        title={alertTitle}
-        message={alertMessage}
-        onConfirm={() => setAlertVisible(false)}
-      />
     </View>
   );
 }

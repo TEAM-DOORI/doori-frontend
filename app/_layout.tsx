@@ -6,6 +6,8 @@ import { StatusBar } from "expo-status-bar";
 import { useEffect } from "react";
 import "react-native-reanimated";
 
+import { GlobalAlertProvider } from "../components/common/GlobalAlertProvider";
+
 SplashScreen.preventAutoHideAsync();
 
 export const unstable_settings = {
@@ -37,13 +39,15 @@ export default function RootLayout() {
 
   return (
     <ThemeProvider value={DefaultTheme}>
-      <Stack screenOptions={{ headerShown: false }}>
-        <Stack.Screen name="index" />
-        <Stack.Screen name="login" />
-        <Stack.Screen name="(tabs)" />
-        <Stack.Screen name="profile-edit" />
-      </Stack>
-      <StatusBar style='auto' />
+      <GlobalAlertProvider>
+        <Stack screenOptions={{ headerShown: false }}>
+          <Stack.Screen name="index" />
+          <Stack.Screen name="login" />
+          <Stack.Screen name="(tabs)" />
+          <Stack.Screen name="profile-edit" />
+        </Stack>
+        <StatusBar style='auto' />
+      </GlobalAlertProvider>
     </ThemeProvider>
   );
 }
