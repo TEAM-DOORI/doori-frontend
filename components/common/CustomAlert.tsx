@@ -26,7 +26,12 @@ export function CustomAlert({
   const hasCancel = typeof cancelText === "string" && typeof onCancel === "function";
 
   return (
-    <Modal visible={visible} transparent animationType="fade" onRequestClose={onConfirm}>
+    <Modal
+      visible={visible}
+      transparent
+      animationType="fade"
+      onRequestClose={() => (onCancel ? onCancel() : onConfirm())}
+    >
       <View style={styles.backdrop}>
         <View style={styles.container}>
           <Text weight="bold" style={styles.title}>

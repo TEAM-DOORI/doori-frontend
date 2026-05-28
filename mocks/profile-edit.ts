@@ -2,9 +2,9 @@ export const PROFILE_EDIT_DEFAULT = {
   name: "김연수",
   school: "홍익대학교",
   introduction: "",
-  lifestyle: "morning" as "morning" | "evening",
+  lifestyle: "morning",
   myTags: ["INFJ", "야행성", "새벽형", "찐친형", "비흡연"],
-  roommateTags: [] as string[],
+  roommateTags: [],
 } as const;
 
 export const PROFILE_EDIT_LIMITS = {

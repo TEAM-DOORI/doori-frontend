@@ -3,7 +3,7 @@ import AsyncStorage from "@react-native-async-storage/async-storage";
 import { Image } from "expo-image";
 import { LinearGradient } from "expo-linear-gradient";
 import { useRouter } from "expo-router";
-import { useEffect, useMemo, useState } from "react";
+import { useEffect, useState } from "react";
 import { Pressable, ScrollView, View } from "react-native";
 import { useSafeAreaInsets } from "react-native-safe-area-context";
 
@@ -15,6 +15,10 @@ import { COLORS, styles } from "./profile-edit.styles";
 
 type LifestyleType = "morning" | "evening";
 const PROFILE_EDIT_STORAGE_KEY = "profile-edit:draft";
+const LIFESTYLE_OPTIONS: { key: LifestyleType; label: string }[] = [
+  { key: "morning", label: "아침형" },
+  { key: "evening", label: "저녁형" },
+];
 
 export default function ProfileEditScreen() {
   const router = useRouter();
@@ -31,7 +35,7 @@ export default function ProfileEditScreen() {
   const [myTags, setMyTags] = useState<string[]>([...PROFILE_EDIT_DEFAULT.myTags]);
   const [wantedTagInput, setWantedTagInput] = useState("");
   const [roommateTags, setRoommateTags] = useState<string[]>(
-    PROFILE_EDIT_DEFAULT.roommateTags,
+    [...PROFILE_EDIT_DEFAULT.roommateTags],
   );
   const [isSaving, setIsSaving] = useState(false);
   const { showAlert } = useGlobalAlert();
@@ -89,6 +93,14 @@ export default function ProfileEditScreen() {
       });
       return;
     }
+    const normalizedTag = tag.toLowerCase();
+    const isDuplicate = roommateTags.some(
+      (existingTag) => existingTag.trim().toLowerCase() === normalizedTag,
+    );
+    if (isDuplicate) {
+      showAlert({ message: "이미 추가된 태그입니다." });
+      return;
+    }
     setRoommateTags((prev) => [...prev, tag]);
     setWantedTagInput("");
   };
@@ -138,14 +150,6 @@ export default function ProfileEditScreen() {
     }
   };
 
-  const lifestyleOptions = useMemo(
-    () => [
-      { key: "morning" as const, label: "아침형" },
-      { key: "evening" as const, label: "저녁형" },
-    ],
-    [],
-  );
-
   return (
     <View style={styles.root}>
       <ScrollView
@@ -185,7 +189,7 @@ export default function ProfileEditScreen() {
             />
 
             <View style={styles.lifestyleWrap}>
-              {lifestyleOptions.map((option) => {
+              {LIFESTYLE_OPTIONS.map((option) => {
                 const selected = lifestyle === option.key;
                 return (
                   <Pressable
@@ -287,8 +291,8 @@ export default function ProfileEditScreen() {
           <TextInput
             value=""
             editable={false}
-            style={styles.addTagInput}
-            placeholder="+ 새로 추가하고 싶은 태그를 작성해주세요!"
+            style={[styles.addTagInput, styles.addTagInputDisabled]}
+            placeholder="태그 추가 기능 준비 중입니다."
             placeholderTextColor={COLORS.textPlaceholder}
           />
         </View>

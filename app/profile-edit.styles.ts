@@ -5,6 +5,9 @@ import { colorStyle } from "../constants/colors";
 
 export const COLORS = {
   bg: colorStyle.Main2,
+  white: "#FFFFFF",
+  dividerBg: "#EAF0FF",
+  lifestyleInactive: "#8595BB",
   text: colorStyle.Main_Text,
   textMuted: colorStyle.S05,
   textPlaceholder: colorStyle.S04,
@@ -92,7 +95,7 @@ export const styles = StyleSheet.create({
     fontSize: fs(16),
     lineHeight: fs(22),
     letterSpacing: -0.64,
-    color: "#8595BB",
+    color: COLORS.lifestyleInactive,
   },
   lifestyleTextActive: {
     color: COLORS.primary,
@@ -100,7 +103,7 @@ export const styles = StyleSheet.create({
   divider: {
     marginTop: vs(28),
     height: StyleSheet.hairlineWidth,
-    backgroundColor: "#EAF0FF",
+    backgroundColor: COLORS.dividerBg,
   },
   section: {
     marginTop: vs(28),
@@ -109,7 +112,7 @@ export const styles = StyleSheet.create({
   topDivider: {
     marginTop: vs(22),
     height: StyleSheet.hairlineWidth,
-    backgroundColor: "#EAF0FF",
+    backgroundColor: COLORS.dividerBg,
   },
   sectionTitle: {
     fontSize: fs(18),
@@ -127,7 +130,7 @@ export const styles = StyleSheet.create({
     lineHeight: fs(25),
     color: COLORS.textMuted,
     letterSpacing: -0.72,
-    backgroundColor: "#FFFFFF",
+    backgroundColor: COLORS.white,
   },
   schoolRow: {
     flexDirection: "row",
@@ -194,7 +197,10 @@ export const styles = StyleSheet.create({
     lineHeight: fs(21),
     color: COLORS.textMuted,
     letterSpacing: -0.6,
-    backgroundColor: "#FFFFFF",
+    backgroundColor: COLORS.white,
+  },
+  addTagInputDisabled: {
+    backgroundColor: COLORS.footerBg,
   },
   roommateTagInput: {
     fontSize: fs(14),

@@ -50,13 +50,19 @@ export function useCustomAlert() {
   }, []);
 
   const handleConfirm = useCallback(() => {
-    alertState.onConfirmAction?.();
-    hideAlert();
+    try {
+      alertState.onConfirmAction?.();
+    } finally {
+      hideAlert();
+    }
   }, [alertState.onConfirmAction, hideAlert]);
 
   const handleCancel = useCallback(() => {
-    alertState.onCancelAction?.();
-    hideAlert();
+    try {
+      alertState.onCancelAction?.();
+    } finally {
+      hideAlert();
+    }
   }, [alertState.onCancelAction, hideAlert]);
 
   const alertProps = useMemo<CustomAlertProps>(
