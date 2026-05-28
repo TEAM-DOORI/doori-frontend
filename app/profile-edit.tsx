@@ -3,9 +3,10 @@ import { Image } from "expo-image";
 import { LinearGradient } from "expo-linear-gradient";
 import { useRouter } from "expo-router";
 import { useMemo, useState } from "react";
-import { Alert, Pressable, ScrollView, View } from "react-native";
+import { Pressable, ScrollView, View } from "react-native";
 import { useSafeAreaInsets } from "react-native-safe-area-context";
 
+import { CustomAlert } from "../components/common/CustomAlert";
 import { Text, TextInput } from "../components/typography";
 import { vs } from "../constants";
 import { PROFILE_EDIT_DEFAULT, PROFILE_EDIT_LIMITS } from "../mocks/profile-edit";
@@ -30,19 +31,28 @@ export default function ProfileEditScreen() {
   const [roommateTags, setRoommateTags] = useState<string[]>(
     PROFILE_EDIT_DEFAULT.roommateTags,
   );
+  const [alertMessage, setAlertMessage] = useState("");
+  const [alertVisible, setAlertVisible] = useState(false);
 
   const introCount = introduction.length;
   const isRoommateTagLimitReached =
     roommateTags.length >= PROFILE_EDIT_LIMITS.roommateTagMax;
 
+  const openAlert = (message: string) => {
+    setAlertMessage(message);
+    setAlertVisible(true);
+  };
+
   const handleAddRoommateTag = () => {
     const tag = wantedTagInput.trim();
     if (!tag) {
-      Alert.alert("태그를 입력해주세요");
+      openAlert("태그를 입력해주세요.");
       return;
     }
     if (roommateTags.length >= PROFILE_EDIT_LIMITS.roommateTagMax) {
-      Alert.alert(`원하는 룸메 태그는 최대 ${PROFILE_EDIT_LIMITS.roommateTagMax}개까지 추가할 수 있어요.`);
+      openAlert(
+        `원하는 룸메 태그는 최대 ${PROFILE_EDIT_LIMITS.roommateTagMax}개까지 추가할 수 있어요.`,
+      );
       return;
     }
     setRoommateTags((prev) => [...prev, tag]);
@@ -245,6 +255,12 @@ export default function ProfileEditScreen() {
           </Text>
         </Pressable>
       </View>
+
+      <CustomAlert
+        visible={alertVisible}
+        message={alertMessage}
+        onConfirm={() => setAlertVisible(false)}
+      />
     </View>
   );
 }
