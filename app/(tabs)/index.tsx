@@ -1,7 +1,7 @@
 import { Feather } from "@expo/vector-icons";
 import { Image } from "expo-image";
 import { LinearGradient } from "expo-linear-gradient";
-import { View } from "react-native";
+import { Pressable, View } from "react-native";
 import { useSafeAreaInsets } from "react-native-safe-area-context";
 
 import { HomeRoommateCarousel } from "../../components/home/HomeRoommateCarousel";
@@ -15,12 +15,18 @@ function Header() {
       <Image
         source={require("../../assets/images/logo/DOORI.png")}
         style={styles.logo}
-        contentFit="contain"
-        accessibilityLabel="DOORI 로고"
+        contentFit='contain'
+        accessibilityLabel='DOORI 로고'
       />
-      <View accessibilityElementsHidden importantForAccessibility="no">
-        <Feather name="bell" size={styles.bell.width} color="#1A3262" />
-      </View>
+      <Pressable
+        accessibilityRole='button'
+        accessibilityLabel='알림'>
+        <Feather
+          name='bell'
+          size={styles.bell.width}
+          color='#1A3262'
+        />
+      </Pressable>
     </View>
   );
 }
@@ -29,14 +35,20 @@ function MatchTitle() {
   return (
     <View style={styles.titleWrap}>
       <Text style={styles.titleLine}>
-        <Text weight="extraBold" style={[styles.titleLine, styles.titleName]}>
+        <Text
+          weight='extraBold'
+          style={[styles.titleLine, styles.titleName]}>
           {USER_NAME}
         </Text>
-        <Text weight="bold" style={styles.titleLine}>
+        <Text
+          weight='bold'
+          style={styles.titleLine}>
           님과 딱 맞는
         </Text>
       </Text>
-      <Text weight="bold" style={styles.titleLine}>
+      <Text
+        weight='bold'
+        style={styles.titleLine}>
         룸메이트를 발견했어요
       </Text>
     </View>
@@ -54,9 +66,8 @@ function TraitChip({
   return (
     <View style={isPrimary ? styles.chipPrimary : styles.chipLight}>
       <Text
-        weight="medium"
-        style={isPrimary ? styles.chipPrimaryText : styles.chipLightText}
-      >
+        weight='medium'
+        style={isPrimary ? styles.chipPrimaryText : styles.chipLightText}>
         {label}
       </Text>
     </View>
@@ -73,7 +84,11 @@ function TraitChipRow({
   return (
     <View style={tone === "light" ? styles.topChipsRow : styles.cardChipsRow}>
       {traits.map((t) => (
-        <TraitChip key={t} label={t} tone={tone} />
+        <TraitChip
+          key={t}
+          label={t}
+          tone={tone}
+        />
       ))}
     </View>
   );
@@ -81,12 +96,14 @@ function TraitChipRow({
 
 function HeroCharacter() {
   return (
-    <View style={styles.heroWrap} pointerEvents="none">
+    <View
+      style={styles.heroWrap}
+      pointerEvents='none'>
       <Image
         source={require("../../assets/images/home/home-character.png")}
         style={styles.hero}
-        contentFit="contain"
-        accessibilityLabel="DOORI 캐릭터"
+        contentFit='contain'
+        accessibilityLabel='DOORI 캐릭터'
       />
     </View>
   );
@@ -101,13 +118,15 @@ export default function HomeScreen() {
       locations={[0, 1]}
       start={{ x: 0.5, y: 0 }}
       end={{ x: 0.5, y: 1 }}
-      style={styles.root}
-    >
+      style={styles.root}>
       <View style={[styles.safeArea, { paddingTop: insets.top }]}>
         <Header />
         <View>
           <MatchTitle />
-          <TraitChipRow traits={USER_TRAITS} tone="light" />
+          <TraitChipRow
+            traits={USER_TRAITS}
+            tone='light'
+          />
           <HeroCharacter />
         </View>
         <HomeRoommateCarousel />

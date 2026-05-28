@@ -46,6 +46,13 @@ export const gradient = {
     start: { x: 0.5, y: 0 },
     end: { x: 0.5, y: 1 },
   },
+  /** 스플래시 — linear-gradient(180deg, #FFF9DE 0%, #F3F6FF 52.4%, #C8D9FF 100%) */
+  splash: {
+    colors: ["#FFF9DE", colorStyle.Main2, colorStyle.Main] as const,
+    locations: [0, 0.524, 1] as const,
+    start: { x: 0.5, y: 0 },
+    end: { x: 0.5, y: 1 },
+  },
 } as const;
 
 /**
