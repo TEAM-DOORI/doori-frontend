@@ -1,7 +1,8 @@
 {
   "expo": {
     "name": "doori-front",
-    "slug": "doori-front",
+    "slug": "doori",
+    "owner": "lastro",
     "version": "1.0.0",
     "orientation": "portrait",
     "icon": "./assets/images/icon.png",
@@ -12,6 +13,7 @@
       "supportsTablet": true
     },
     "android": {
+      "package": "com.doori.front",
       "adaptiveIcon": {
         "backgroundColor": "#E6F4FE",
         "foregroundImage": "./assets/images/android-icon-foreground.png",
@@ -26,16 +28,17 @@
       "favicon": "./assets/images/favicon.png"
     },
     "plugins": [
+      "expo-dev-client",
       "expo-router",
       [
         "expo-splash-screen",
         {
-          "image": "./assets/images/splash-icon.png",
-          "imageWidth": 200,
+          "image": "./assets/images/splash/transparent.png",
+          "imageWidth": 1,
           "resizeMode": "contain",
-          "backgroundColor": "#ffffff",
+          "backgroundColor": "#FFF9DE",
           "dark": {
-            "backgroundColor": "#000000"
+            "backgroundColor": "#FFF9DE"
           }
         }
       ]
@@ -43,6 +46,12 @@
     "experiments": {
       "typedRoutes": true,
       "reactCompiler": true
+    },
+    "extra": {
+      "router": {},
+      "eas": {
+        "projectId": "99abcd7b-e7c0-4244-b4d7-456e7392963d"
+      }
     }
   }
 }
