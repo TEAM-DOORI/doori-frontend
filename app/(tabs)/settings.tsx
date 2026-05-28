@@ -1,6 +1,7 @@
 import { Feather } from "@expo/vector-icons";
 import { Image } from "expo-image";
 import { LinearGradient } from "expo-linear-gradient";
+import { useRouter } from "expo-router";
 import { useCallback } from "react";
 import { Alert, Pressable, ScrollView, View } from "react-native";
 import { useSafeAreaInsets } from "react-native-safe-area-context";
@@ -77,6 +78,7 @@ function MenuSection({
 }
 
 export default function MyPageScreen() {
+  const router = useRouter();
   const insets = useSafeAreaInsets();
 
   const showComingSoon = useCallback((label: string) => {
@@ -142,7 +144,7 @@ export default function MyPageScreen() {
                     styles.actionCard,
                     pressed && { opacity: 0.85 },
                   ]}
-                  onPress={() => showComingSoon("프로필 수정")}
+                  onPress={() => router.push("/profile-edit")}
                   accessibilityRole='button'
                   accessibilityLabel='프로필 수정'>
                   <Image
