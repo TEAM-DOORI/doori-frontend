@@ -1,7 +1,7 @@
 import { Image } from "expo-image";
 import { View } from "react-native";
 
-import type { ChatAvatarData } from "../../types/chat";
+import type { ChatAvatarData } from "@/types/chat";
 import { MEMBER_OVERLAP, styles } from "./ChatAvatar.styles";
 
 type Props = {

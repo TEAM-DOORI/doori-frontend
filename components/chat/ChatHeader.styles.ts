@@ -1,5 +1,5 @@
 import { StyleSheet } from "react-native";
-import { fs, hs, vs } from "../../constants";
+import { fs, hs, vs } from "@constants";
 
 export const styles = StyleSheet.create({
   header: {

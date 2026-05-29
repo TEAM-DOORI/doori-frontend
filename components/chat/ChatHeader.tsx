@@ -1,8 +1,8 @@
 import { Feather } from "@expo/vector-icons";
 import { View } from "react-native";
 
-import { hs } from "../../constants";
-import { Text } from "../typography";
+import { hs } from "@constants";
+import { Text } from "@components/typography";
 import { styles } from "./ChatHeader.styles";
 
 type Props = {

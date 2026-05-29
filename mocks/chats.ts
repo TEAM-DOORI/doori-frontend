@@ -1,7 +1,7 @@
-import type { Chat } from "../types/chat";
+import type { Chat } from "@/types/chat";
 
-const sampleProfile = require("../assets/images/chat/chat-profile.png");
-const sampleFood = require("../assets/images/chat/sample-food.png");
+const sampleProfile = require("@assets/images/chat/chat-profile.png");
+const sampleFood = require("@assets/images/chat/sample-food.png");
 
 export const CHATS: Chat[] = [
   {

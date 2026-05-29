@@ -5,15 +5,15 @@ import ReanimatedSwipeable, { type SwipeableMethods } from "react-native-gesture
 import Animated, { useAnimatedStyle } from "react-native-reanimated";
 import type { SharedValue } from "react-native-reanimated";
 
-import { Text } from "../../components/typography";
-import { ChatCategoryTabs } from "../../components/chat/ChatCategoryTabs";
-import { ChatHeader } from "../../components/chat/ChatHeader";
-import { ChatInfoBanner } from "../../components/chat/ChatInfoBanner";
-import { ChatListItem } from "../../components/chat/ChatListItem";
-import { ChatSwipeActions } from "../../components/chat/ChatSwipeActions";
-import { ACTIONS_TOTAL_WIDTH, BUTTON_WIDTH } from "../../components/chat/ChatSwipeActions.constants";
-import { CHATS } from "../../mocks/chats";
-import type { Chat, ChatFilter } from "../../types/chat";
+import { Text } from "@components/typography";
+import { ChatCategoryTabs } from "@components/chat/ChatCategoryTabs";
+import { ChatHeader } from "@components/chat/ChatHeader";
+import { ChatInfoBanner } from "@components/chat/ChatInfoBanner";
+import { ChatListItem } from "@components/chat/ChatListItem";
+import { ChatSwipeActions } from "@components/chat/ChatSwipeActions";
+import { ACTIONS_TOTAL_WIDTH, BUTTON_WIDTH } from "@components/chat/ChatSwipeActions.constants";
+import { CHATS } from "@/mocks/chats";
+import type { Chat, ChatFilter } from "@/types/chat";
 import { styles } from "./chat.styles";
 
 function EmptyState() {

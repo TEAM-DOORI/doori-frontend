@@ -1,6 +1,6 @@
 import { View } from "react-native";
 
-import { Text } from "../typography";
+import { Text } from "@components/typography";
 import { styles } from "./ChatInfoBanner.styles";
 
 export function ChatInfoBanner() {

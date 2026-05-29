@@ -1,6 +1,6 @@
 import { StyleSheet } from "react-native";
-import { fs, hs, vs } from "../../constants";
-import { colorStyle } from "../../constants/colors";
+import { fs, hs, vs } from "@constants";
+import { colorStyle } from "@constants/colors";
 
 export const ITEM_HEIGHT = vs(82);
 

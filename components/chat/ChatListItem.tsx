@@ -1,7 +1,7 @@
 import { Pressable, View } from "react-native";
 
-import type { Chat } from "../../types/chat";
-import { Text } from "../typography";
+import type { Chat } from "@/types/chat";
+import { Text } from "@components/typography";
 import { ChatAvatar } from "./ChatAvatar";
 import { styles } from "./ChatListItem.styles";
 

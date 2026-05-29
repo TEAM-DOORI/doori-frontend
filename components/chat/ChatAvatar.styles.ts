@@ -1,6 +1,6 @@
 import { StyleSheet } from "react-native";
-import { hs, vs } from "../../constants";
-import { colorStyle } from "../../constants/colors";
+import { hs, vs } from "@constants";
+import { colorStyle } from "@constants/colors";
 
 export const AVATAR_SIZE = hs(52.5);
 export const FOOD_SIZE = hs(57.5);

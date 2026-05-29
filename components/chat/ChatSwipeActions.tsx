@@ -1,7 +1,7 @@
 import { Feather } from "@expo/vector-icons";
 import { Pressable, View } from "react-native";
 
-import { hs } from "../../constants";
+import { hs } from "@constants";
 import { styles } from "./ChatSwipeActions.styles";
 
 type Props = {

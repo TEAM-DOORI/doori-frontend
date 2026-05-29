@@ -22,13 +22,13 @@
 
 Follow the structure below and use absolute paths only:
 
-- `@/*`: `./src/*`
-- `@components/*`: `./src/components/*`
-- `@screens/*`: `./src/screens/*`
-- `@hooks/*`: `./src/hooks/*`
-- `@constants/*`: `./src/constants/*`
+- `@/*`: `./*` (프로젝트 루트)
+- `@components/*`: `./components/*`
+- `@screens/*`: `./screens/*`
+- `@hooks/*`: `./hooks/*`
+- `@constants`: `./constants` (barrel import)
+- `@constants/*`: `./constants/*`
 - `@assets/*`: `./assets/*`
-- `@styles/*`: `./src/styles/*`
 
 ## 4. UI/UX & Responsive Rules (CRITICAL)
 

@@ -1,7 +1,7 @@
 import { Pressable, View } from "react-native";
 
-import type { ChatFilter } from "../../types/chat";
-import { Text } from "../typography";
+import type { ChatFilter } from "@/types/chat";
+import { Text } from "@components/typography";
 import { styles } from "./ChatCategoryTabs.styles";
 
 const TABS: { id: ChatFilter; label: string }[] = [
