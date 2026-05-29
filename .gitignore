@@ -44,3 +44,6 @@ app-example
 
 # cursor
 .cursorrules
+
+# claude per-task plans (개인 작업 메모)
+.claude/plans/
