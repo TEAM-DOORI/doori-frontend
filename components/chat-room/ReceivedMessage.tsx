@@ -1,6 +1,7 @@
-import { useCallback, useRef } from "react";
+import { useCallback, useMemo } from "react";
 import { Image } from "expo-image";
-import { Pressable, View, type GestureResponderEvent } from "react-native";
+import { View } from "react-native";
+import { Gesture, GestureDetector } from "react-native-gesture-handler";
 import Animated, {
   FadeIn,
   FadeOut,
@@ -28,7 +29,6 @@ type Props = {
 
 export function ReceivedMessage({ message, reactions, onDoubleTap }: Props) {
   const activeReactions = reactions ?? message.reactions ?? [];
-  const lastTapRef = useRef<number>(0);
 
   const heartScale = useSharedValue(0);
   const heartOpacity = useSharedValue(0);
@@ -59,30 +59,26 @@ export function ReceivedMessage({ message, reactions, onDoubleTap }: Props) {
     if (onDoubleTap) onDoubleTap();
   }, [onDoubleTap, heartScale, heartOpacity, heartTranslateY]);
 
-  const handlePress = useCallback((_event: GestureResponderEvent) => {
-    const now = Date.now();
-    if (now - lastTapRef.current < 300) {
-      triggerHeartAnimation();
-    }
-    lastTapRef.current = now;
-  }, [triggerHeartAnimation]);
+  const doubleTapGesture = useMemo(
+    () => Gesture.Tap().numberOfTaps(2).runOnJS(true).onEnd(triggerHeartAnimation),
+    [triggerHeartAnimation],
+  );
 
   return (
     <View style={styles.container}>
       <Image source={sampleProfile} style={styles.avatar} />
       <View style={styles.body}>
         <View style={styles.bubbleRow}>
-          <Pressable
-            style={styles.bubble}
-            onPress={handlePress}
-          >
-            <Text weight="medium" style={styles.text}>
-              {message.text}
-            </Text>
-            <Animated.View style={[styles.heartOverlay, animatedHeartStyle]} pointerEvents="none">
-              <AntDesign name="heart" size={40} color="rgba(255,255,255,0.85)" />
-            </Animated.View>
-          </Pressable>
+          <GestureDetector gesture={doubleTapGesture}>
+            <View style={styles.bubble}>
+              <Text weight="medium" style={styles.text}>
+                {message.text}
+              </Text>
+              <Animated.View style={[styles.heartOverlay, animatedHeartStyle]} pointerEvents="none">
+                <AntDesign name="heart" size={40} color="rgba(255,255,255,0.85)" />
+              </Animated.View>
+            </View>
+          </GestureDetector>
           <View style={styles.meta}>
             {message.unreadBy !== undefined && message.unreadBy > 0 && (
               <Text weight="regular" style={styles.unread}>
