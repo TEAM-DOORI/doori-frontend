@@ -4,6 +4,7 @@ import { useSafeAreaInsets } from "react-native-safe-area-context";
 import ReanimatedSwipeable, { type SwipeableMethods } from "react-native-gesture-handler/ReanimatedSwipeable";
 import Animated, { useAnimatedStyle } from "react-native-reanimated";
 import type { SharedValue } from "react-native-reanimated";
+import { useRouter } from "expo-router";
 
 import { Text } from "@components/typography";
 import { ChatCategoryTabs } from "@components/chat/ChatCategoryTabs";
@@ -89,6 +90,7 @@ const SwipeableChatItem = memo(function SwipeableChatItem({
 
 export default function ChatScreen() {
   const insets = useSafeAreaInsets();
+  const router = useRouter();
   const [activeTab, setActiveTab] = useState<ChatFilter>("all");
   const openSwipeableRef = useRef<SwipeableMethods | null>(null);
 
@@ -118,10 +120,8 @@ export default function ChatScreen() {
   }, []);
 
   const handleChatPress = useCallback((id: string) => {
-    // TODO: /chat/[id] 라우트 생성 후 typed routes로 연결
-    // router.push({ pathname: "/chat/[id]", params: { id } });
-    console.log("Open chat:", id);
-  }, []);
+    router.push({ pathname: "/chat/[id]", params: { id } });
+  }, [router]);
 
   const renderItem = useCallback(
     ({ item }: { item: Chat }) => (

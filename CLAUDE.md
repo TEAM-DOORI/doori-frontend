@@ -41,7 +41,7 @@ Use absolute path aliases only:
 ## 5. Coding Standards & Conventions
 
 - **Component Style:** Functional components with Hooks.
-- **Commit Messages:** `type: description (#issue)` (feat, fix, style, refactor, docs, chore, test).
+- **Commit Messages:** `type: description (#issue)` (feat, fix, style, refactor, docs, chore, test). Write commit messages in **Korean**.
 - **Branching:** Base all PRs on the `main` branch. Follow-up work branches off the preceding feature branch.
 - **Testing:** Write unit tests with Jest and React Testing Library. All new features must include a basic test file.
 - **AI Code Review:** Code is reviewed by CodeRabbit. Keep code clean and readable.
