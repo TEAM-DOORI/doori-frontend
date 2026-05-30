@@ -30,7 +30,7 @@ export function ChatMessageInput({ value, onChangeText, onSend }: Props) {
           placeholder="메시지를 입력하세요"
           placeholderTextColor={colorStyle.S04}
           returnKeyType="send"
-          onSubmitEditing={onSend}
+          onSubmitEditing={() => { if (canSend) onSend(); }}
           blurOnSubmit={false}
           accessibilityLabel="메시지 입력"
         />

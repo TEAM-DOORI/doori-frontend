@@ -11,7 +11,7 @@
 ## 2. Technical Stack & Environment
 
 - **Framework:** Expo (React Native) with Expo Router.
-- **Platform:** App first, with future expansion to iOS/Android.
+- **Platform:** Cross-platform mobile app (iOS/Android via Expo), with potential web expansion in the future.
 - **Language:** TypeScript (strict mode).
 - **State Management:**
   - Server State: TanStack Query (`@tanstack/react-query`)
