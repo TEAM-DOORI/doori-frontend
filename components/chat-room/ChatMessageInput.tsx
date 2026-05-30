@@ -10,7 +10,7 @@ export function ChatMessageInput() {
     <View style={styles.container}>
       <Pressable
         hitSlop={hs(8)}
-        onPress={() => console.log("첨부 버튼 탭")} // TODO: 첨부 기능 구현
+        onPress={() => {}} // TODO: 첨부 기능 구현
       >
         <Feather name="plus" size={hs(26)} color="{colorStyle.NavyDeep}" />
       </Pressable>
@@ -22,7 +22,7 @@ export function ChatMessageInput() {
       </View>
       <Pressable
         hitSlop={hs(8)}
-        onPress={() => console.log("메시지 전송 탭")} // TODO: 메시지 송신 기능 구현
+        onPress={() => {}} // TODO: 메시지 송신 기능 구현
       >
         <Feather name="send" size={hs(26)} color="{colorStyle.NavyDeep}" />
       </Pressable>

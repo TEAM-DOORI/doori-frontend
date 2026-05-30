@@ -1,22 +1,13 @@
-import { useCallback, useMemo } from "react";
 import { View } from "react-native";
-import { Gesture, GestureDetector } from "react-native-gesture-handler";
-import Animated, {
-  FadeIn,
-  FadeOut,
-  useSharedValue,
-  useAnimatedStyle,
-  withSequence,
-  withTiming,
-  withDelay,
-} from "react-native-reanimated";
+import { GestureDetector } from "react-native-gesture-handler";
+import Animated, { FadeIn, FadeOut } from "react-native-reanimated";
 import { AntDesign } from "@expo/vector-icons";
-import * as Haptics from "expo-haptics";
 
-import { colorStyle } from "@constants/colors";
+import { hs } from "@constants";
 import { Text } from "@components/typography";
 import type { ChatMessage, MessageReaction } from "@/types/chat";
 import { MessageReactionBadge } from "./MessageReactionBadge";
+import { useDoubleTapHeart } from "@hooks/useDoubleTapHeart";
 import { styles } from "./SentMessage.styles";
 
 const HEART_OVERLAY_COLOR = "rgba(255,255,255,0.85)";
@@ -29,40 +20,7 @@ type Props = {
 
 export function SentMessage({ message, reactions, onDoubleTap }: Props) {
   const activeReactions = reactions ?? message.reactions ?? [];
-
-  const heartScale = useSharedValue(0);
-  const heartOpacity = useSharedValue(0);
-  const heartTranslateY = useSharedValue(0);
-
-  const animatedHeartStyle = useAnimatedStyle(() => ({
-    transform: [{ scale: heartScale.value }, { translateY: heartTranslateY.value }],
-    opacity: heartOpacity.value,
-  }));
-
-  const triggerHeartAnimation = useCallback(() => {
-    Haptics.impactAsync(Haptics.ImpactFeedbackStyle.Medium);
-    heartScale.value = 0;
-    heartOpacity.value = 0;
-    heartTranslateY.value = 0;
-
-    heartScale.value = withSequence(
-      withTiming(1.5, { duration: 150 }),
-      withTiming(1.1, { duration: 100 }),
-      withDelay(200, withTiming(0, { duration: 250 })),
-    );
-    heartOpacity.value = withSequence(
-      withTiming(1, { duration: 50 }),
-      withDelay(300, withTiming(0, { duration: 250 })),
-    );
-    heartTranslateY.value = withDelay(200, withTiming(-35, { duration: 400 }));
-
-    if (onDoubleTap) onDoubleTap();
-  }, [onDoubleTap, heartScale, heartOpacity, heartTranslateY]);
-
-  const doubleTapGesture = useMemo(
-    () => Gesture.Tap().numberOfTaps(2).runOnJS(true).onEnd(triggerHeartAnimation),
-    [triggerHeartAnimation],
-  );
+  const { animatedHeartStyle, doubleTapGesture } = useDoubleTapHeart(onDoubleTap);
 
   return (
     <View style={styles.wrapper}>
@@ -83,7 +41,7 @@ export function SentMessage({ message, reactions, onDoubleTap }: Props) {
               {message.text}
             </Text>
             <Animated.View style={[styles.heartOverlay, animatedHeartStyle]} pointerEvents="none">
-              <AntDesign name="heart" size={40} color={HEART_OVERLAY_COLOR} />
+              <AntDesign name="heart" size={hs(40)} color={HEART_OVERLAY_COLOR} />
             </Animated.View>
           </View>
         </GestureDetector>

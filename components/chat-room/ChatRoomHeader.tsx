@@ -29,7 +29,7 @@ export function ChatRoomHeader({ title, chatId }: Props) {
       </Text>
       <Pressable
         style={styles.iconButton}
-        onPress={() => console.log("채팅방 메뉴 열기:", chatId)} // TODO: 채팅방 옵션 메뉴 구현
+        onPress={() => {}} // TODO: 채팅방 옵션 메뉴 구현
         hitSlop={hs(8)}
       >
         <Feather name="more-vertical" size={hs(28)} color="{colorStyle.NavyDeep}" />

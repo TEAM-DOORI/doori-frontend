@@ -17,8 +17,4 @@ export const styles = StyleSheet.create({
     color: colorStyle.white,
     lineHeight: fs(14),
   },
-  emojiText: {
-    fontSize: fs(8),
-    lineHeight: fs(10),
-  },
 });

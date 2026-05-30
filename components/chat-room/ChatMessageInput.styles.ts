@@ -1,5 +1,5 @@
 import { StyleSheet } from "react-native";
-import { hs, vs } from "@constants";
+import { fs, hs, vs } from "@constants";
 import { colorStyle } from "@constants/colors";
 
 export const styles = StyleSheet.create({
@@ -24,7 +24,7 @@ export const styles = StyleSheet.create({
   },
   input: {
     flex: 1,
-    fontSize: 14,
+    fontSize: fs(14),
     color: colorStyle.TextBody,
   },
 });
