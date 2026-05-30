@@ -5,26 +5,43 @@ import { hs } from "@constants";
 import { colorStyle } from "@constants/colors";
 import { styles } from "./ChatMessageInput.styles";
 
-export function ChatMessageInput() {
+type Props = {
+  value: string;
+  onChangeText: (text: string) => void;
+  onSend: () => void;
+};
+
+export function ChatMessageInput({ value, onChangeText, onSend }: Props) {
+  const canSend = value.trim().length > 0;
+
   return (
     <View style={styles.container}>
       <Pressable
         hitSlop={hs(8)}
-        onPress={() => {}} // TODO: 첨부 기능 구현
+        onPress={() => {}}
       >
-        <Feather name="plus" size={hs(26)} color="{colorStyle.NavyDeep}" />
+        <Feather name="plus" size={hs(26)} color={colorStyle.NavyDeep} />
       </Pressable>
       <View style={styles.inputBox}>
         <TextInput
           style={styles.input}
+          value={value}
+          onChangeText={onChangeText}
+          placeholder="메시지를 입력하세요"
+          placeholderTextColor={colorStyle.S04}
+          returnKeyType="send"
+          onSubmitEditing={onSend}
+          blurOnSubmit={false}
           accessibilityLabel="메시지 입력"
         />
       </View>
       <Pressable
         hitSlop={hs(8)}
-        onPress={() => {}} // TODO: 메시지 송신 기능 구현
+        onPress={onSend}
+        disabled={!canSend}
+        style={canSend ? undefined : styles.sendDisabled}
       >
-        <Feather name="send" size={hs(26)} color="{colorStyle.NavyDeep}" />
+        <Feather name="send" size={hs(26)} color={colorStyle.NavyDeep} />
       </Pressable>
     </View>
   );

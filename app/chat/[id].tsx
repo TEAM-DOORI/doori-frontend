@@ -1,8 +1,8 @@
-import { useCallback, useEffect, useMemo, useState } from "react";
-import { Keyboard, KeyboardAvoidingView, Platform, View } from "react-native";
+import { useCallback, useEffect, useMemo, useRef, useState } from "react";
+import { FlatList, Keyboard, KeyboardAvoidingView, Platform, View } from "react-native";
 import { useSafeAreaInsets } from "react-native-safe-area-context";
 import { useLocalSearchParams } from "expo-router";
-import Animated, { LinearTransition } from "react-native-reanimated";
+import Animated, { FadeIn, LinearTransition } from "react-native-reanimated";
 
 import { Text } from "@components/typography";
 import { ChatRoomHeader } from "@components/chat-room/ChatRoomHeader";
@@ -31,6 +31,8 @@ export default function ChatRoomScreen() {
   const insets = useSafeAreaInsets();
 
   const [keyboardVisible, setKeyboardVisible] = useState(false);
+  const [inputText, setInputText] = useState("");
+  const [timeline, setTimeline] = useState<ChatTimelineItem[]>(() => MESSAGES_BY_CHAT_ID[id] ?? []);
   const [reactionMap, setReactionMap] = useState<Record<string, MessageReaction[]>>(() => {
     const map: Record<string, MessageReaction[]> = {};
     for (const item of MESSAGES_BY_CHAT_ID[id] ?? []) {
@@ -40,6 +42,11 @@ export default function ChatRoomScreen() {
     }
     return map;
   });
+
+  const flatListRef = useRef<FlatList<ChatTimelineItem>>(null);
+  const newMessageIdsRef = useRef(new Set<string>());
+  // 전송 직후 콘텐츠 레이아웃이 끝나면 최신 메시지로 스크롤하기 위한 플래그
+  const shouldScrollToBottomRef = useRef(false);
 
   useEffect(() => {
     const show = Keyboard.addListener(
@@ -52,6 +59,23 @@ export default function ChatRoomScreen() {
     );
     return () => { show.remove(); hide.remove(); };
   }, []);
+
+  const handleSend = useCallback(() => {
+    const text = inputText.trim();
+    if (!text) return;
+
+    const now = new Date();
+    const timestamp = `${now.getHours().toString().padStart(2, "0")}:${now.getMinutes().toString().padStart(2, "0")}`;
+    const msgId = `msg-${Date.now()}`;
+
+    newMessageIdsRef.current.add(msgId);
+    shouldScrollToBottomRef.current = true;
+    setTimeline((prev) => [
+      ...prev,
+      { kind: "message", data: { id: msgId, sender: "me", text, timestamp } },
+    ]);
+    setInputText("");
+  }, [inputText]);
 
   const handleDoubleTap = useCallback((messageId: string) => {
     setReactionMap((prev) => {
@@ -66,31 +90,41 @@ export default function ChatRoomScreen() {
     });
   }, []);
 
-  const chat = useMemo(() => CHATS.find((c) => c.id === id), [id]);
-  const timeline = useMemo(() => MESSAGES_BY_CHAT_ID[id] ?? [], [id]);
+  const chat = CHATS.find((c) => c.id === id);
+
+  // inverted FlatList용 — timeline은 오래된 순, 표시는 최신이 아래
+  const invertedData = useMemo(() => [...timeline].reverse(), [timeline]);
 
   const renderItem = useCallback(({ item }: { item: ChatTimelineItem }) => {
     if (item.kind === "date") {
       return <ChatDateDivider label={item.label} />;
     }
     const { data } = item;
+    const isNew = newMessageIdsRef.current.has(data.id);
     const reactions = reactionMap[data.id];
-    if (data.sender === "other") {
-      return (
-        <ReceivedMessage
-          message={data}
-          reactions={reactions}
-          onDoubleTap={() => handleDoubleTap(data.id)}
-        />
-      );
-    }
-    return (
+
+    const messageNode = data.sender === "other" ? (
+      <ReceivedMessage
+        message={data}
+        reactions={reactions}
+        onDoubleTap={() => handleDoubleTap(data.id)}
+      />
+    ) : (
       <SentMessage
         message={data}
         reactions={reactions}
         onDoubleTap={() => handleDoubleTap(data.id)}
       />
     );
+
+    if (isNew) {
+      return (
+        <Animated.View entering={FadeIn.duration(200)}>
+          {messageNode}
+        </Animated.View>
+      );
+    }
+    return messageNode;
   }, [reactionMap, handleDoubleTap]);
 
   if (!chat) {
@@ -114,22 +148,34 @@ export default function ChatRoomScreen() {
         behavior={Platform.OS === "ios" ? "padding" : undefined}
       >
         <Animated.FlatList
+          ref={flatListRef}
           style={styles.messageList}
           contentContainerStyle={[
             styles.messageListContent,
             timeline.length === 0 && { flex: 1 },
           ]}
-          data={timeline}
-          keyExtractor={(item, index) =>
-            item.kind === "date" ? `date-${index}` : item.data.id
+          data={invertedData}
+          keyExtractor={(item) =>
+            item.kind === "date" ? `date-${item.label}` : item.data.id
           }
           renderItem={renderItem}
           ListEmptyComponent={<EmptyMessages />}
           showsVerticalScrollIndicator={false}
+          inverted
           itemLayoutAnimation={LinearTransition.duration(200)}
+          onContentSizeChange={() => {
+            if (shouldScrollToBottomRef.current) {
+              shouldScrollToBottomRef.current = false;
+              flatListRef.current?.scrollToOffset({ offset: 0, animated: true });
+            }
+          }}
         />
         <View style={{ paddingBottom: keyboardVisible ? 0 : insets.bottom }}>
-          <ChatMessageInput />
+          <ChatMessageInput
+            value={inputText}
+            onChangeText={setInputText}
+            onSend={handleSend}
+          />
         </View>
       </KeyboardAvoidingView>
     </View>

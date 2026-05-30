@@ -27,4 +27,7 @@ export const styles = StyleSheet.create({
     fontSize: fs(14),
     color: colorStyle.TextBody,
   },
+  sendDisabled: {
+    opacity: 0.35,
+  },
 });
