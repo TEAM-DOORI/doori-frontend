@@ -12,7 +12,7 @@ import { BackButton } from "../../components/navigation/BackButton";
 import { Text, TextInput } from "../../components/typography";
 import { MATCHING_SHORTCUT_CHIPS } from "../../constants/matching-filter-options";
 import { useMatchingFilters } from "../../contexts/MatchingFilterContext";
-import { useScaledStyles } from "../../hooks/useScaledStyles";
+import { useScaledStyles } from "../../hooks";
 import {
   applyMatchingFilters,
   getActiveFilterLabels,

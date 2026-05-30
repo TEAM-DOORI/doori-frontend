@@ -1,7 +1,7 @@
 import { Image } from "expo-image";
 import { Pressable, View } from "react-native";
 
-import { useScaledStyles } from "../../hooks/useScaledStyles";
+import { useScaledStyles } from "../../hooks";
 import type { RecommendedRoommate } from "../../types/recommended-roommate";
 import { Text } from "../typography";
 import { createRoommateListItemStyles } from "./_styles/RoommateListItem.styles";

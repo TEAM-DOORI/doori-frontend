@@ -1,6 +1,6 @@
 import { Pressable } from "react-native";
 
-import { useScaledStyles } from "../../hooks/useScaledStyles";
+import { useScaledStyles } from "../../hooks";
 import { Text } from "../typography";
 import { createFilterOptionChipStyles } from "./_styles/FilterOptionChip.styles";
 

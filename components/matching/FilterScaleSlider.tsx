@@ -8,7 +8,7 @@ import {
 
 import { MATCHING_SCALE_STEP_COUNT } from "../../types/matching-filter";
 import type { MatchingScaleStep } from "../../types/matching-filter";
-import { useScaledStyles } from "../../hooks/useScaledStyles";
+import { useScaledStyles } from "../../hooks";
 import { Text } from "../typography";
 import {
   createFilterScaleSliderStyles,

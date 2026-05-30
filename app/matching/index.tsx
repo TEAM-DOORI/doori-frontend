@@ -18,7 +18,7 @@ import { MatchingIntroTitle } from "../../components/matching/MatchingIntroTitle
 import { RoommateListItem } from "../../components/matching/RoommateListItem";
 import { BackButton } from "../../components/navigation/BackButton";
 import { Text } from "../../components/typography";
-import { useScaledStyles } from "../../hooks/useScaledStyles";
+import { useScaledStyles } from "../../hooks";
 import { MATCHING_SHORTCUT_CHIPS } from "../../constants/matching-filter-options";
 import { useMatchingFilters } from "../../contexts/MatchingFilterContext";
 import { applyMatchingFilters } from "../../lib/matching/apply-matching-filters";

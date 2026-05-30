@@ -1,7 +1,7 @@
 import { Feather } from "@expo/vector-icons";
 import { Pressable, View } from "react-native";
 
-import { useScaledStyles } from "../../hooks/useScaledStyles";
+import { useScaledStyles } from "../../hooks";
 import { Text } from "../typography";
 import { createActiveFilterPillStyles } from "./_styles/ActiveFilterPill.styles";
 

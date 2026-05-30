@@ -10,7 +10,7 @@ import {
   NOISE_LABELS,
   SOCIABILITY_OPTIONS,
 } from "../../constants/matching-filter-options";
-import { useScaledStyles } from "../../hooks/useScaledStyles";
+import { useScaledStyles } from "../../hooks";
 import type { MatchingFilters } from "../../types/matching-filter";
 import { Text } from "../typography";
 import { FilterOptionChip } from "./FilterOptionChip";

@@ -1,6 +1,6 @@
 import { Pressable, Text as RNText, View } from "react-native";
 
-import { useScaledStyles } from "../../hooks/useScaledStyles";
+import { useScaledStyles } from "../../hooks";
 import { Text } from "../typography";
 import { createSociabilityFilterCardStyles } from "./_styles/SociabilityFilterCard.styles";
 

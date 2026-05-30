@@ -2,7 +2,7 @@ import { Image } from "expo-image";
 import { LinearGradient } from "expo-linear-gradient";
 import { Pressable, View } from "react-native";
 
-import { useScaledStyles } from "../../hooks/useScaledStyles";
+import { useScaledStyles } from "../../hooks";
 import type { Roommate } from "../../mocks/home";
 import { Text } from "../typography";
 import {

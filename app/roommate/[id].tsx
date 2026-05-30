@@ -8,7 +8,7 @@ import { useSafeAreaInsets } from "react-native-safe-area-context";
 import { BackButton } from "../../components/navigation/BackButton";
 import { Text } from "../../components/typography";
 import { colorStyle } from "../../constants/colors";
-import { useScaledStyles } from "../../hooks/useScaledStyles";
+import { useScaledStyles } from "../../hooks";
 import { getRoommateDetail } from "../../mocks/roommate-detail";
 import { createRoommateDetailStyles } from "./_styles/roommate-detail.styles";
 

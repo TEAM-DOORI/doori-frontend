@@ -1,6 +1,6 @@
 import { View } from "react-native";
 
-import { useScaledStyles } from "../../hooks/useScaledStyles";
+import { useScaledStyles } from "../../hooks";
 import { USER_NAME, USER_TRAITS } from "../../mocks/home";
 import { MATCHING_INTRO_SUBTITLE } from "../../mocks/matching-recommendations";
 import { Text } from "../typography";

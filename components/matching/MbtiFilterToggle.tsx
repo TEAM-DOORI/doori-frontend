@@ -1,7 +1,7 @@
 import { Pressable, View } from "react-native";
 
 import { MBTI_OPTIONS } from "../../constants/matching-filter-options";
-import { useScaledStyles } from "../../hooks/useScaledStyles";
+import { useScaledStyles } from "../../hooks";
 import type { MbtiAxisMap } from "../../types/matching-filter";
 import { Text } from "../typography";
 import { createMbtiFilterToggleStyles } from "./_styles/MbtiFilterToggle.styles";
