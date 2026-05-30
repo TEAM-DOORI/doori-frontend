@@ -1,7 +1,5 @@
-import { Dimensions, StyleSheet } from "react-native";
+import { StyleSheet } from "react-native";
 import { fs, hs, ms, vs } from "../../constants";
-
-const DEVICE_WIDTH = Dimensions.get("window").width;
 
 export const COLORS = {
   bgTop: "#F3F6FF",
@@ -101,8 +99,8 @@ export const styles = StyleSheet.create({
     height: CARD_HEIGHT + CARD_RAISE,
   },
   carouselContent: {
-    // 실제 화면 폭 + 스케일된 카드 폭 기반으로 중앙 정렬 보정
-    paddingHorizontal: (DEVICE_WIDTH - CARD_WIDTH) / 2,
+    // 패딩은 HomeRoommateCarousel에서 useWindowDimensions로 동적 계산
+    paddingHorizontal: 0,
   },
   cardOuter: {
     width: CARD_WIDTH,

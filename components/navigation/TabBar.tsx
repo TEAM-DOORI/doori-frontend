@@ -1,5 +1,6 @@
 import type { BottomTabBarProps } from "@react-navigation/bottom-tabs";
 import { Image } from "expo-image";
+import { useRouter } from "expo-router";
 import { useState } from "react";
 import { Pressable, View } from "react-native";
 import { useSafeAreaInsets } from "react-native-safe-area-context";
@@ -37,6 +38,7 @@ const TAB_ICONS = {
 type TabKey = keyof typeof TAB_ICONS;
 
 export function TabBar({ state, descriptors, navigation }: BottomTabBarProps) {
+  const router = useRouter();
   const insets = useSafeAreaInsets();
   const [menuOpen, setMenuOpen] = useState(false);
   const [tabBarHeight, setTabBarHeight] = useState(DEFAULT_TAB_BAR_HEIGHT);
@@ -99,7 +101,14 @@ export function TabBar({ state, descriptors, navigation }: BottomTabBarProps) {
             style={[styles.menuContainer, { bottom: tabBarHeight }]}
             pointerEvents="box-none"
           >
-            <PlusMenu onItemPress={() => setMenuOpen(false)} />
+            <PlusMenu
+              onItemPress={(id) => {
+                setMenuOpen(false);
+                if (id === "roommate") {
+                  router.replace("/matching" as never);
+                }
+              }}
+            />
           </View>
         </>
       )}

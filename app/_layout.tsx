@@ -40,15 +40,15 @@ export default function RootLayout() {
 
   return (
     <ThemeProvider value={DefaultTheme}>
-      <GlobalAlertProvider>
-        <Stack screenOptions={{ headerShown: false }}>
-          <Stack.Screen name="index" />
-          <Stack.Screen name="login" />
-          <Stack.Screen name="(tabs)" />
-          <Stack.Screen name="profile-edit" />
-        </Stack>
-        <StatusBar style='auto' />
-      </GlobalAlertProvider>
+      <Stack screenOptions={{ headerShown: false }}>
+        <Stack.Screen name='index' />
+        <Stack.Screen name='login' />
+        <Stack.Screen name='onboarding' />
+        <Stack.Screen name='matching' />
+        <Stack.Screen name='roommate' />
+        <Stack.Screen name='(tabs)' />
+      </Stack>
+      <StatusBar style='auto' />
     </ThemeProvider>
   );
 }
