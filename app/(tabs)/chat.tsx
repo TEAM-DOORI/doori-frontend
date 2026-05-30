@@ -119,7 +119,12 @@ export default function ChatScreen() {
     console.log("Delete chat:", id);
   }, []);
 
+  const lastPressRef = useRef(0);
+
   const handleChatPress = useCallback((id: string) => {
+    const now = Date.now();
+    if (now - lastPressRef.current < 1000) return;
+    lastPressRef.current = now;
     router.push({ pathname: "/chat/[id]", params: { id } });
   }, [router]);
 
