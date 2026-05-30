@@ -9,7 +9,7 @@ export const styles = StyleSheet.create({
     paddingHorizontal: hs(20),
     paddingTop: vs(6),
     paddingBottom: vs(6),
-    backgroundColor: "#FFFFFF",
+    backgroundColor: colorStyle.white,
   },
   inputBox: {
     flex: 1,
@@ -25,6 +25,6 @@ export const styles = StyleSheet.create({
   input: {
     flex: 1,
     fontSize: 14,
-    color: "#393939",
+    color: colorStyle.TextBody,
   },
 });

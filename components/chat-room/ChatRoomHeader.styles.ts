@@ -1,5 +1,6 @@
 import { StyleSheet } from "react-native";
 import { fs, hs, vs } from "@constants";
+import { colorStyle } from "@constants/colors";
 
 export const styles = StyleSheet.create({
   container: {
@@ -8,7 +9,7 @@ export const styles = StyleSheet.create({
     justifyContent: "space-between",
     paddingHorizontal: hs(20),
     paddingVertical: vs(14),
-    backgroundColor: "#FFFFFF",
+    backgroundColor: colorStyle.white,
   },
   iconButton: {
     width: hs(28),
@@ -19,7 +20,7 @@ export const styles = StyleSheet.create({
   title: {
     flex: 1,
     fontSize: fs(22),
-    color: "#102047",
+    color: colorStyle.NavyDeep,
     textAlign: "center",
     letterSpacing: -0.66,
   },

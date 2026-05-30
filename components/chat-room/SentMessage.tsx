@@ -13,10 +13,13 @@ import Animated, {
 import { AntDesign } from "@expo/vector-icons";
 import * as Haptics from "expo-haptics";
 
+import { colorStyle } from "@constants/colors";
 import { Text } from "@components/typography";
 import type { ChatMessage, MessageReaction } from "@/types/chat";
 import { MessageReactionBadge } from "./MessageReactionBadge";
 import { styles } from "./SentMessage.styles";
+
+const HEART_OVERLAY_COLOR = "rgba(255,255,255,0.85)";
 
 type Props = {
   message: ChatMessage;
@@ -80,7 +83,7 @@ export function SentMessage({ message, reactions, onDoubleTap }: Props) {
               {message.text}
             </Text>
             <Animated.View style={[styles.heartOverlay, animatedHeartStyle]} pointerEvents="none">
-              <AntDesign name="heart" size={40} color="rgba(255,255,255,0.85)" />
+              <AntDesign name="heart" size={40} color={HEART_OVERLAY_COLOR} />
             </Animated.View>
           </View>
         </GestureDetector>

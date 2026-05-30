@@ -14,7 +14,7 @@ export const styles = StyleSheet.create({
   },
   count: {
     fontSize: fs(10),
-    color: "#FFFFFF",
+    color: colorStyle.white,
     lineHeight: fs(14),
   },
   emojiText: {

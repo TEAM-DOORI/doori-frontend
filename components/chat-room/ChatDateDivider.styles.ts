@@ -1,5 +1,6 @@
 import { StyleSheet } from "react-native";
 import { fs, vs } from "@constants";
+import { colorStyle } from "@constants/colors";
 
 export const styles = StyleSheet.create({
   container: {
@@ -8,7 +9,7 @@ export const styles = StyleSheet.create({
   },
   label: {
     fontSize: fs(12),
-    color: "#4D5052",
+    color: colorStyle.S06,
     letterSpacing: -0.36,
   },
 });

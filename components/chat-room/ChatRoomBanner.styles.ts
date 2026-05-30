@@ -1,15 +1,16 @@
 import { StyleSheet } from "react-native";
 import { fs, hs, vs } from "@constants";
+import { colorStyle } from "@constants/colors";
 
 export const styles = StyleSheet.create({
   container: {
-    backgroundColor: "#E0E8FA",
+    backgroundColor: colorStyle.InfoBannerBg,
     paddingHorizontal: hs(20),
     paddingVertical: vs(5),
   },
   text: {
     fontSize: fs(12),
-    color: "#5370A8",
+    color: colorStyle.InfoBannerText,
     letterSpacing: -0.5,
     lineHeight: fs(12) * 1.5,
   },

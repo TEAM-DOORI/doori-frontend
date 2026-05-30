@@ -4,10 +4,10 @@ import { colorStyle } from "@constants/colors";
 export const styles = StyleSheet.create({
   safeArea: {
     flex: 1,
-    backgroundColor: "#FFFFFF",
+    backgroundColor: colorStyle.white,
   },
   headerZone: {
-    backgroundColor: "#FFFFFF",
+    backgroundColor: colorStyle.white,
   },
   keyboardAvoid: {
     flex: 1,

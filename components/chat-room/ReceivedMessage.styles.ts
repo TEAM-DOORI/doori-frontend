@@ -26,9 +26,9 @@ export const styles = StyleSheet.create({
   },
   bubble: {
     maxWidth: hs(260),
-    backgroundColor: "#FFFAE5",
+    backgroundColor: colorStyle.BubbleOther,
     borderWidth: 1,
-    borderColor: "#F2E8BC",
+    borderColor: colorStyle.BubbleOtherBorder,
     borderTopLeftRadius: hs(5),
     borderTopRightRadius: hs(30),
     borderBottomRightRadius: hs(30),
@@ -38,7 +38,7 @@ export const styles = StyleSheet.create({
   },
   text: {
     fontSize: fs(14),
-    color: "#393939",
+    color: colorStyle.TextBody,
     lineHeight: fs(14) * 1.4,
     letterSpacing: -0.14,
   },
