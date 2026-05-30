@@ -2,12 +2,24 @@
 
 ## 개발 환경 세팅
 
+> Node·npm 버전은 리포에 고정돼 있습니다 (`.nvmrc` + `packageManager`).
+> 처음 한 번만 nvm·Corepack 세팅하면 이후 자동 적용됩니다.
+
 ```bash
 git clone <repo-url>
 cd doori-frontend
-npm install
+
+# 1회 세팅 (이미 했다면 스킵)
+nvm install        # .nvmrc 읽어 Node 자동 설치
+corepack enable    # package.json의 packageManager 자동 사용
+
+# 평소 작업
+nvm use            # .nvmrc 버전으로 전환
+npm ci             # lockfile 그대로 의존성 설치 (rewrite 방지)
 npx expo start
 ```
+
+의존성 추가/제거 시에만 `npm install`을 쓰고, 평소엔 `npm ci`를 사용하세요.
 
 ---
 

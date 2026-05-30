@@ -1,1 +1,1 @@
-export {};
+export { useScaledStyles } from "./useScaledStyles";
