@@ -22,7 +22,7 @@ export function ChatRoomHeader({ title, chatId }: Props) {
         onPress={() => router.back()}
         hitSlop={hs(8)}
       >
-        <Feather name="chevron-left" size={hs(28)} color="{colorStyle.NavyDeep}" />
+        <Feather name="chevron-left" size={hs(28)} color={colorStyle.NavyDeep} />
       </Pressable>
       <Text weight="semiBold" style={styles.title} numberOfLines={1}>
         {title}
@@ -32,7 +32,7 @@ export function ChatRoomHeader({ title, chatId }: Props) {
         onPress={() => {}} // TODO: 채팅방 옵션 메뉴 구현
         hitSlop={hs(8)}
       >
-        <Feather name="more-vertical" size={hs(28)} color="{colorStyle.NavyDeep}" />
+        <Feather name="more-vertical" size={hs(28)} color={colorStyle.NavyDeep} />
       </Pressable>
     </View>
   );
