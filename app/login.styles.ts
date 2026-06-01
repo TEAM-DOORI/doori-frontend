@@ -97,6 +97,9 @@ export const styles = StyleSheet.create({
     alignItems: "center",
     justifyContent: "center",
   },
+  primaryButtonPressed: {
+    opacity: 0.92,
+  },
   primaryButtonText: {
     fontSize: fs(18),
     lineHeight: vs(24),
@@ -108,6 +111,9 @@ export const styles = StyleSheet.create({
     paddingVertical: vs(16),
     alignItems: "center",
     justifyContent: "center",
+  },
+  secondaryButtonPressed: {
+    opacity: 0.92,
   },
   secondaryButtonText: {
     fontSize: fs(18),
