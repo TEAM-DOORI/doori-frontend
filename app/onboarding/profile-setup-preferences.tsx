@@ -1,13 +1,13 @@
-import { useRouter } from "expo-router";
 import { Pressable, ScrollView, View } from "react-native";
 import { useSafeAreaInsets } from "react-native-safe-area-context";
 
 import { LifestyleOptionCard } from "@components/profile-setup/LifestyleOptionCard";
 import { Text } from "@components/typography";
-import { vs } from "../../constants";
-import { useProfileSetup } from "../../contexts/ProfileSetupContext";
-import type { CleanlinessOption, NoiseOption } from "../../types/profile-setup";
-import { useScaledStyles } from "../../hooks/useScaledStyles";
+import { vs } from "@constants";
+import type { CleanlinessOption, NoiseOption } from "@/types/profile-setup";
+import { useProfileSetup } from "@/contexts/ProfileSetupContext";
+import { useNavigateOnce } from "@hooks/useNavigateOnce";
+import { useScaledStyles } from "@hooks/useScaledStyles";
 import { createPreferencesScreenStyles } from "./_styles/_profile-setup-preferences.styles";
 
 type PreferenceCardOption<T extends string> = {
@@ -35,14 +35,17 @@ const NOISE_OPTIONS: PreferenceCardOption<NoiseOption>[] = [
 ];
 
 export default function ProfileSetupPreferencesScreen() {
-  const router = useRouter();
+  const { push } = useNavigateOnce();
   const insets = useSafeAreaInsets();
   const styles = useScaledStyles(createPreferencesScreenStyles);
   const { draft, updateDraft } = useProfileSetup();
   const { cleanliness, noise } = draft.preferences;
 
+  const footerPaddingBottom = Math.max(insets.bottom + vs(20), vs(32));
+  const footerStyle = [styles.footer, { paddingBottom: footerPaddingBottom }];
+
   const handleNext = () => {
-    router.push("/onboarding/profile-setup-matching");
+    push("/onboarding/profile-setup-matching");
   };
 
   return (
@@ -111,15 +114,11 @@ export default function ProfileSetupPreferencesScreen() {
           </View>
         </ScrollView>
 
-        <View
-          style={[
-            styles.footer,
-            { paddingBottom: Math.max(insets.bottom + vs(20), vs(32)) },
-          ]}>
+        <View style={footerStyle}>
           <Pressable
             style={({ pressed }) => [
               styles.nextButton,
-              pressed && { opacity: 0.92 },
+              pressed && styles.nextButtonPressed,
             ]}
             onPress={handleNext}
             accessibilityRole='button'

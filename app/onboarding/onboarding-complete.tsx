@@ -1,22 +1,25 @@
 import { Image } from "expo-image";
-import { useRouter } from "expo-router";
 import { Pressable, View } from "react-native";
 import { useSafeAreaInsets } from "react-native-safe-area-context";
 
-import { Text } from "../../components/typography";
-import { vs } from "../../constants";
-import { useOnboardingCompleteContent } from "../../contexts/ProfileSetupContext";
-import { useScaledStyles } from "../../hooks/useScaledStyles";
+import { Text } from "@components/typography";
+import { vs } from "@constants";
+import { useOnboardingCompleteContent } from "@/contexts/ProfileSetupContext";
+import { useNavigateOnce } from "@hooks/useNavigateOnce";
+import { useScaledStyles } from "@hooks/useScaledStyles";
 import { createOnboardingCompleteStyles } from "./_styles/_onboarding-complete.styles";
 
 export default function OnboardingCompleteScreen() {
-  const router = useRouter();
+  const { dismissTo } = useNavigateOnce();
   const insets = useSafeAreaInsets();
   const styles = useScaledStyles(createOnboardingCompleteStyles);
   const content = useOnboardingCompleteContent();
 
+  const footerPaddingBottom = Math.max(insets.bottom + vs(20), vs(32));
+  const footerStyle = [styles.footer, { paddingBottom: footerPaddingBottom }];
+
   const handleStart = () => {
-    router.dismissTo("/(tabs)");
+    dismissTo("/(tabs)");
   };
 
   return (
@@ -53,15 +56,11 @@ export default function OnboardingCompleteScreen() {
 
         <View style={styles.spacer} />
 
-        <View
-          style={[
-            styles.footer,
-            { paddingBottom: Math.max(insets.bottom + vs(20), vs(32)) },
-          ]}>
+        <View style={footerStyle}>
           <Pressable
             style={({ pressed }) => [
               styles.startButton,
-              pressed && { opacity: 0.92 },
+              pressed && styles.startButtonPressed,
             ]}
             onPress={handleStart}
             accessibilityRole='button'

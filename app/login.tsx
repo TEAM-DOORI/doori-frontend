@@ -1,22 +1,22 @@
 import { Image } from "expo-image";
-import { useRouter } from "expo-router";
 import { Pressable, ScrollView, View } from "react-native";
 import { useSafeAreaInsets } from "react-native-safe-area-context";
 
-import { BackgroundGradient } from "../components/layout/BackgroundGradient";
-import { Text } from "../components/typography";
+import { BackgroundGradient } from "@components/layout/BackgroundGradient";
+import { Text } from "@components/typography";
+import { useNavigateOnce } from "@hooks/useNavigateOnce";
 import { styles } from "./login.styles";
 
 export default function LoginScreen() {
-  const router = useRouter();
+  const { push, replace } = useNavigateOnce();
   const insets = useSafeAreaInsets();
 
   const goToProfileSetup = () => {
-    router.push("/onboarding/profile-setup");
+    push("/onboarding/profile-setup");
   };
 
   const goToMain = () => {
-    router.replace("/(tabs)");
+    replace("/(tabs)");
   };
 
   return (
@@ -73,7 +73,7 @@ export default function LoginScreen() {
                 <Pressable
                   style={({ pressed }) => [
                     styles.primaryButton,
-                    pressed && { opacity: 0.92 },
+                    pressed && styles.primaryButtonPressed,
                   ]}
                   onPress={goToProfileSetup}
                   accessibilityRole='button'
@@ -87,7 +87,7 @@ export default function LoginScreen() {
                 <Pressable
                   style={({ pressed }) => [
                     styles.secondaryButton,
-                    pressed && { opacity: 0.92 },
+                    pressed && styles.secondaryButtonPressed,
                   ]}
                   onPress={goToMain}
                   accessibilityRole='button'

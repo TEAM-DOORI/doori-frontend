@@ -1,12 +1,11 @@
-import { useRouter } from "expo-router";
 import { useMemo, useState } from "react";
 import { Pressable, ScrollView, View } from "react-native";
 import { useSafeAreaInsets } from "react-native-safe-area-context";
 
-import { InlineChipDropdown } from "../../components/profile-setup/InlineChipDropdown";
-import { ProfileSetupChip } from "../../components/profile-setup/ProfileSetupChip";
-import { Text } from "../../components/typography";
-import { vs } from "../../constants";
+import { InlineChipDropdown } from "@components/profile-setup/InlineChipDropdown";
+import { ProfileSetupChip } from "@components/profile-setup/ProfileSetupChip";
+import { Text } from "@components/typography";
+import { vs } from "@constants";
 import {
   ENROLLMENT_OPTIONS,
   GRADE_OPTIONS,
@@ -14,15 +13,16 @@ import {
   getGraduationYearOptions,
   type EnrollmentOption,
   type GradeOption,
-} from "../../constants/profile-setup-options";
-import { useProfileSetup } from "../../contexts/ProfileSetupContext";
-import { useScaledStyles } from "../../hooks/useScaledStyles";
+} from "@constants/profile-setup-options";
+import { useProfileSetup } from "@/contexts/ProfileSetupContext";
+import { useNavigateOnce } from "@hooks/useNavigateOnce";
+import { useScaledStyles } from "@hooks/useScaledStyles";
 import { createProfileSetupScreenStyles } from "./_styles/_profile-setup.styles";
 
 type PickerField = "grade" | "enrollment" | "graduation";
 
 export default function ProfileSetupScreen() {
-  const router = useRouter();
+  const { push } = useNavigateOnce();
   const insets = useSafeAreaInsets();
   const styles = useScaledStyles(createProfileSetupScreenStyles);
   const graduationYearOptions = useMemo(() => getGraduationYearOptions(), []);
@@ -42,11 +42,14 @@ export default function ProfileSetupScreen() {
 
   const canProceed = graduation != null;
 
+  const footerPaddingBottom = Math.max(insets.bottom + vs(20), vs(32));
+  const footerStyle = [styles.footer, { paddingBottom: footerPaddingBottom }];
+
   const handleNext = () => {
     if (!canProceed) {
       return;
     }
-    router.push("/onboarding/profile-setup-lifestyle");
+    push("/onboarding/profile-setup-lifestyle");
   };
 
   return (
@@ -162,16 +165,12 @@ export default function ProfileSetupScreen() {
           </View>
         </ScrollView>
 
-        <View
-          style={[
-            styles.footer,
-            { paddingBottom: Math.max(insets.bottom + vs(20), vs(32)) },
-          ]}>
+        <View style={footerStyle}>
           <Pressable
             style={({ pressed }) => [
               styles.nextButton,
               !canProceed && styles.nextButtonDisabled,
-              canProceed && pressed && { opacity: 0.92 },
+              canProceed && pressed && styles.nextButtonPressed,
             ]}
             onPress={handleNext}
             disabled={!canProceed}

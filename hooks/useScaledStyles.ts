@@ -1,7 +1,7 @@
 import { useMemo } from "react";
 import { useWindowDimensions } from "react-native";
 
-import { createScaleFns, type ScaleFns } from "../constants/create-scale-api";
+import { createScaleFns, type ScaleFns } from "@/constants/create-scale-api";
 
 type StyleFactory<T> = (scale: ScaleFns) => T;
 

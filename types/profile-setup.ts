@@ -1,7 +1,7 @@
 import type {
   EnrollmentOption,
   GradeOption,
-} from "../constants/profile-setup-options";
+} from "@constants/profile-setup-options";
 
 export type GenderOption = "male" | "female";
 export type ResidenceOption = "dorm" | "share";

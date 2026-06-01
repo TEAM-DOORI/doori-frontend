@@ -71,6 +71,9 @@ export const createProfileSetupScreenStyles = ({ hs, vs, fs, ms }: ScaleFns) =>
   nextButtonDisabled: {
     backgroundColor: colorStyle.S01,
   },
+  nextButtonPressed: {
+    opacity: 0.92,
+  },
   nextButtonText: {
     fontSize: fs(20),
     lineHeight: vs(28),

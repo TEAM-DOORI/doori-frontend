@@ -73,6 +73,9 @@ export const createMatchingScreenStyles = ({ hs, vs, fs, ms }: ScaleFns) =>
     alignItems: "center",
     justifyContent: "center",
   },
+  nextButtonPressed: {
+    opacity: 0.92,
+  },
   nextButtonText: {
     fontSize: fs(20),
     lineHeight: vs(28),

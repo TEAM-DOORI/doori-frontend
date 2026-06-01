@@ -1,17 +1,17 @@
-import { useRouter } from "expo-router";
 import { Pressable, ScrollView, View } from "react-native";
 import { useSafeAreaInsets } from "react-native-safe-area-context";
 
 import { IconSelectChip } from "@components/profile-setup/IconSelectChip";
 import { LifestyleOptionCard } from "@components/profile-setup/LifestyleOptionCard";
 import { Text } from "@components/typography";
-import { vs } from "../../constants";
-import { useProfileSetup } from "../../contexts/ProfileSetupContext";
+import { vs } from "@constants";
 import type {
   AtmosphereOption,
   PriorityCriterion,
-} from "../../types/profile-setup";
-import { useScaledStyles } from "../../hooks/useScaledStyles";
+} from "@/types/profile-setup";
+import { useProfileSetup } from "@/contexts/ProfileSetupContext";
+import { useNavigateOnce } from "@hooks/useNavigateOnce";
+import { useScaledStyles } from "@hooks/useScaledStyles";
 import { createMatchingScreenStyles } from "./_styles/_profile-setup-matching.styles";
 
 type AtmosphereCardOption = {
@@ -45,14 +45,17 @@ const PRIORITY_OPTIONS: {
 ];
 
 export default function ProfileSetupMatchingScreen() {
-  const router = useRouter();
+  const { push } = useNavigateOnce();
   const insets = useSafeAreaInsets();
   const styles = useScaledStyles(createMatchingScreenStyles);
   const { draft, updateDraft } = useProfileSetup();
   const { atmosphere, priority } = draft.matching;
 
+  const footerPaddingBottom = Math.max(insets.bottom + vs(20), vs(32));
+  const footerStyle = [styles.footer, { paddingBottom: footerPaddingBottom }];
+
   const handleNext = () => {
-    router.push("/onboarding/profile-setup-intro");
+    push("/onboarding/profile-setup-intro");
   };
 
   return (
@@ -137,15 +140,11 @@ export default function ProfileSetupMatchingScreen() {
           </View>
         </ScrollView>
 
-        <View
-          style={[
-            styles.footer,
-            { paddingBottom: Math.max(insets.bottom + vs(20), vs(32)) },
-          ]}>
+        <View style={footerStyle}>
           <Pressable
             style={({ pressed }) => [
               styles.nextButton,
-              pressed && { opacity: 0.92 },
+              pressed && styles.nextButtonPressed,
             ]}
             onPress={handleNext}
             accessibilityRole='button'

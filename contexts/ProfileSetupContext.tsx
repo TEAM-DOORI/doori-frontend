@@ -9,21 +9,21 @@ import {
   type ReactNode,
 } from "react";
 
-import { DEFAULT_PROFILE_SETUP_DRAFT } from "../lib/profile-setup/default-profile-setup-draft";
-import { getOnboardingCompleteContent } from "../lib/profile-setup/get-onboarding-complete-content";
-import { mergeProfileSetupDraft } from "../lib/profile-setup/merge-profile-setup-draft";
+import { DEFAULT_PROFILE_SETUP_DRAFT } from "@/lib/profile-setup/default-profile-setup-draft";
+import { getOnboardingCompleteContent } from "@/lib/profile-setup/get-onboarding-complete-content";
+import { mergeProfileSetupDraft } from "@/lib/profile-setup/merge-profile-setup-draft";
 import {
   clearProfileSetupState,
   loadProfileSetupState,
   saveProfileSetupState,
-} from "../lib/profile-setup/profile-setup-storage";
+} from "@/lib/profile-setup/profile-setup-storage";
 import type {
   OnboardingCompleteContent,
   OnboardingCompleteOverride,
   ProfileSetupApiPayload,
   ProfileSetupDraft,
   ProfileSetupDraftPatch,
-} from "../types/profile-setup";
+} from "@/types/profile-setup";
 
 type ProfileSetupContextValue = {
   draft: ProfileSetupDraft;
@@ -132,10 +132,6 @@ export function ProfileSetupProvider({ children }: { children: ReactNode }) {
       getCompleteContent,
     ],
   );
-
-  if (!isHydrated) {
-    return null;
-  }
 
   return (
     <ProfileSetupContext.Provider value={value}>

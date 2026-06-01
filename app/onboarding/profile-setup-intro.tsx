@@ -1,4 +1,3 @@
-import { useRouter } from "expo-router";
 import { useRef } from "react";
 import {
   KeyboardAvoidingView,
@@ -12,11 +11,12 @@ import {
 } from "react-native";
 import { useSafeAreaInsets } from "react-native-safe-area-context";
 
-import { Text, TextInput } from "../../components/typography";
-import { vs } from "../../constants";
-import { colorStyle } from "../../constants/colors";
-import { useProfileSetup } from "../../contexts/ProfileSetupContext";
-import { useScaledStyles } from "../../hooks/useScaledStyles";
+import { Text, TextInput } from "@components/typography";
+import { vs } from "@constants";
+import { colorStyle } from "@constants/colors";
+import { useProfileSetup } from "@/contexts/ProfileSetupContext";
+import { useNavigateOnce } from "@hooks/useNavigateOnce";
+import { useScaledStyles } from "@hooks/useScaledStyles";
 import { createIntroStyles } from "./_styles/_profile-setup-intro.styles";
 
 const INTRO_MAX_LENGTH = 200;
@@ -103,14 +103,17 @@ function MultilineIntroField({
 }
 
 export default function ProfileSetupIntroScreen() {
-  const router = useRouter();
+  const { push } = useNavigateOnce();
   const insets = useSafeAreaInsets();
   const styles = useScaledStyles(createIntroStyles);
   const { draft, updateDraft } = useProfileSetup();
   const { introduction, roommateWish } = draft.intro;
 
+  const footerPaddingBottom = Math.max(insets.bottom + vs(20), vs(32));
+  const footerStyle = [styles.footer, { paddingBottom: footerPaddingBottom }];
+
   const handleNext = () => {
-    router.push("/onboarding/onboarding-complete");
+    push("/onboarding/onboarding-complete");
   };
 
   const handleIntroChange = (text: string) => {
@@ -186,15 +189,11 @@ export default function ProfileSetupIntroScreen() {
             </View>
           </ScrollView>
 
-          <View
-            style={[
-              styles.footer,
-              { paddingBottom: Math.max(insets.bottom + vs(20), vs(32)) },
-            ]}>
+          <View style={footerStyle}>
             <Pressable
               style={({ pressed }) => [
                 styles.startButton,
-                pressed && { opacity: 0.92 },
+                pressed && styles.startButtonPressed,
               ]}
               onPress={handleNext}
               accessibilityRole='button'

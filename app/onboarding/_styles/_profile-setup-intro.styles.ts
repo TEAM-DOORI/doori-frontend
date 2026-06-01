@@ -82,6 +82,9 @@ export const createIntroStyles = ({ hs, vs, fs, ms }: ScaleFns) =>
       paddingHorizontal: hs(20),
       paddingTop: vs(20),
     },
+    startButtonPressed: {
+      opacity: 0.92,
+    },
     startButton: {
       backgroundColor: color.buttonPrimary,
       borderRadius: ms(15),

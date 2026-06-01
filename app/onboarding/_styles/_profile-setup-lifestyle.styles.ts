@@ -64,4 +64,7 @@ export const createLifestyleScreenStyles = ({ hs, vs, fs, ms }: ScaleFns) =>
     lineHeight: vs(28),
     color: color.textPrimary,
   },
+  nextButtonPressed: {
+    opacity: 0.92,
+  },
   });

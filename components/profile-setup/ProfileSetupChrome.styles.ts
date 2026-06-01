@@ -1,10 +1,11 @@
 import { StyleSheet } from "react-native";
 
-import type { ScaleFns } from "../../constants/create-scale-api";
+import type { ScaleFns } from "@/constants/create-scale-api";
 
 export const createProfileSetupChromeStyles = ({ hs, vs }: ScaleFns) =>
   StyleSheet.create({
     header: {
+      backgroundColor: "transparent",
       paddingHorizontal: hs(20),
       paddingTop: vs(17),
     },

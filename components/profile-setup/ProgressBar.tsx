@@ -33,22 +33,27 @@ export function ProgressBar({ progress, animated = false }: ProgressBarProps) {
     setTrackWidth(event.nativeEvent.layout.width);
   };
 
+  const fillPercentWidth = `${clamped * 100}%` as `${number}%`;
+
   if (animated && trackWidth > 0) {
     const fillWidth = progressAnim.interpolate({
       inputRange: [0, 1],
       outputRange: [0, trackWidth],
     });
+    const animatedFillStyle = [styles.fill, { width: fillWidth }];
 
     return (
       <View style={styles.track} onLayout={handleTrackLayout}>
-        <Animated.View style={[styles.fill, { width: fillWidth }]} />
+        <Animated.View style={animatedFillStyle} />
       </View>
     );
   }
 
+  const staticFillStyle = [styles.fill, { width: fillPercentWidth }];
+
   return (
     <View style={styles.track} onLayout={animated ? handleTrackLayout : undefined}>
-      <View style={[styles.fill, { width: `${clamped * 100}%` }]} />
+      <View style={staticFillStyle} />
     </View>
   );
 }

@@ -26,7 +26,9 @@ export function DropdownChevron({
         transform: [{ rotate: up ? "180deg" : "0deg" }],
       }}
       contentFit='contain'
+      accessible={false}
       accessibilityElementsHidden
+      importantForAccessibility='no-hide-descendants'
     />
   );
 }
