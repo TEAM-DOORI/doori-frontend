@@ -3,8 +3,11 @@ import { FlatList, Keyboard, KeyboardAvoidingView, Platform, View } from "react-
 import { useSafeAreaInsets } from "react-native-safe-area-context";
 import { useLocalSearchParams } from "expo-router";
 import Animated, { FadeIn, LinearTransition } from "react-native-reanimated";
+import { Feather } from "@expo/vector-icons";
 
 import { Text } from "@components/typography";
+import { ms } from "@constants";
+import { colorStyle } from "@constants/colors";
 import { ChatRoomHeader } from "@components/chat-room/ChatRoomHeader";
 import { ChatRoomBanner } from "@components/chat-room/ChatRoomBanner";
 import { ChatDateDivider } from "@components/chat-room/ChatDateDivider";
@@ -19,8 +22,14 @@ import { styles } from "./[id].styles";
 function EmptyMessages() {
   return (
     <View style={styles.emptyContainer}>
-      <Text weight="medium" style={styles.emptyText}>
-        아직 대화가 없습니다
+      <View style={styles.emptyIconCircle}>
+        <Feather name="message-circle" size={ms(32)} color={colorStyle.Sub1} />
+      </View>
+      <Text weight="semiBold" style={styles.emptyTitle}>
+        아직 대화가 없어요
+      </Text>
+      <Text weight="regular" style={styles.emptySubtitle}>
+        첫 메시지를 보내 대화를 시작해보세요
       </Text>
     </View>
   );
