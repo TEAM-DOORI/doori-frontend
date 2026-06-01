@@ -36,7 +36,7 @@ function migrateDraft(raw: unknown): ProfileSetupDraft {
 }
 
 function parseCompleteOverride(
-  raw: unknown,
+  raw: unknown
 ): OnboardingCompleteOverride | null {
   if (raw === null || raw === undefined) {
     return null;
@@ -77,7 +77,7 @@ export async function loadProfileSetupState(): Promise<HydratedProfileSetupState
 
 export async function saveProfileSetupState(
   draft: ProfileSetupDraft,
-  completeOverride: OnboardingCompleteOverride | null,
+  completeOverride: OnboardingCompleteOverride | null
 ): Promise<void> {
   const payload: PersistedProfileSetupState = {
     version: STORAGE_VERSION,

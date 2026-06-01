@@ -2,23 +2,25 @@ import { StyleSheet } from "react-native";
 
 import type { ScaleFns } from "../../../constants/create-scale-api";
 import { color, colorStyle } from "../../../constants/colors";
-import { onboardingScreenBackground } from "./shared";
 
-export const createLifestyleScreenStyles = ({ hs, vs, fs, ms }: ScaleFns) =>
+export const createProfileSetupScreenStyles = ({ hs, vs, fs, ms }: ScaleFns) =>
   StyleSheet.create({
+  flex: {
+    flex: 1,
+  },
   screen: {
     flex: 1,
-    backgroundColor: onboardingScreenBackground,
   },
   scrollContent: {
     flexGrow: 1,
     paddingHorizontal: hs(20),
     paddingBottom: vs(24),
+    overflow: "visible",
   },
   title: {
     fontSize: fs(24),
     lineHeight: vs(32),
-    color: colorStyle.Main_Text,
+    color: "#1A3262",
     marginBottom: vs(8),
   },
   description: {
@@ -30,6 +32,10 @@ export const createLifestyleScreenStyles = ({ hs, vs, fs, ms }: ScaleFns) =>
   section: {
     marginBottom: vs(40),
   },
+  sectionDropdown: {
+    overflow: "visible",
+    zIndex: 10,
+  },
   sectionLabel: {
     fontSize: fs(18),
     lineHeight: vs(25),
@@ -38,17 +44,18 @@ export const createLifestyleScreenStyles = ({ hs, vs, fs, ms }: ScaleFns) =>
   },
   rowCompact: {
     flexDirection: "row",
-    flexWrap: "nowrap",
+    flexWrap: "wrap",
     alignItems: "center",
     gap: hs(10),
     alignSelf: "flex-start",
   },
-  sleepRow: {
+  rowDropdownContainer: {
     flexDirection: "row",
-    alignItems: "stretch",
+    flexWrap: "nowrap",
+    alignItems: "center",
     gap: hs(10),
-    alignSelf: "stretch",
-    width: "100%",
+    maxWidth: hs(353),
+    overflow: "visible",
   },
   footer: {
     paddingHorizontal: hs(20),
@@ -61,9 +68,15 @@ export const createLifestyleScreenStyles = ({ hs, vs, fs, ms }: ScaleFns) =>
     alignItems: "center",
     justifyContent: "center",
   },
+  nextButtonDisabled: {
+    backgroundColor: colorStyle.S01,
+  },
   nextButtonText: {
     fontSize: fs(20),
     lineHeight: vs(28),
     color: color.textPrimary,
+  },
+  nextButtonTextDisabled: {
+    color: colorStyle.S03,
   },
   });

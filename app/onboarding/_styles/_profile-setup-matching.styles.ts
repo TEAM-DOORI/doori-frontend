@@ -2,27 +2,21 @@ import { StyleSheet } from "react-native";
 
 import type { ScaleFns } from "../../../constants/create-scale-api";
 import { color, colorStyle } from "../../../constants/colors";
-import { onboardingScreenBackground } from "./shared";
 
-export const createProfileSetupScreenStyles = ({ hs, vs, fs, ms }: ScaleFns) =>
+export const createMatchingScreenStyles = ({ hs, vs, fs, ms }: ScaleFns) =>
   StyleSheet.create({
-  flex: {
-    flex: 1,
-  },
   screen: {
     flex: 1,
-    backgroundColor: onboardingScreenBackground,
   },
   scrollContent: {
     flexGrow: 1,
     paddingHorizontal: hs(20),
     paddingBottom: vs(24),
-    overflow: "visible",
   },
   title: {
     fontSize: fs(24),
     lineHeight: vs(32),
-    color: "#1A3262",
+    color: colorStyle.Main_Text,
     marginBottom: vs(8),
   },
   description: {
@@ -31,33 +25,42 @@ export const createProfileSetupScreenStyles = ({ hs, vs, fs, ms }: ScaleFns) =>
     color: colorStyle.S05,
     marginBottom: vs(75),
   },
-  section: {
-    marginBottom: vs(40),
+  sections: {
+    gap: vs(52),
   },
-  sectionDropdown: {
-    overflow: "visible",
-    zIndex: 10,
-  },
+  section: {},
   sectionLabel: {
     fontSize: fs(18),
     lineHeight: vs(25),
     color: "#4B566A",
     marginBottom: vs(15),
   },
-  rowCompact: {
+  sectionLabelMultiline: {
+    lineHeight: vs(27),
+    marginBottom: 0,
+  },
+  sectionLabelUnderline: {
+    textDecorationLine: "underline",
+  },
+  sectionLabelBlock: {
+    gap: 0,
+    marginBottom: vs(15),
+  },
+  optionRow: {
+    flexDirection: "row",
+    alignItems: "stretch",
+    gap: hs(10),
+    alignSelf: "stretch",
+    width: "100%",
+  },
+  criteriaRow: {
     flexDirection: "row",
     flexWrap: "wrap",
     alignItems: "center",
-    gap: hs(10),
-    alignSelf: "flex-start",
-  },
-  rowDropdownContainer: {
-    flexDirection: "row",
-    flexWrap: "nowrap",
-    alignItems: "center",
-    gap: hs(10),
-    maxWidth: hs(353),
-    overflow: "visible",
+    columnGap: hs(10),
+    rowGap: vs(8),
+    alignSelf: "stretch",
+    width: "100%",
   },
   footer: {
     paddingHorizontal: hs(20),
@@ -70,15 +73,9 @@ export const createProfileSetupScreenStyles = ({ hs, vs, fs, ms }: ScaleFns) =>
     alignItems: "center",
     justifyContent: "center",
   },
-  nextButtonDisabled: {
-    backgroundColor: colorStyle.S01,
-  },
   nextButtonText: {
     fontSize: fs(20),
     lineHeight: vs(28),
     color: color.textPrimary,
-  },
-  nextButtonTextDisabled: {
-    color: colorStyle.S03,
   },
   });

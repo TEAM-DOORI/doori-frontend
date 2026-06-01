@@ -8,7 +8,7 @@ import { vs } from "../../constants";
 import { useProfileSetup } from "../../contexts/ProfileSetupContext";
 import type { CleanlinessOption, NoiseOption } from "../../types/profile-setup";
 import { useScaledStyles } from "../../hooks/useScaledStyles";
-import { createPreferencesScreenStyles } from "./_styles/profile-setup-preferences.styles";
+import { createPreferencesScreenStyles } from "./_styles/_profile-setup-preferences.styles";
 
 type PreferenceCardOption<T extends string> = {
   value: T;

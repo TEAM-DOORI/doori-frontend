@@ -1,14 +1,12 @@
 import { StyleSheet } from "react-native";
 
 import { color, colorStyle } from "../../../constants/colors";
-import { onboardingScreenBackground } from "./shared";
 import type { ScaleFns } from "../../../constants/create-scale-api";
 
 export const createIntroStyles = ({ hs, vs, fs, ms }: ScaleFns) =>
   StyleSheet.create({
     screen: {
       flex: 1,
-      backgroundColor: onboardingScreenBackground,
     },
     scrollContent: {
       flexGrow: 1,

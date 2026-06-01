@@ -7,7 +7,7 @@ import { Text } from "../../components/typography";
 import { vs } from "../../constants";
 import { useOnboardingCompleteContent } from "../../contexts/ProfileSetupContext";
 import { useScaledStyles } from "../../hooks/useScaledStyles";
-import { createOnboardingCompleteStyles } from "./_styles/onboarding-complete.styles";
+import { createOnboardingCompleteStyles } from "./_styles/_onboarding-complete.styles";
 
 export default function OnboardingCompleteScreen() {
   const router = useRouter();

@@ -8,8 +8,6 @@ import {
   getOnboardingChromeVariant,
   getOnboardingProgress,
 } from "../../lib/profile-setup/onboarding-route";
-import { onboardingScreenBackground } from "./_styles/shared";
-
 export default function OnboardingLayout() {
   const insets = useSafeAreaInsets();
   const pathname = usePathname();
@@ -24,8 +22,10 @@ export default function OnboardingLayout() {
           <Stack
             screenOptions={{
               headerShown: false,
-              animation: "simple_push",
-              contentStyle: { backgroundColor: onboardingScreenBackground },
+              animation: "fade",
+              animationDuration: 200,
+              freezeOnBlur: true,
+              contentStyle: { backgroundColor: "transparent" },
             }}>
             <Stack.Screen name='profile-setup' />
             <Stack.Screen name='profile-setup-lifestyle' />

@@ -2,13 +2,11 @@ import { StyleSheet } from "react-native";
 
 import type { ScaleFns } from "../../../constants/create-scale-api";
 import { color, colorStyle } from "../../../constants/colors";
-import { onboardingScreenBackground } from "./shared";
 
-export const createPreferencesScreenStyles = ({ hs, vs, fs, ms }: ScaleFns) =>
+export const createLifestyleScreenStyles = ({ hs, vs, fs, ms }: ScaleFns) =>
   StyleSheet.create({
   screen: {
     flex: 1,
-    backgroundColor: onboardingScreenBackground,
   },
   scrollContent: {
     flexGrow: 1,
@@ -27,17 +25,23 @@ export const createPreferencesScreenStyles = ({ hs, vs, fs, ms }: ScaleFns) =>
     color: colorStyle.S05,
     marginBottom: vs(75),
   },
-  sections: {
-    gap: vs(52),
+  section: {
+    marginBottom: vs(40),
   },
-  section: {},
   sectionLabel: {
     fontSize: fs(18),
     lineHeight: vs(25),
     color: "#4B566A",
     marginBottom: vs(15),
   },
-  optionRow: {
+  rowCompact: {
+    flexDirection: "row",
+    flexWrap: "nowrap",
+    alignItems: "center",
+    gap: hs(10),
+    alignSelf: "flex-start",
+  },
+  sleepRow: {
     flexDirection: "row",
     alignItems: "stretch",
     gap: hs(10),

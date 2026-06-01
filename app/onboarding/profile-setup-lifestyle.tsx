@@ -8,7 +8,7 @@ import { Text } from "../../components/typography";
 import { vs } from "../../constants";
 import { useProfileSetup } from "../../contexts/ProfileSetupContext";
 import { useScaledStyles } from "../../hooks/useScaledStyles";
-import { createLifestyleScreenStyles } from "./_styles/profile-setup-lifestyle.styles";
+import { createLifestyleScreenStyles } from "./_styles/_profile-setup-lifestyle.styles";
 
 export default function ProfileSetupLifestyleScreen() {
   const router = useRouter();

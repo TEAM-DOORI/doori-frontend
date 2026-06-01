@@ -17,7 +17,7 @@ import {
 } from "../../constants/profile-setup-options";
 import { useProfileSetup } from "../../contexts/ProfileSetupContext";
 import { useScaledStyles } from "../../hooks/useScaledStyles";
-import { createProfileSetupScreenStyles } from "./_styles/profile-setup.styles";
+import { createProfileSetupScreenStyles } from "./_styles/_profile-setup.styles";
 
 type PickerField = "grade" | "enrollment" | "graduation";
 

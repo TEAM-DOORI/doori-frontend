@@ -12,7 +12,7 @@ import type {
   PriorityCriterion,
 } from "../../types/profile-setup";
 import { useScaledStyles } from "../../hooks/useScaledStyles";
-import { createMatchingScreenStyles } from "./_styles/profile-setup-matching.styles";
+import { createMatchingScreenStyles } from "./_styles/_profile-setup-matching.styles";
 
 type AtmosphereCardOption = {
   value: AtmosphereOption;

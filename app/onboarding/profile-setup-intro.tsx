@@ -17,7 +17,7 @@ import { vs } from "../../constants";
 import { colorStyle } from "../../constants/colors";
 import { useProfileSetup } from "../../contexts/ProfileSetupContext";
 import { useScaledStyles } from "../../hooks/useScaledStyles";
-import { createIntroStyles } from "./_styles/profile-setup-intro.styles";
+import { createIntroStyles } from "./_styles/_profile-setup-intro.styles";
 
 const INTRO_MAX_LENGTH = 200;
 
