@@ -2,9 +2,9 @@ import { useRouter } from "expo-router";
 import { Pressable, ScrollView, View } from "react-native";
 import { useSafeAreaInsets } from "react-native-safe-area-context";
 
-import { IconSelectChip } from "../../components/profile-setup/IconSelectChip";
-import { LifestyleOptionCard } from "../../components/profile-setup/LifestyleOptionCard";
-import { Text } from "../../components/typography";
+import { IconSelectChip } from "@components/profile-setup/IconSelectChip";
+import { LifestyleOptionCard } from "@components/profile-setup/LifestyleOptionCard";
+import { Text } from "@components/typography";
 import { vs } from "../../constants";
 import { useProfileSetup } from "../../contexts/ProfileSetupContext";
 import { useScaledStyles } from "../../hooks/useScaledStyles";
