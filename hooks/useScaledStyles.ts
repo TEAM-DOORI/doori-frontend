@@ -1,15 +1,15 @@
 import { useMemo } from "react";
 import { useWindowDimensions } from "react-native";
 
-import {
-  createScaleFns,
-  type ScaleFns,
-} from "../constants/create-scale-api";
+import { createScaleFns, type ScaleFns } from "../constants/create-scale-api";
 
-export function useScaledStyles<T>(
-  factory: (scale: ScaleFns) => T
-): T {
+type StyleFactory<T> = (scale: ScaleFns) => T;
+
+export function useScaledStyles<T>(styleFactory: StyleFactory<T>): T {
   const { width } = useWindowDimensions();
 
-  return useMemo(() => factory(createScaleFns(width)), [width, factory]);
+  return useMemo(() => {
+    const scaleFns = createScaleFns(width);
+    return styleFactory(scaleFns);
+  }, [styleFactory, width]);
 }
