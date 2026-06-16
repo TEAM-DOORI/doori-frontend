@@ -1,4 +1,4 @@
-import { StyleSheet } from "react-native";
+import { Platform, StyleSheet } from "react-native";
 import { fs, ms, vs } from "@constants";
 import { colorStyle } from "@constants/colors";
 
@@ -27,8 +27,7 @@ export const styles = StyleSheet.create({
     paddingHorizontal: ms(40),
     gap: vs(8),
     backgroundColor: colorStyle.Main2,
-    // inverted FlatList의 scaleY: -1 을 상쇄해 콘텐츠를 정방향으로 표시
-    transform: [{ scaleY: -1 }],
+    transform: Platform.OS === "android" ? [{ scale: -1 }] : [{ scaleY: -1 }],
   },
   emptyIconCircle: {
     width: ms(72),
