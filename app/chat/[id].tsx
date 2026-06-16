@@ -1,5 +1,5 @@
 import { useCallback, useEffect, useMemo, useRef, useState } from "react";
-import { FlatList, Keyboard, KeyboardAvoidingView, Platform, View } from "react-native";
+import { FlatList, Keyboard, Platform, View } from "react-native";
 import { useSafeAreaInsets } from "react-native-safe-area-context";
 import { useLocalSearchParams } from "expo-router";
 import Animated, { FadeIn, LinearTransition } from "react-native-reanimated";
@@ -39,7 +39,8 @@ export default function ChatRoomScreen() {
   const { id } = useLocalSearchParams<{ id: string }>();
   const insets = useSafeAreaInsets();
 
-  const [keyboardVisible, setKeyboardVisible] = useState(false);
+  const [keyboardHeight, setKeyboardHeight] = useState(0);
+  const keyboardVisible = keyboardHeight > 0;
   const [inputText, setInputText] = useState("");
   const [timeline, setTimeline] = useState<ChatTimelineItem[]>(() => MESSAGES_BY_CHAT_ID[id] ?? []);
   const [reactionMap, setReactionMap] = useState<Record<string, MessageReaction[]>>(() => {
@@ -60,11 +61,11 @@ export default function ChatRoomScreen() {
   useEffect(() => {
     const show = Keyboard.addListener(
       Platform.OS === "ios" ? "keyboardWillShow" : "keyboardDidShow",
-      () => setKeyboardVisible(true),
+      (e) => setKeyboardHeight(e.endCoordinates.height),
     );
     const hide = Keyboard.addListener(
       Platform.OS === "ios" ? "keyboardWillHide" : "keyboardDidHide",
-      () => setKeyboardVisible(false),
+      () => setKeyboardHeight(0),
     );
     return () => { show.remove(); hide.remove(); };
   }, []);
@@ -152,9 +153,16 @@ export default function ChatRoomScreen() {
         <ChatRoomHeader title={chat.title} chatId={id} />
         <ChatRoomBanner />
       </View>
-      <KeyboardAvoidingView
-        style={styles.keyboardAvoid}
-        behavior={Platform.OS === "ios" ? "padding" : undefined}
+      <View
+        style={[
+          styles.keyboardAvoid,
+          {
+            paddingBottom:
+              keyboardHeight > 0
+                ? keyboardHeight + (Platform.OS === "android" ? insets.bottom : 0)
+                : 0,
+          },
+        ]}
       >
         <Animated.FlatList
           ref={flatListRef}
@@ -186,7 +194,7 @@ export default function ChatRoomScreen() {
             onSend={handleSend}
           />
         </View>
-      </KeyboardAvoidingView>
+      </View>
     </View>
   );
 }
