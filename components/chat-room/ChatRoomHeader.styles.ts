@@ -1,19 +1,19 @@
 import { StyleSheet } from "react-native";
-import { fs, hs, vs } from "@constants";
+import { fs, hs, HEADER_HEIGHT, HEADER_NAV_ICON_SIZE } from "@constants";
 import { colorStyle } from "@constants/colors";
 
 export const styles = StyleSheet.create({
   container: {
+    height: HEADER_HEIGHT,
     flexDirection: "row",
     alignItems: "center",
     justifyContent: "space-between",
     paddingHorizontal: hs(20),
-    paddingVertical: vs(14),
     backgroundColor: colorStyle.white,
   },
   iconButton: {
-    width: hs(28),
-    height: hs(28),
+    width: HEADER_NAV_ICON_SIZE,
+    height: HEADER_NAV_ICON_SIZE,
     alignItems: "center",
     justifyContent: "center",
   },

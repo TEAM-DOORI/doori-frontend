@@ -1,7 +1,7 @@
 import { Feather } from "@expo/vector-icons";
 import { View } from "react-native";
 
-import { hs } from "@constants";
+import { HEADER_ICON_SIZE } from "@constants";
 import { Text } from "@components/typography";
 import { styles } from "./ChatHeader.styles";
 
@@ -17,7 +17,7 @@ export function ChatHeader({ hasNotification = true }: Props) {
       </Text>
       {/* TODO: /notifications 라우트 연결 */}
       <View style={styles.bellWrapper}>
-        <Feather name="bell" size={hs(24)} color="#102047" />
+        <Feather name="bell" size={HEADER_ICON_SIZE} color="#102047" />
         {hasNotification && <View style={styles.notificationDot} />}
       </View>
     </View>
