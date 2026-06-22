@@ -1,17 +1,17 @@
+import { fs, hs, HEADER_HEIGHT } from "@constants";
 import { StyleSheet } from "react-native";
-import { fs, hs, vs } from "@constants";
 
 export const styles = StyleSheet.create({
   header: {
+    height: HEADER_HEIGHT,
     flexDirection: "row",
     alignItems: "center",
     justifyContent: "space-between",
     paddingHorizontal: hs(20),
-    paddingVertical: vs(14),
     backgroundColor: "#FFFFFF",
   },
   title: {
-    fontSize: fs(20),
+    fontSize: fs(22),
     color: "#102047",
   },
   bellWrapper: {

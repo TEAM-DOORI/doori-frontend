@@ -33,3 +33,27 @@ export type Chat = {
 };
 
 export type ChatFilter = "all" | ChatCategory;
+
+// ─── 채팅방(메시지) 관련 타입 ───────────────────────────────────────────────
+
+export type MessageSender = "me" | "other";
+
+export type MessageReaction = {
+  emoji: "heart";
+  count: number;
+};
+
+export type ChatMessage = {
+  id: string;
+  sender: MessageSender;
+  text: string;
+  /** 표시용 문자열 ("10:00"). 추후 Date + 포맷터로 교체 */
+  timestamp: string;
+  /** 미열람 수 — sender === "me"일 때만 의미 있음 */
+  unreadBy?: number;
+  reactions?: readonly MessageReaction[];
+};
+
+export type ChatTimelineItem =
+  | { kind: "message"; data: ChatMessage }
+  | { kind: "date"; label: string };

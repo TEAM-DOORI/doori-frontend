@@ -16,7 +16,15 @@ export const colorStyle = {
   S03: "#D2D5D8",
   S04: "#B2B6BA",
   S05: "#696E71",
+  S06: "#4D5052",
   black: "#15171B",
+  white: "#FFFFFF",
+  NavyDeep: "#102047",
+  TextBody: "#393939",
+  InfoBannerBg: "#E0E8FA",
+  InfoBannerText: "#5370A8",
+  BubbleOther: "#FFFAE5",
+  BubbleOtherBorder: "#F2E8BC",
 } as const;
 
 /** 그라데이션 스타일 */
