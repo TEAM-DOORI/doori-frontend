@@ -107,8 +107,8 @@ export const styles = StyleSheet.create({
     textAlign: "center",
   },
   menuWrap: {
-    marginTop: vs(36),
-    gap: vs(38),
+    marginTop: vs(40),
+    gap: vs(12),
   },
   menuSection: {
     gap: vs(30),
@@ -137,5 +137,7 @@ export const styles = StyleSheet.create({
     height: StyleSheet.hairlineWidth,
     backgroundColor: COLORS.divider,
     width: "100%",
+    marginTop: vs(38),
+    marginBottom: vs(38),
   },
 });
