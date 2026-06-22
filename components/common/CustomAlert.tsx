@@ -1,8 +1,8 @@
 import { Modal, Pressable, StyleSheet, View } from "react-native";
 
-import { fs, hs, ms, vs } from "../../constants";
-import { colorStyle } from "../../constants/colors";
-import { Text } from "../typography";
+import { Text } from "@components/typography";
+import { fs, hs, ms, vs } from "@constants";
+import { colorStyle } from "@constants/colors";
 
 export type CustomAlertProps = {
   visible: boolean;
@@ -11,7 +11,7 @@ export type CustomAlertProps = {
   confirmText?: string;
   cancelText?: string;
   onConfirm: () => void;
-  onCancel?: () => void;
+  onCancel: () => void;
 };
 
 export function CustomAlert({
@@ -23,16 +23,15 @@ export function CustomAlert({
   onConfirm,
   onCancel,
 }: CustomAlertProps) {
-  const hasCancel = typeof cancelText === "string" && typeof onCancel === "function";
+  const hasCancel = typeof cancelText === "string";
 
   return (
     <Modal
       visible={visible}
       transparent
       animationType="fade"
-      onRequestClose={() => (onCancel ? onCancel() : onConfirm())}
-    >
-      <View style={styles.backdrop}>
+      onRequestClose={onCancel}
+    >      <View style={styles.backdrop}>
         <View style={styles.container}>
           <Text weight="bold" style={styles.title}>
             {title}

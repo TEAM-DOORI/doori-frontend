@@ -1,7 +1,7 @@
 import { StyleSheet } from "react-native";
 
-import { fs, hs, ms, vs } from "../constants";
-import { colorStyle } from "../constants/colors";
+import { fs, hs, ms, vs } from "@constants";
+import { colorStyle } from "@constants/colors";
 
 export const COLORS = {
   bg: colorStyle.Main2,
@@ -244,4 +244,32 @@ export const styles = StyleSheet.create({
     color: COLORS.text,
     letterSpacing: -0.8,
   },
+  pressedAddButton: {
+    opacity: 0.8,
+  },
+  pressedSaveButton: {
+    opacity: 0.85,
+  },
 });
+
+type ProfileEditLayoutOptions = {
+  paddingTop: number;
+  scrollPaddingBottom: number;
+  footerPaddingBottom: number;
+  keyboardPaddingBottom: number;
+};
+
+export function createProfileEditLayoutStyles(options: ProfileEditLayoutOptions) {
+  return StyleSheet.create({
+    scrollContentInset: {
+      paddingTop: options.paddingTop,
+      paddingBottom: options.scrollPaddingBottom,
+    },
+    footerInset: {
+      paddingBottom: options.footerPaddingBottom,
+    },
+    rootKeyboardInset: {
+      paddingBottom: options.keyboardPaddingBottom,
+    },
+  });
+}

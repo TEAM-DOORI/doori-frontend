@@ -1,8 +1,7 @@
 import { StyleSheet } from "react-native";
 
-import { fs, hs, ms, vs } from "../../constants";
-import { colorStyle } from "../../constants/colors";
-
+import { fs, hs, ms, vs } from "@constants";
+import { colorStyle } from "@constants/colors";
 export const COLORS = {
   bg: colorStyle.Main2,
   cardBg: colorStyle.Main2,
@@ -140,4 +139,26 @@ export const styles = StyleSheet.create({
     marginTop: vs(38),
     marginBottom: vs(38),
   },
+  menuRowPressed: {
+    opacity: 0.7,
+  },
+  actionCardPressed: {
+    opacity: 0.85,
+  },
 });
+
+type SettingsLayoutOptions = {
+  paddingTop: number;
+  paddingBottom: number;
+};
+
+export function createSettingsLayoutStyles(options: SettingsLayoutOptions) {
+  return StyleSheet.create({
+    contentInset: {
+      paddingTop: options.paddingTop,
+    },
+    scrollContentInset: {
+      paddingBottom: options.paddingBottom,
+    },
+  });
+}

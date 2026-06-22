@@ -1,41 +1,31 @@
-import { createContext, useContext, type ReactNode } from "react";
+import type { ReactNode } from "react";
 
-import { CustomAlert } from "./CustomAlert";
-import { useCustomAlert } from "./useCustomAlert";
-
-type ShowAlertOptions = {
-  title?: string;
-  message: string;
-  confirmText?: string;
-  cancelText?: string;
-  onConfirm?: () => void;
-  onCancel?: () => void;
-};
-
-type GlobalAlertContextValue = {
-  showAlert: (options: ShowAlertOptions) => void;
-  hideAlert: () => void;
-};
-
-const GlobalAlertContext = createContext<GlobalAlertContextValue | null>(null);
+import { CustomAlert } from "@components/common/CustomAlert";
+import { useAlertStore } from "@/stores/alertStore";
 
 export function GlobalAlertProvider({ children }: { children: ReactNode }) {
-  const { showAlert, hideAlert, alertProps } = useCustomAlert();
+  const visible = useAlertStore((state) => state.visible);
+  const title = useAlertStore((state) => state.title);
+  const message = useAlertStore((state) => state.message);
+  const confirmText = useAlertStore((state) => state.confirmText);
+  const cancelText = useAlertStore((state) => state.cancelText);
+  const handleConfirm = useAlertStore((state) => state.handleConfirm);
+  const handleCancel = useAlertStore((state) => state.handleCancel);
 
   return (
-    <GlobalAlertContext.Provider value={{ showAlert, hideAlert }}>
+    <>
       {children}
-      <CustomAlert {...alertProps} />
-    </GlobalAlertContext.Provider>
+      <CustomAlert
+        visible={visible}
+        title={title}
+        message={message}
+        confirmText={confirmText}
+        cancelText={cancelText}
+        onConfirm={handleConfirm}
+        onCancel={handleCancel}
+      />
+    </>
   );
 }
 
-export function useGlobalAlert() {
-  const context = useContext(GlobalAlertContext);
-
-  if (!context) {
-    throw new Error("useGlobalAlert must be used within GlobalAlertProvider");
-  }
-
-  return context;
-}
+export { useGlobalAlert } from "@/stores/alertStore";

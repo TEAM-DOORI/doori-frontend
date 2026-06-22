@@ -8,7 +8,7 @@ import { StyleSheet } from "react-native";
 import { GestureHandlerRootView } from "react-native-gesture-handler";
 import "react-native-reanimated";
 
-import { GlobalAlertProvider } from "../components/common/GlobalAlertProvider";
+import { GlobalAlertProvider } from "@components/common/GlobalAlertProvider";
 
 SplashScreen.preventAutoHideAsync();
 

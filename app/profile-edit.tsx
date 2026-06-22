@@ -3,7 +3,7 @@ import AsyncStorage from "@react-native-async-storage/async-storage";
 import { Image } from "expo-image";
 import { LinearGradient } from "expo-linear-gradient";
 import { useRouter } from "expo-router";
-import { useEffect, useState } from "react";
+import { useEffect, useMemo, useState } from "react";
 import {
   Keyboard,
   KeyboardAvoidingView,
@@ -14,11 +14,12 @@ import {
 } from "react-native";
 import { useSafeAreaInsets } from "react-native-safe-area-context";
 
-import { useGlobalAlert } from "../components/common/GlobalAlertProvider";
-import { Text, TextInput } from "../components/typography";
-import { vs } from "../constants";
-import { PROFILE_EDIT_DEFAULT, PROFILE_EDIT_LIMITS } from "../mocks/profile-edit";
-import { COLORS, styles } from "./profile-edit.styles";
+import { useGlobalAlert } from "@components/common/GlobalAlertProvider";
+import { Text, TextInput } from "@components/typography";
+import { vs } from "@constants";
+import { PROFILE_EDIT_DEFAULT, PROFILE_EDIT_LIMITS } from "@/mocks/profile-edit";
+import { canAddRoommateTag } from "@/utils/profileEditTags";
+import { COLORS, createProfileEditLayoutStyles, styles } from "./profile-edit.styles";
 
 type LifestyleType = "morning" | "evening";
 const PROFILE_EDIT_STORAGE_KEY = "profile-edit:draft";
@@ -107,26 +108,23 @@ export default function ProfileEditScreen() {
   }, []);
 
   const handleAddRoommateTag = () => {
-    const tag = wantedTagInput.trim();
-    if (!tag) {
-      showAlert({ message: "태그를 입력해주세요." });
-      return;
-    }
-    if (roommateTags.length >= PROFILE_EDIT_LIMITS.roommateTagMax) {
-      showAlert({
-        message: `원하는 룸메 태그는 최대 ${PROFILE_EDIT_LIMITS.roommateTagMax}개까지 추가할 수 있어요.`,
-      });
-      return;
-    }
-    const normalizedTag = tag.toLowerCase();
-    const isDuplicate = roommateTags.some(
-      (existingTag) => existingTag.trim().toLowerCase() === normalizedTag,
-    );
-    if (isDuplicate) {
+    const result = canAddRoommateTag(roommateTags, wantedTagInput);
+    if (!result.ok) {
+      if (result.reason === "empty") {
+        showAlert({ message: "태그를 입력해주세요." });
+        return;
+      }
+      if (result.reason === "limit") {
+        showAlert({
+          message: `원하는 룸메 태그는 최대 ${PROFILE_EDIT_LIMITS.roommateTagMax}개까지 추가할 수 있어요.`,
+        });
+        return;
+      }
       showAlert({ message: "이미 추가된 태그입니다." });
       return;
     }
-    setRoommateTags((prev) => [...prev, tag]);
+
+    setRoommateTags((prev) => [...prev, result.value]);
     setWantedTagInput("");
   };
 
@@ -178,11 +176,22 @@ export default function ProfileEditScreen() {
   const footerBottomInset =
     keyboardHeight > 0 ? vs(20) : Math.max(insets.bottom, vs(20));
 
+  const layoutStyles = useMemo(
+    () =>
+      createProfileEditLayoutStyles({
+        paddingTop: insets.top,
+        scrollPaddingBottom: vs(24),
+        footerPaddingBottom: footerBottomInset,
+        keyboardPaddingBottom: keyboardHeight,
+      }),
+    [footerBottomInset, insets.top, keyboardHeight],
+  );
+
   return (
     <View
       style={[
         styles.root,
-        Platform.OS === "android" && keyboardHeight > 0 && { paddingBottom: keyboardHeight },
+        Platform.OS === "android" && keyboardHeight > 0 && layoutStyles.rootKeyboardInset,
       ]}
     >
       <KeyboardAvoidingView
@@ -191,10 +200,7 @@ export default function ProfileEditScreen() {
       >
         <ScrollView
           style={styles.scrollView}
-          contentContainerStyle={[
-            styles.content,
-            { paddingTop: insets.top, paddingBottom: vs(24) },
-          ]}
+          contentContainerStyle={[styles.content, layoutStyles.scrollContentInset]}
           keyboardShouldPersistTaps="handled"
           keyboardDismissMode="on-drag"
           automaticallyAdjustKeyboardInsets
@@ -353,7 +359,7 @@ export default function ProfileEditScreen() {
           <Pressable
             style={({ pressed }) => [
               styles.addButton,
-              pressed && { opacity: 0.8 },
+              pressed && styles.pressedAddButton,
             ]}
             onPress={handleAddRoommateTag}
             accessibilityRole="button"
@@ -384,9 +390,12 @@ export default function ProfileEditScreen() {
         </View>
         </ScrollView>
 
-        <View style={[styles.footer, { paddingBottom: footerBottomInset }]}>
+        <View style={[styles.footer, layoutStyles.footerInset]}>
           <Pressable
-            style={({ pressed }) => [styles.saveButton, (pressed || isSaving) && { opacity: 0.85 }]}
+            style={({ pressed }) => [
+              styles.saveButton,
+              (pressed || isSaving) && styles.pressedSaveButton,
+            ]}
             onPress={handleSave}
             disabled={isSaving}
             accessibilityRole="button"

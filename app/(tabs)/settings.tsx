@@ -2,19 +2,19 @@ import { Feather } from "@expo/vector-icons";
 import { Image } from "expo-image";
 import { LinearGradient } from "expo-linear-gradient";
 import { useRouter } from "expo-router";
-import { useCallback } from "react";
+import { useCallback, useMemo } from "react";
 import { Pressable, ScrollView, View } from "react-native";
 import { useSafeAreaInsets } from "react-native-safe-area-context";
 
-import { useGlobalAlert } from "../../components/common/GlobalAlertProvider";
-import { Text } from "../../components/typography";
-import { vs } from "../../constants";
+import { useGlobalAlert } from "@components/common/GlobalAlertProvider";
+import { Text } from "@components/typography";
+import { vs } from "@constants";
 import {
   MY_PAGE_MENU_SECTIONS,
   MY_PAGE_USER,
   type MyPageMenuItem,
-} from "../../mocks/mypage";
-import { COLORS, styles } from "./settings.styles";
+} from "@/mocks/mypage";
+import { COLORS, createSettingsLayoutStyles, styles } from "./settings.styles";
 
 function MenuDivider() {
   return <View style={styles.divider} />;
@@ -31,7 +31,7 @@ function MenuRow({
 
   return (
     <Pressable
-      style={({ pressed }) => [styles.menuRow, pressed && { opacity: 0.7 }]}
+      style={({ pressed }) => [styles.menuRow, pressed && styles.menuRowPressed]}
       onPress={handlePress}
       accessibilityRole='button'
       accessibilityLabel={item.label}>
@@ -95,15 +95,21 @@ export default function MyPageScreen() {
     [showComingSoon]
   );
 
+  const layoutStyles = useMemo(
+    () =>
+      createSettingsLayoutStyles({
+        paddingTop: insets.top,
+        paddingBottom: Math.max(insets.bottom, vs(24)),
+      }),
+    [insets.bottom, insets.top],
+  );
+
   return (
     <View style={styles.root}>
       <ScrollView
-        contentContainerStyle={[
-          styles.scrollContent,
-          { paddingBottom: Math.max(insets.bottom, vs(24)) },
-        ]}
+        contentContainerStyle={[styles.scrollContent, layoutStyles.scrollContentInset]}
         showsVerticalScrollIndicator={false}>
-        <View style={[styles.content, { paddingTop: insets.top }]}>
+        <View style={[styles.content, layoutStyles.contentInset]}>
           <Text
             weight='bold'
             style={styles.pageTitle}>
@@ -147,7 +153,7 @@ export default function MyPageScreen() {
                 <Pressable
                   style={({ pressed }) => [
                     styles.actionCard,
-                    pressed && { opacity: 0.85 },
+                    pressed && styles.actionCardPressed,
                   ]}
                   onPress={() => router.push("/profile-edit")}
                   accessibilityRole='button'
@@ -168,7 +174,7 @@ export default function MyPageScreen() {
                 <Pressable
                   style={({ pressed }) => [
                     styles.actionCard,
-                    pressed && { opacity: 0.85 },
+                    pressed && styles.actionCardPressed,
                   ]}
                   onPress={() => showComingSoon("희망 규칙 설정")}
                   accessibilityRole='button'
