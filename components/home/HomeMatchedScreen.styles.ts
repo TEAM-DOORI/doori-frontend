@@ -3,6 +3,12 @@ import { StyleSheet } from "react-native";
 import { fs, hs, ms, vs } from "@constants";
 import { colorStyle } from "@constants/colors";
 
+/** Figma 1015:6139 — 아크 패널 (393pt 프레임 기준 396×491, 상단 반원) */
+const ARC_PANEL_WIDTH = 396;
+const ARC_PANEL_RADIUS = ARC_PANEL_WIDTH / 2;
+/** Figma x=-1 — 화면보다 3pt 넓게 중앙 정렬 */
+const ARC_PANEL_BLEED = 1.5;
+
 export const MATCHED_COLORS = {
   bgTop: colorStyle.Main2,
   bgBottom: colorStyle.Main,
@@ -24,6 +30,7 @@ export const styles = StyleSheet.create({
   screen: {
     flex: 1,
     width: "100%",
+    overflow: "visible",
   },
   header: {
     paddingTop: vs(18),
@@ -47,6 +54,10 @@ export const styles = StyleSheet.create({
     alignItems: "center",
     justifyContent: "center",
   },
+  headerBellIcon: {
+    width: hs(24),
+    height: hs(24),
+  },
   statusSection: {
     marginTop: vs(30),
     paddingHorizontal: hs(20),
@@ -65,12 +76,13 @@ export const styles = StyleSheet.create({
     borderTopLeftRadius: ms(30),
     borderTopRightRadius: ms(97),
     borderBottomRightRadius: ms(97),
-    borderBottomLeftRadius: ms(30),
+    borderBottomLeftRadius: 0,
   },
   statusCardRoommateWrap: {
     marginTop: vs(13),
     alignSelf: "flex-end",
-    width: "70%",
+    width: hs(243),
+    maxWidth: "88%",
   },
   statusCardRoommate: {
     flexDirection: "row",
@@ -84,8 +96,8 @@ export const styles = StyleSheet.create({
     borderWidth: 1,
     borderColor: MATCHED_COLORS.bubbleYellowBorder,
     borderTopLeftRadius: ms(30),
-    borderTopRightRadius: ms(97),
-    borderBottomRightRadius: ms(97),
+    borderTopRightRadius: ms(30),
+    borderBottomRightRadius: 0,
     borderBottomLeftRadius: ms(30),
   },
   statusAvatar: {
@@ -111,30 +123,32 @@ export const styles = StyleSheet.create({
   },
   scheduleSection: {
     flex: 1,
-    marginTop: vs(16),
+    marginTop: vs(17),
     alignSelf: "stretch",
     width: "100%",
+    alignItems: "center",
+    overflow: "visible",
+  },
+  arcDatesRow: {
+    height: vs(104),
+    width: hs(ARC_PANEL_WIDTH),
+    marginHorizontal: hs(-ARC_PANEL_BLEED),
+    position: "relative",
+    zIndex: 2,
+    marginBottom: vs(-44),
   },
   arcPanel: {
     flex: 1,
-    alignSelf: "stretch",
-    width: "100%",
-    marginTop: vs(8),
+    width: hs(ARC_PANEL_WIDTH),
+    marginHorizontal: hs(-ARC_PANEL_BLEED),
     backgroundColor: colorStyle.Main2,
-    borderTopLeftRadius: ms(999),
-    borderTopRightRadius: ms(999),
-    paddingTop: vs(28),
+    borderTopLeftRadius: hs(ARC_PANEL_RADIUS),
+    borderTopRightRadius: hs(ARC_PANEL_RADIUS),
     overflow: "hidden",
   },
   arcPanelContent: {
     paddingHorizontal: hs(20),
-  },
-  arcDatesRow: {
-    height: vs(88),
-    width: "100%",
-    position: "relative",
-    alignItems: "center",
-    justifyContent: "center",
+    paddingTop: vs(16),
   },
   arcDateSide: {
     position: "absolute",
@@ -145,26 +159,32 @@ export const styles = StyleSheet.create({
     letterSpacing: -0.4,
   },
   arcDateLeftFar: {
-    left: hs(8),
-    bottom: vs(4),
-    transform: [{ rotate: "-37deg" }],
+    left: hs(25),
+    top: vs(104),
+    transform: [{ translateY: -fs(14) }, { rotate: "-37.14deg" }],
   },
   arcDateLeftNear: {
-    left: hs(72),
-    top: vs(8),
-    transform: [{ rotate: "-32deg" }],
+    left: hs(91),
+    top: vs(55),
+    transform: [{ translateY: -fs(14) }, { rotate: "-31.7deg" }],
   },
   arcDateRightNear: {
-    right: hs(72),
-    top: vs(8),
-    transform: [{ rotate: "26deg" }],
+    right: hs(91),
+    top: vs(55),
+    transform: [{ translateY: -fs(14) }, { rotate: "25.51deg" }],
   },
   arcDateRightFar: {
-    right: hs(8),
-    bottom: vs(4),
-    transform: [{ rotate: "45deg" }],
+    right: hs(25),
+    top: vs(104),
+    transform: [{ translateY: -fs(14) }, { rotate: "45deg" }],
   },
   arcDateCenter: {
+    position: "absolute",
+    top: vs(28),
+    left: 0,
+    right: 0,
+    textAlign: "center",
+    transform: [{ translateY: -fs(28) }],
     fontSize: fs(40),
     lineHeight: fs(56),
     color: colorStyle.black,
@@ -172,7 +192,7 @@ export const styles = StyleSheet.create({
   },
   monthWeekWrap: {
     alignItems: "center",
-    marginTop: vs(4),
+    marginTop: vs(12),
     gap: vs(2),
   },
   monthLabel: {
@@ -188,7 +208,7 @@ export const styles = StyleSheet.create({
     letterSpacing: -0.48,
   },
   daySummary: {
-    marginTop: vs(12),
+    marginTop: vs(13),
     fontSize: fs(14),
     lineHeight: fs(20),
     color: MATCHED_COLORS.textMuted,
@@ -202,8 +222,7 @@ export const styles = StyleSheet.create({
     marginTop: "auto",
   },
   choreList: {
-    marginTop: vs(20),
-    gap: vs(16),
+    marginTop: vs(64),
   },
   choreRow: {
     flexDirection: "row",
@@ -241,7 +260,8 @@ export const styles = StyleSheet.create({
   choreDivider: {
     height: StyleSheet.hairlineWidth,
     backgroundColor: colorStyle.S03,
-    marginTop: vs(20),
+    marginTop: vs(15),
+    marginBottom: vs(15),
   },
   devToggle: {
     position: "absolute",

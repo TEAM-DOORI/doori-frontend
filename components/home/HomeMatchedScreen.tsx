@@ -6,14 +6,15 @@ import { useSafeAreaInsets } from "react-native-safe-area-context";
 
 import { Text } from "@components/typography";
 import { hs } from "@constants";
-import { colorStyle, gradient } from "@constants/colors";
+import { gradient } from "@constants/colors";
 import {
   HOME_MATCHED_CHORES,
-  HOME_MATCHED_DAY,
+  HOME_MATCHED_DAY_SUMMARY,
   HOME_MATCHED_STATUS,
   type HomeChoreItem,
   type HomeStatusCard,
 } from "@/mocks/home-with-roommate";
+import { getHomeMatchedDay } from "@hooks/homeMatchedDay";
 import { MATCHED_COLORS, styles } from "./HomeMatchedScreen.styles";
 
 type Props = {
@@ -35,7 +36,11 @@ function Header() {
           accessibilityRole="button"
           accessibilityLabel="알림"
         >
-          <Feather name="bell" size={hs(24)} color={MATCHED_COLORS.timeText} />
+          <Image
+            source={require("../../assets/images/home/matched/bell-02.png")}
+            style={styles.headerBellIcon}
+            contentFit="contain"
+          />
         </Pressable>
         <Pressable
           style={styles.headerIconHit}
@@ -107,51 +112,63 @@ function ChoreList() {
   );
 }
 
+function ArcDatesRow({
+  arcDates,
+  selectedDate,
+}: {
+  arcDates: readonly [number, number, number, number, number];
+  selectedDate: number;
+}) {
+  const [leftFar, leftNear, , rightNear, rightFar] = arcDates;
+
+  return (
+    <View style={styles.arcDatesRow}>
+      <Text weight="regular" style={[styles.arcDateSide, styles.arcDateLeftFar]}>
+        {leftFar}
+      </Text>
+      <Text weight="regular" style={[styles.arcDateSide, styles.arcDateLeftNear]}>
+        {leftNear}
+      </Text>
+      <Text weight="semiBold" style={styles.arcDateCenter}>
+        {selectedDate}
+      </Text>
+      <Text weight="regular" style={[styles.arcDateSide, styles.arcDateRightNear]}>
+        {rightNear}
+      </Text>
+      <Text weight="regular" style={[styles.arcDateSide, styles.arcDateRightFar]}>
+        {rightFar}
+      </Text>
+    </View>
+  );
+}
+
 function SchedulePanel() {
-  const { monthLabel, weekdayLabel, selectedDate, summary } = HOME_MATCHED_DAY;
-  const [leftFar, leftNear, , rightNear, rightFar] = HOME_MATCHED_DAY.arcDates;
+  const day = getHomeMatchedDay();
 
   return (
     <View style={styles.scheduleSection}>
+      <ArcDatesRow arcDates={day.arcDates} selectedDate={day.selectedDate} />
       <View style={styles.arcPanel}>
         <View style={styles.arcPanelContent}>
-          <View style={styles.arcDatesRow}>
-            <Text weight="regular" style={[styles.arcDateSide, styles.arcDateLeftFar]}>
-              {leftFar}
-            </Text>
-            <Text weight="regular" style={[styles.arcDateSide, styles.arcDateLeftNear]}>
-              {leftNear}
-            </Text>
-            <Text weight="semiBold" style={styles.arcDateCenter}>
-              {selectedDate}
-            </Text>
-            <Text weight="regular" style={[styles.arcDateSide, styles.arcDateRightNear]}>
-              {rightNear}
-            </Text>
-            <Text weight="regular" style={[styles.arcDateSide, styles.arcDateRightFar]}>
-              {rightFar}
-            </Text>
-          </View>
-
           <View style={styles.monthWeekWrap}>
             <Text weight="bold" style={styles.monthLabel}>
-              {monthLabel}
+              {day.monthLabel}
             </Text>
             <Text weight="medium" style={styles.weekdayLabel}>
-              {weekdayLabel}
+              {day.weekdayLabel}
             </Text>
           </View>
 
           <Text weight="medium" style={styles.daySummary}>
-            {summary}
+            {HOME_MATCHED_DAY_SUMMARY}
           </Text>
 
           <ChoreList />
         </View>
 
         <LinearGradient
-          colors={["rgba(243,246,255,0)", "rgba(149,164,210,0.5)", colorStyle.Main]}
-          locations={[0, 0.55, 1]}
+          colors={["rgba(149,164,210,0)", "rgba(149,164,210,0.5)"]}
+          locations={[0, 1]}
           start={{ x: 0.5, y: 0 }}
           end={{ x: 0.5, y: 1 }}
           style={styles.listBottomFade}

@@ -15,14 +15,6 @@ export type HomeChoreItem = {
   icon: ImageSourcePropType;
 };
 
-export type HomeMatchedDay = {
-  monthLabel: string;
-  weekdayLabel: string;
-  selectedDate: number;
-  arcDates: readonly number[];
-  summary: string;
-};
-
 const statusSelfAvatar = require("../assets/images/home/matched/status-self.png");
 const statusRoommateAvatar = require("../assets/images/home/matched/status-roommate.png");
 const choreSweepIcon = require("../assets/images/home/matched/chore-sweep.png");
@@ -43,13 +35,7 @@ export const HOME_MATCHED_STATUS: readonly [HomeStatusCard, HomeStatusCard] = [
   },
 ];
 
-export const HOME_MATCHED_DAY: HomeMatchedDay = {
-  monthLabel: "3월",
-  weekdayLabel: "수요일",
-  selectedDate: 14,
-  arcDates: [12, 13, 14, 15, 16],
-  summary: "오늘은 선우님이 청소하는 날이에요!",
-};
+export const HOME_MATCHED_DAY_SUMMARY = "오늘은 선우님이 청소하는 날이에요!";
 
 export const HOME_MATCHED_CHORES: readonly HomeChoreItem[] = [
   {
