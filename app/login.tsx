@@ -8,15 +8,11 @@ import { useNavigateOnce } from "@hooks/useNavigateOnce";
 import { styles } from "./login.styles";
 
 export default function LoginScreen() {
-  const { push, replace } = useNavigateOnce();
+  const { push } = useNavigateOnce();
   const insets = useSafeAreaInsets();
 
   const goToProfileSetup = () => {
     push("/onboarding/profile-setup");
-  };
-
-  const goToMain = () => {
-    replace("/(tabs)");
   };
 
   return (
@@ -89,7 +85,7 @@ export default function LoginScreen() {
                     styles.secondaryButton,
                     pressed && styles.secondaryButtonPressed,
                   ]}
-                  onPress={goToMain}
+                  onPress={goToProfileSetup}
                   accessibilityRole='button'
                   accessibilityLabel='회원가입하기'>
                   <Text

@@ -1,6 +1,4 @@
 import { DefaultTheme, ThemeProvider } from "@react-navigation/native";
-
-import { ProfileSetupProvider } from "../contexts/ProfileSetupContext";
 import { useFonts } from "expo-font";
 import { Stack } from "expo-router";
 import * as SplashScreen from "expo-splash-screen";
