@@ -39,16 +39,20 @@ export default function RootLayout() {
   }
 
   return (
-    <ThemeProvider value={DefaultTheme}>
-      <Stack screenOptions={{ headerShown: false }}>
-        <Stack.Screen name='index' />
-        <Stack.Screen name='login' />
-        <Stack.Screen name='onboarding' />
-        <Stack.Screen name='matching' />
-        <Stack.Screen name='roommate' />
-        <Stack.Screen name='(tabs)' />
-      </Stack>
-      <StatusBar style='auto' />
-    </ThemeProvider>
+    <GestureHandlerRootView style={{ flex: 1 }}>
+      <GlobalAlertProvider>
+        <ThemeProvider value={DefaultTheme}>
+          <Stack screenOptions={{ headerShown: false }}>
+            <Stack.Screen name='index' />
+            <Stack.Screen name='login' />
+            <Stack.Screen name='onboarding' />
+            <Stack.Screen name='matching' />
+            <Stack.Screen name='roommate' />
+            <Stack.Screen name='(tabs)' />
+          </Stack>
+          <StatusBar style='auto' />
+        </ThemeProvider>
+      </GlobalAlertProvider>
+    </GestureHandlerRootView>
   );
 }
