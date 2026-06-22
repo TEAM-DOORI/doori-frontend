@@ -4,7 +4,14 @@ import { Image } from "expo-image";
 import { LinearGradient } from "expo-linear-gradient";
 import { useRouter } from "expo-router";
 import { useEffect, useState } from "react";
-import { Pressable, ScrollView, View } from "react-native";
+import {
+  Keyboard,
+  KeyboardAvoidingView,
+  Platform,
+  Pressable,
+  ScrollView,
+  View,
+} from "react-native";
 import { useSafeAreaInsets } from "react-native-safe-area-context";
 
 import { useGlobalAlert } from "../components/common/GlobalAlertProvider";
@@ -38,7 +45,25 @@ export default function ProfileEditScreen() {
     [...PROFILE_EDIT_DEFAULT.roommateTags],
   );
   const [isSaving, setIsSaving] = useState(false);
+  const [keyboardHeight, setKeyboardHeight] = useState(0);
   const { showAlert } = useGlobalAlert();
+
+  useEffect(() => {
+    const showEvent = Platform.OS === "ios" ? "keyboardWillShow" : "keyboardDidShow";
+    const hideEvent = Platform.OS === "ios" ? "keyboardWillHide" : "keyboardDidHide";
+
+    const showSub = Keyboard.addListener(showEvent, (event) => {
+      setKeyboardHeight(event.endCoordinates.height);
+    });
+    const hideSub = Keyboard.addListener(hideEvent, () => {
+      setKeyboardHeight(0);
+    });
+
+    return () => {
+      showSub.remove();
+      hideSub.remove();
+    };
+  }, []);
 
   const introCount = introduction.length;
   const isRoommateTagLimitReached =
@@ -150,15 +175,31 @@ export default function ProfileEditScreen() {
     }
   };
 
+  const footerBottomInset =
+    keyboardHeight > 0 ? vs(20) : Math.max(insets.bottom, vs(20));
+
   return (
-    <View style={styles.root}>
-      <ScrollView
-        contentContainerStyle={[
-          styles.content,
-          { paddingTop: insets.top, paddingBottom: Math.max(insets.bottom, 140) },
-        ]}
-        showsVerticalScrollIndicator={false}
+    <View
+      style={[
+        styles.root,
+        Platform.OS === "android" && keyboardHeight > 0 && { paddingBottom: keyboardHeight },
+      ]}
+    >
+      <KeyboardAvoidingView
+        style={styles.keyboardAvoid}
+        behavior={Platform.OS === "ios" ? "padding" : undefined}
       >
+        <ScrollView
+          style={styles.scrollView}
+          contentContainerStyle={[
+            styles.content,
+            { paddingTop: insets.top, paddingBottom: vs(24) },
+          ]}
+          keyboardShouldPersistTaps="handled"
+          keyboardDismissMode="on-drag"
+          automaticallyAdjustKeyboardInsets
+          showsVerticalScrollIndicator={false}
+        >
         <View style={styles.header}>
           <Pressable
             style={styles.backButton}
@@ -341,22 +382,22 @@ export default function ProfileEditScreen() {
             </View>
           )}
         </View>
-      </ScrollView>
+        </ScrollView>
 
-      <View style={[styles.footer, { paddingBottom: Math.max(insets.bottom, vs(20)) }]}>
-        <Pressable
-          style={({ pressed }) => [styles.saveButton, (pressed || isSaving) && { opacity: 0.85 }]}
-          onPress={handleSave}
-          disabled={isSaving}
-          accessibilityRole="button"
-          accessibilityLabel="저장하기"
-        >
-          <Text weight="semiBold" style={styles.saveButtonText}>
-            {isSaving ? "저장 중..." : "저장하기"}
-          </Text>
-        </Pressable>
-      </View>
-
+        <View style={[styles.footer, { paddingBottom: footerBottomInset }]}>
+          <Pressable
+            style={({ pressed }) => [styles.saveButton, (pressed || isSaving) && { opacity: 0.85 }]}
+            onPress={handleSave}
+            disabled={isSaving}
+            accessibilityRole="button"
+            accessibilityLabel="저장하기"
+          >
+            <Text weight="semiBold" style={styles.saveButtonText}>
+              {isSaving ? "저장 중..." : "저장하기"}
+            </Text>
+          </Pressable>
+        </View>
+      </KeyboardAvoidingView>
     </View>
   );
 }

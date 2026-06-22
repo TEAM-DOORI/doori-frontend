@@ -25,9 +25,14 @@ export const styles = StyleSheet.create({
     flex: 1,
     backgroundColor: COLORS.bg,
   },
+  keyboardAvoid: {
+    flex: 1,
+  },
+  scrollView: {
+    flex: 1,
+  },
   content: {
     paddingHorizontal: hs(20),
-    paddingBottom: vs(140),
   },
   header: {
     marginTop: vs(12),
@@ -222,10 +227,6 @@ export const styles = StyleSheet.create({
     letterSpacing: -1.12,
   },
   footer: {
-    position: "absolute",
-    left: 0,
-    right: 0,
-    bottom: 0,
     backgroundColor: COLORS.footerBg,
     paddingHorizontal: hs(10),
     paddingTop: vs(20),
