@@ -1,5 +1,5 @@
 import { StyleSheet } from "react-native";
-import { fs, hs, ms, vs } from "../../constants";
+import { fs, hs, ms, vs, HEADER_HEIGHT } from "../../constants";
 
 export const COLORS = {
   bgTop: "#F3F6FF",
@@ -28,7 +28,7 @@ export const styles = StyleSheet.create({
   },
 
   header: {
-    paddingTop: vs(18),
+    height: HEADER_HEIGHT,
     paddingHorizontal: hs(20),
     flexDirection: "row",
     alignItems: "center",
@@ -37,10 +37,6 @@ export const styles = StyleSheet.create({
   logo: {
     width: hs(96),
     height: vs(36),
-  },
-  bell: {
-    width: hs(30),
-    height: hs(30),
   },
 
   titleWrap: {

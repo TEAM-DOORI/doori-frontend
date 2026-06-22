@@ -49,6 +49,7 @@ export default function RootLayout() {
             <Stack.Screen name="matching" />
             <Stack.Screen name="roommate" />
             <Stack.Screen name="(tabs)" />
+             <Stack.Screen name="chat" />
           </Stack>
           <StatusBar style="auto" />
         </ThemeProvider>

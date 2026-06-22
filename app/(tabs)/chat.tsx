@@ -1,19 +1,25 @@
+import { useRouter } from "expo-router";
 import { memo, useCallback, useMemo, useRef, useState } from "react";
 import { FlatList, View } from "react-native";
-import { useSafeAreaInsets } from "react-native-safe-area-context";
-import ReanimatedSwipeable, { type SwipeableMethods } from "react-native-gesture-handler/ReanimatedSwipeable";
-import Animated, { useAnimatedStyle } from "react-native-reanimated";
+import ReanimatedSwipeable, {
+  type SwipeableMethods,
+} from "react-native-gesture-handler/ReanimatedSwipeable";
 import type { SharedValue } from "react-native-reanimated";
+import Animated, { useAnimatedStyle } from "react-native-reanimated";
+import { useSafeAreaInsets } from "react-native-safe-area-context";
 
-import { Text } from "@components/typography";
+import { CHATS } from "@/mocks/chats";
+import type { Chat, ChatFilter } from "@/types/chat";
 import { ChatCategoryTabs } from "@components/chat/ChatCategoryTabs";
 import { ChatHeader } from "@components/chat/ChatHeader";
 import { ChatInfoBanner } from "@components/chat/ChatInfoBanner";
 import { ChatListItem } from "@components/chat/ChatListItem";
 import { ChatSwipeActions } from "@components/chat/ChatSwipeActions";
-import { ACTIONS_TOTAL_WIDTH, BUTTON_WIDTH } from "@components/chat/ChatSwipeActions.constants";
-import { CHATS } from "@/mocks/chats";
-import type { Chat, ChatFilter } from "@/types/chat";
+import {
+  ACTIONS_TOTAL_WIDTH,
+  BUTTON_WIDTH,
+} from "@components/chat/ChatSwipeActions.constants";
+import { Text } from "@components/typography";
 import { styles } from "./chat.styles";
 
 function EmptyState() {
@@ -40,7 +46,11 @@ function RightActions({ dragX, onMute, onDelete, closed }: RightActionsProps) {
   }));
   return (
     <Animated.View style={[{ width, alignSelf: "stretch" }, animStyle]}>
-      <ChatSwipeActions onMute={onMute} onDelete={onDelete} showMute={!closed} />
+      <ChatSwipeActions
+        onMute={onMute}
+        onDelete={onDelete}
+        showMute={!closed}
+      />
     </Animated.View>
   );
 }
@@ -69,8 +79,14 @@ const SwipeableChatItem = memo(function SwipeableChatItem({
         <RightActions
           dragX={dragX}
           closed={item.closed}
-          onMute={() => { onMute(item.id); ref.current?.close(); }}
-          onDelete={() => { onDelete(item.id); ref.current?.close(); }}
+          onMute={() => {
+            onMute(item.id);
+            ref.current?.close();
+          }}
+          onDelete={() => {
+            onDelete(item.id);
+            ref.current?.close();
+          }}
         />
       )}
       rightThreshold={40}
@@ -89,6 +105,7 @@ const SwipeableChatItem = memo(function SwipeableChatItem({
 
 export default function ChatScreen() {
   const insets = useSafeAreaInsets();
+  const router = useRouter();
   const [activeTab, setActiveTab] = useState<ChatFilter>("all");
   const openSwipeableRef = useRef<SwipeableMethods | null>(null);
 
@@ -117,11 +134,17 @@ export default function ChatScreen() {
     console.log("Delete chat:", id);
   }, []);
 
-  const handleChatPress = useCallback((id: string) => {
-    // TODO: /chat/[id] 라우트 생성 후 typed routes로 연결
-    // router.push({ pathname: "/chat/[id]", params: { id } });
-    console.log("Open chat:", id);
-  }, []);
+  const lastPressRef = useRef(0);
+
+  const handleChatPress = useCallback(
+    (id: string) => {
+      const now = Date.now();
+      if (now - lastPressRef.current < 1000) return;
+      lastPressRef.current = now;
+      router.push({ pathname: "/chat/[id]", params: { id } });
+    },
+    [router],
+  );
 
   const renderItem = useCallback(
     ({ item }: { item: Chat }) => (

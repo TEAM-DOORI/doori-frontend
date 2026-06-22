@@ -4,6 +4,7 @@ import { LinearGradient } from "expo-linear-gradient";
 import { Pressable, View } from "react-native";
 import { useSafeAreaInsets } from "react-native-safe-area-context";
 
+import { HEADER_ICON_SIZE } from "../../constants";
 import { HomeRoommateCarousel } from "../../components/home/HomeRoommateCarousel";
 import { Text } from "../../components/typography";
 import { USER_NAME, USER_TRAITS } from "../../mocks/home";
@@ -23,7 +24,7 @@ function Header() {
         accessibilityLabel='알림'>
         <Feather
           name='bell'
-          size={styles.bell.width}
+          size={HEADER_ICON_SIZE}
           color='#1A3262'
         />
       </Pressable>
