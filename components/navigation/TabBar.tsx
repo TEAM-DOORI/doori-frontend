@@ -31,7 +31,7 @@ const TAB_ICONS = {
   settings: {
     active: require("../../app/(tabs)/assets/tabbar/tab-settings-inactive.png"),
     inactive: require("../../app/(tabs)/assets/tabbar/tab-settings-inactive.png"),
-    label: "설정",
+    label: "MY",
   },
 } as const;
 

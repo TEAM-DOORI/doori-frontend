@@ -1,0 +1,275 @@
+import { StyleSheet } from "react-native";
+
+import { fs, hs, ms, vs } from "@constants";
+import { colorStyle } from "@constants/colors";
+
+export const COLORS = {
+  bg: colorStyle.Main2,
+  white: "#FFFFFF",
+  dividerBg: "#EAF0FF",
+  lifestyleInactive: "#8595BB",
+  text: colorStyle.Main_Text,
+  textMuted: colorStyle.S05,
+  textPlaceholder: colorStyle.S04,
+  border: colorStyle.S03,
+  primary: colorStyle.Sub1,
+  tabBg: colorStyle.Main,
+  tabActiveBg: colorStyle.Main2,
+  chipBg: "#E6EEFF",
+  footerBg: colorStyle.S01,
+  saveBg: "#FFF195",
+} as const;
+
+export const styles = StyleSheet.create({
+  root: {
+    flex: 1,
+    backgroundColor: COLORS.bg,
+  },
+  keyboardAvoid: {
+    flex: 1,
+  },
+  scrollView: {
+    flex: 1,
+  },
+  content: {
+    paddingHorizontal: hs(20),
+  },
+  header: {
+    marginTop: vs(12),
+    flexDirection: "row",
+    alignItems: "center",
+  },
+  backButton: {
+    width: hs(30),
+    height: hs(30),
+    alignItems: "center",
+    justifyContent: "center",
+  },
+  headerTitle: {
+    flex: 1,
+    marginRight: hs(30),
+    textAlign: "center",
+    fontSize: fs(22),
+    lineHeight: fs(31),
+    color: COLORS.text,
+    letterSpacing: -0.66,
+  },
+  heroSection: {
+    marginTop: vs(20),
+    marginHorizontal: -hs(20),
+    borderTopLeftRadius: ms(200),
+    borderTopRightRadius: ms(200),
+    overflow: "hidden",
+    paddingBottom: vs(24),
+  },
+  heroInner: {
+    alignItems: "center",
+    paddingHorizontal: hs(20),
+  },
+  profileImage: {
+    width: hs(100),
+    height: hs(100),
+    marginTop: vs(22),
+    borderRadius: hs(50),
+  },
+  lifestyleWrap: {
+    marginTop: vs(12),
+    width: hs(180),
+    height: vs(40),
+    backgroundColor: COLORS.tabBg,
+    borderRadius: ms(10),
+    flexDirection: "row",
+    paddingHorizontal: hs(5),
+    paddingVertical: vs(5),
+  },
+  lifestyleOption: {
+    flex: 1,
+    borderRadius: ms(8),
+    alignItems: "center",
+    justifyContent: "center",
+  },
+  lifestyleOptionActive: {
+    backgroundColor: COLORS.tabActiveBg,
+    shadowColor: "#000000",
+    shadowOffset: { width: 0, height: 1 },
+    shadowOpacity: 0.12,
+    shadowRadius: 2.5,
+    elevation: 2,
+  },
+  lifestyleText: {
+    fontSize: fs(16),
+    lineHeight: fs(22),
+    letterSpacing: -0.64,
+    color: COLORS.lifestyleInactive,
+  },
+  lifestyleTextActive: {
+    color: COLORS.primary,
+  },
+  divider: {
+    marginTop: vs(28),
+    height: StyleSheet.hairlineWidth,
+    backgroundColor: COLORS.dividerBg,
+  },
+  section: {
+    marginTop: vs(28),
+    gap: vs(14),
+  },
+  topDivider: {
+    marginTop: vs(22),
+    height: StyleSheet.hairlineWidth,
+    backgroundColor: COLORS.dividerBg,
+  },
+  sectionTitle: {
+    fontSize: fs(18),
+    lineHeight: fs(25),
+    color: COLORS.text,
+    letterSpacing: -0.72,
+  },
+  inputBox: {
+    height: vs(47),
+    borderWidth: 1,
+    borderColor: COLORS.border,
+    borderRadius: ms(10),
+    paddingHorizontal: hs(16),
+    fontSize: fs(18),
+    lineHeight: fs(25),
+    color: COLORS.textMuted,
+    letterSpacing: -0.72,
+    backgroundColor: COLORS.white,
+  },
+  schoolRow: {
+    flexDirection: "row",
+    alignItems: "center",
+    gap: hs(8),
+  },
+  schoolInput: {
+    flex: 1,
+  },
+  verifiedText: {
+    position: "absolute",
+    right: hs(16),
+    fontSize: fs(14),
+    lineHeight: fs(20),
+    color: COLORS.primary,
+    letterSpacing: -0.56,
+  },
+  introInput: {
+    height: vs(82),
+    textAlignVertical: "top",
+    paddingTop: vs(16),
+    fontSize: fs(15),
+    lineHeight: fs(21),
+    color: COLORS.textMuted,
+    letterSpacing: -0.6,
+  },
+  countText: {
+    alignSelf: "flex-end",
+    fontSize: fs(15),
+    lineHeight: fs(21),
+    color: COLORS.textPlaceholder,
+    letterSpacing: -0.6,
+  },
+  countCurrent: {
+    color: COLORS.primary,
+  },
+  chipList: {
+    flexDirection: "row",
+    flexWrap: "wrap",
+    gap: hs(6),
+  },
+  chip: {
+    backgroundColor: COLORS.chipBg,
+    borderRadius: ms(15),
+    paddingHorizontal: hs(12),
+    height: vs(32),
+    flexDirection: "row",
+    alignItems: "center",
+    gap: hs(4),
+  },
+  chipText: {
+    fontSize: fs(16),
+    lineHeight: fs(20),
+    color: COLORS.text,
+    letterSpacing: -0.48,
+  },
+  addTagInput: {
+    height: vs(45),
+    borderWidth: 1,
+    borderColor: COLORS.border,
+    borderRadius: ms(10),
+    paddingHorizontal: hs(16),
+    fontSize: fs(15),
+    lineHeight: fs(21),
+    color: COLORS.textMuted,
+    letterSpacing: -0.6,
+    backgroundColor: COLORS.white,
+  },
+  addTagInputDisabled: {
+    backgroundColor: COLORS.footerBg,
+  },
+  roommateTagInput: {
+    fontSize: fs(14),
+    lineHeight: fs(20),
+    letterSpacing: -0.56,
+    paddingHorizontal: hs(14),
+  },
+  addButton: {
+    height: vs(45),
+    borderRadius: ms(10),
+    backgroundColor: COLORS.chipBg,
+    alignItems: "center",
+    justifyContent: "center",
+  },
+  addButtonText: {
+    fontSize: fs(28),
+    lineHeight: fs(32),
+    color: COLORS.primary,
+    letterSpacing: -1.12,
+  },
+  footer: {
+    backgroundColor: COLORS.footerBg,
+    paddingHorizontal: hs(10),
+    paddingTop: vs(20),
+  },
+  saveButton: {
+    height: vs(58),
+    backgroundColor: COLORS.saveBg,
+    borderRadius: ms(15),
+    alignItems: "center",
+    justifyContent: "center",
+  },
+  saveButtonText: {
+    fontSize: fs(20),
+    lineHeight: fs(38),
+    color: COLORS.text,
+    letterSpacing: -0.8,
+  },
+  pressedAddButton: {
+    opacity: 0.8,
+  },
+  pressedSaveButton: {
+    opacity: 0.85,
+  },
+});
+
+type ProfileEditLayoutOptions = {
+  paddingTop: number;
+  scrollPaddingBottom: number;
+  footerPaddingBottom: number;
+  keyboardPaddingBottom: number;
+};
+
+export function createProfileEditLayoutStyles(options: ProfileEditLayoutOptions) {
+  return StyleSheet.create({
+    scrollContentInset: {
+      paddingTop: options.paddingTop,
+      paddingBottom: options.scrollPaddingBottom,
+    },
+    footerInset: {
+      paddingBottom: options.footerPaddingBottom,
+    },
+    rootKeyboardInset: {
+      paddingBottom: options.keyboardPaddingBottom,
+    },
+  });
+}

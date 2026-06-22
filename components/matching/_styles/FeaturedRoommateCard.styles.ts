@@ -6,10 +6,6 @@ import {
 } from "react-native";
 
 import type { ScaleFns } from "../../../constants/create-scale-api";
-import {
-  figmaLetterSpacing,
-  matchingColors,
-} from "../../../constants/matching-figma";
 
 export type FeaturedRoommateCardStyles = {
   card: ViewStyle;
@@ -53,12 +49,12 @@ export const createFeaturedRoommateCardStyles = ({
     name: {
       fontSize: fs(18),
       lineHeight: vs(18 * 1.5),
-      letterSpacing: figmaLetterSpacing(18, -3),
-      color: matchingColors.titleInk,
+      letterSpacing: fs(18) * -0.03,
+      color: "#121212",
       textAlign: "center",
     },
     matchBadge: {
-      backgroundColor: matchingColors.matchBadgeBg,
+      backgroundColor: "#FFF195",
       borderRadius: hs(20),
       paddingVertical: vs(2),
       paddingHorizontal: hs(10),
@@ -69,7 +65,7 @@ export const createFeaturedRoommateCardStyles = ({
     matchBadgeText: {
       fontSize: fs(12),
       lineHeight: vs(17),
-      letterSpacing: figmaLetterSpacing(12, -3),
+      letterSpacing: fs(12) * -0.03,
       color: "#4E6FD3",
       textAlign: "center",
     },

@@ -10,6 +10,9 @@ dist/
 web-build/
 expo-env.d.ts
 
+# Expo tmp
+.expo-tmp-bundle-test/
+
 # Native
 .kotlin/
 *.orig.*

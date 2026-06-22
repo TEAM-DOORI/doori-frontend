@@ -1,3 +1,4 @@
+import { useFocusEffect } from "@react-navigation/native";
 import { type Href, useRouter } from "expo-router";
 import { useCallback, useRef } from "react";
 
@@ -5,6 +6,12 @@ import { useCallback, useRef } from "react";
 export function useNavigateOnce() {
   const router = useRouter();
   const lockRef = useRef(false);
+
+  useFocusEffect(
+    useCallback(() => {
+      lockRef.current = false;
+    }, []),
+  );
 
   const push = useCallback(
     (href: Href) => {

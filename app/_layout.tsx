@@ -1,19 +1,26 @@
 import { DefaultTheme, ThemeProvider } from "@react-navigation/native";
-
-import { ProfileSetupProvider } from "../contexts/ProfileSetupContext";
 import { useFonts } from "expo-font";
 import { Stack } from "expo-router";
 import * as SplashScreen from "expo-splash-screen";
 import { StatusBar } from "expo-status-bar";
 import { useEffect } from "react";
+import { StyleSheet } from "react-native";
 import { GestureHandlerRootView } from "react-native-gesture-handler";
 import "react-native-reanimated";
+
+import { GlobalAlertProvider } from "@components/common/GlobalAlertProvider";
 
 SplashScreen.preventAutoHideAsync();
 
 export const unstable_settings = {
   anchor: "(tabs)",
 };
+
+const styles = StyleSheet.create({
+  root: {
+    flex: 1,
+  },
+});
 
 export default function RootLayout() {
   const [loaded, error] = useFonts({
@@ -39,21 +46,20 @@ export default function RootLayout() {
   }
 
   return (
-    <GestureHandlerRootView style={{ flex: 1 }}>
-      <ProfileSetupProvider>
+    <GestureHandlerRootView style={styles.root}>
+      <GlobalAlertProvider>
         <ThemeProvider value={DefaultTheme}>
           <Stack screenOptions={{ headerShown: false }}>
-            <Stack.Screen name="index" />
-            <Stack.Screen name="login" />
-            <Stack.Screen name="onboarding" />
-            <Stack.Screen name="matching" />
-            <Stack.Screen name="roommate" />
-            <Stack.Screen name="(tabs)" />
-             <Stack.Screen name="chat" />
+            <Stack.Screen name='index' />
+            <Stack.Screen name='login' />
+            <Stack.Screen name='onboarding' />
+            <Stack.Screen name='matching' />
+            <Stack.Screen name='roommate' />
+            <Stack.Screen name='(tabs)' />
           </Stack>
-          <StatusBar style="auto" />
+          <StatusBar style='auto' />
         </ThemeProvider>
-      </ProfileSetupProvider>
+      </GlobalAlertProvider>
     </GestureHandlerRootView>
   );
 }

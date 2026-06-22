@@ -20,13 +20,13 @@ export function FeaturedRoommateCard({
   onPress,
 }: FeaturedRoommateCardProps) {
   const styles = useScaledStyles<FeaturedRoommateCardStyles>(
-    createFeaturedRoommateCardStyles,
+    createFeaturedRoommateCardStyles
   );
 
   return (
     <Pressable
       onPress={() => onPress?.(item.id)}
-      accessibilityRole="button"
+      accessibilityRole='button'
       accessibilityLabel={`${item.name}, 매칭률 ${item.matchRate}%`}>
       <LinearGradient
         colors={["#FFFFFF", "#FFFFFF", "rgba(255,255,255,0)"]}
@@ -38,16 +38,16 @@ export function FeaturedRoommateCard({
           <Image
             source={item.profile}
             style={styles.avatar}
-            contentFit="cover"
+            contentFit='cover'
           />
           <Text
-            weight="bold"
+            weight='bold'
             style={styles.name}>
             {item.name}
           </Text>
           <View style={styles.matchBadge}>
             <Text
-              weight="semiBold"
+              weight='semiBold'
               style={styles.matchBadgeText}
               allowFontScaling={false}>
               {`매칭률 ${item.matchRate}%`}
